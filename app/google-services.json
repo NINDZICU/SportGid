@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "663224699304",
+    "project_id": "firebase-sportgid"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663224699304:android:6f8c14210cdcf83f",
+        "android_client_info": {
+          "package_name": "com.kpfu.khlopunov.sportgid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "663224699304-7kam7o8aok4fg11i7pjb0gsjmokm7vd1.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "663224699304-kg0j6ukud59omaqsebo2ekun0vsd7kj5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kpfu.khlopunov.sportgid",
+            "certificate_hash": "87cf5802204ecee08e87e2f6ef4ff79704b8ea13"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFj0ttTLmgS_usV9WtkFXgCVpKOZA5yS0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

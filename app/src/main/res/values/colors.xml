@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="button_vk">#1d6cda</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="error_color">#f4281d</color>
+    <color name="background">#3F4261</color>
+    <color name="tab_background">#8f8f8f</color>
+    <color name="button_pressed">#836e6e6e</color>
+    <color name="text_color">#FFFCFCFC</color>
+    <color name="button_orange">#FFF27050</color>
+    <color name="reg_gray">#FF9C9996</color>
+    <color name="white">#FFFCFCFC</color>
+    <color name="black">#000</color>
+</resources>
