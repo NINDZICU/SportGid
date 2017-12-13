@@ -11,6 +11,7 @@
     <color name="text_color">#FFFCFCFC</color>
     <color name="button_orange">#FFF27050</color>
     <color name="reg_gray">#FF9C9996</color>
+    <color name="event_background">#FF6A6E9E</color>
     <color name="white">#FFFCFCFC</color>
     <color name="black">#000</color>
 </resources>

@@ -2,6 +2,7 @@ package com.kpfu.khlopunov.sportgid.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,7 @@ public class KindSportsAdapter extends RecyclerView.Adapter<KindSportsAdapter.Ki
     public void onBindViewHolder(KindSportViewHolder holder, int position) {
         final KindSport kindSport = mKindSports.get(position);
         holder.tvKindSport.setText(kindSport.getKindSport());
-        holder.itemView.setOnClickListener(v -> {
+        holder.tvKindSport.setOnClickListener(v -> {
             if (mKindSportListener != null) {
                 mKindSportListener.onAlarmClick(kindSport);
             }

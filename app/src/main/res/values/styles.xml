@@ -32,4 +32,5 @@
         <item name="android:gravity">center_vertical|center_horizontal</item>
         <item name="background">@color/white</item>
     </style>
+
 </resources>

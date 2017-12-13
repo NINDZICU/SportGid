@@ -3,5 +3,7 @@
     <integer name="com_vk_sdk_AppId">6240516</integer>
 
     <string name="find">Найти:</string>
-
+    <string name="objects">Объекты</string>
+    <string name="events">Мероприятия</string>
+    <string name="sorting_by">Сортировать по:</string>
 </resources>

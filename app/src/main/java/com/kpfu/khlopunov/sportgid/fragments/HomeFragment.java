@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,11 +57,15 @@ public class HomeFragment extends Fragment {
             rvKinds = view.findViewById(R.id.rv_kind_of_sports);
             etSearch = view.findViewById(R.id.et_search);
 
-            rvKinds.setLayoutManager(new GridLayoutManager(getContext(), 2));
+            rvKinds.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
-            adapter = new KindSportsAdapter(getContext());
+            adapter = new KindSportsAdapter(getActivity());
             adapter.setmKindSportListener(kindSport ->{
-
+                ListObjectsFragment fragment = ListObjectsFragment.newInstance();
+                getChildFragmentManager().beginTransaction()
+                        .add(R.id.frame_events, fragment, ListObjectsFragment.class.getName())
+                        .addToBackStack(ListObjectsFragment.class.getName())
+                        .commit();
             });
             List<KindSport> kindSports = new ArrayList<>();
             kindSports.add(new KindSport("futbol", "asd"));
