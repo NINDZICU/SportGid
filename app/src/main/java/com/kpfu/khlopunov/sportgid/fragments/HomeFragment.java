@@ -15,6 +15,7 @@ import android.widget.EditText;
 import com.kpfu.khlopunov.sportgid.activities.AuthentificationActivity;
 import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.adapters.KindSportsAdapter;
+import com.kpfu.khlopunov.sportgid.adapters.TabPagerAdapter;
 import com.kpfu.khlopunov.sportgid.models.KindSport;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKSdk;
@@ -62,10 +63,21 @@ public class HomeFragment extends Fragment {
             adapter = new KindSportsAdapter(getActivity());
             adapter.setmKindSportListener(kindSport ->{
                 ListObjectsFragment fragment = ListObjectsFragment.newInstance();
+                fragment.setEventsListener(nextFragment->{
+                    getChildFragmentManager().beginTransaction()
+                            .add(R.id.frame_home_fragment, nextFragment, ListObjectsFragment.class.getName())
+                            .addToBackStack(HomeFragment.class.getName())
+                            .commit();
+                });
                 getChildFragmentManager().beginTransaction()
-                        .add(R.id.frame_events, fragment, ListObjectsFragment.class.getName())
-                        .addToBackStack(ListObjectsFragment.class.getName())
+                        .add(R.id.frame_home_fragment, fragment, ListObjectsFragment.class.getName())
+                        .addToBackStack(HomeFragment.class.getName())
                         .commit();
+
+//               TabPagerAdapter pagerAdapter = TabPagerAdapter.getInstance(getChildFragmentManager());
+//                List<Fragment> fragments = pagerAdapter.getmFragmentList();
+//                fragments.set(0, ListObjectsFragment.newInstance());
+//                pagerAdapter.setFragmentList(fragments);
             });
             List<KindSport> kindSports = new ArrayList<>();
             kindSports.add(new KindSport("futbol", "asd"));

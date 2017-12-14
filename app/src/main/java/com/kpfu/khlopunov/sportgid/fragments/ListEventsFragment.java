@@ -24,21 +24,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by hlopu on 13.12.2017.
+ * Created by hlopu on 14.12.2017.
  */
 
-public class ListObjectsFragment extends Fragment {
+public class ListEventsFragment extends Fragment {
     private Button btnObjects;
     private Button btnEvents;
     private NoDefaultSpinner spinnerSort;
     private ImageButton btnFilter;
     private RecyclerView rvEvents;
     private EventAdapter eventAdapter;
-//    private EventsListener eventsListener;
     private EventsListener eventsListener;
 
-    public static ListObjectsFragment newInstance(){
-        return new ListObjectsFragment();
+    public static ListEventsFragment newInstance(){
+        return new ListEventsFragment();
     }
     @Nullable
     @Override
@@ -62,13 +61,12 @@ public class ListObjectsFragment extends Fragment {
 
         });
 
-        btnEvents.setOnClickListener(v -> {
-            if(eventsListener!=null){
-               ListEventsFragment fragment= ListEventsFragment.newInstance();
-               fragment.setEventsListener(eventsListener);
+        btnObjects.setOnClickListener(v -> {
+            if(eventsListener!= null){
+                ListObjectsFragment fragment = ListObjectsFragment.newInstance();
+                fragment.setEventsListener(eventsListener);
                 eventsListener.onButtonClicked(fragment);
             }
-//            ListEventsFragment fragment = ListEventsFragment.newInstance();
 //            getChildFragmentManager().beginTransaction()
 //                    .add(R.id.frame_home_fragment, fragment, ListObjectsFragment.class.getName())
 //                    .addToBackStack(HomeFragment.class.getName())
@@ -76,9 +74,9 @@ public class ListObjectsFragment extends Fragment {
         });
 
         List<Event> events = new ArrayList<>();
-        events.add(new Event("SDDS", "SDSD", "sadasd", "123", "4.0"));
-        events.add(new Event("SDDS", "SDSD", "sadasd", "123", "4.0"));
-        events.add(new Event("SDDS", "SDSD", "sadasd", "123", "4.0"));
+        events.add(new Event("EVENT", "EVENT", "sadasd", "123", "4.0"));
+        events.add(new Event("EVENT", "EVENT", "EVENT", "EVENT", "4.0"));
+        events.add(new Event("EVENT", "EVENT", "EVENT", "EVENT", "4.0"));
         eventAdapter.setmEventList(events);
         rvEvents.setAdapter(eventAdapter);
 
@@ -96,14 +94,13 @@ public class ListObjectsFragment extends Fragment {
 
             }
         });
-
     }
-//    public interface EventsListener {
+//    public interface ObjectsListener {
 //        void onButtonClick(Fragment nextFragment);
 //    }
 //
-//    public void setEventsListener(EventsListener eventsListener) {
-//        this.eventsListener = eventsListener;
+//    public void setObjectsListener(ObjectsListener objectsListener) {
+//        this.objectsListener = objectsListener;
 //    }
 
     public void setEventsListener(EventsListener eventsListener) {
