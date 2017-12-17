@@ -44,7 +44,7 @@ public class KindSportsAdapter extends RecyclerView.Adapter<KindSportsAdapter.Ki
     @Override
     public void onBindViewHolder(KindSportViewHolder holder, int position) {
         final KindSport kindSport = mKindSports.get(position);
-        holder.tvKindSport.setText(kindSport.getKindSport());
+        holder.tvKindSport.setText(kindSport.getName());
         holder.tvKindSport.setOnClickListener(v -> {
             if (mKindSportListener != null) {
                 mKindSportListener.onAlarmClick(kindSport);

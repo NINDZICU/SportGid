@@ -43,9 +43,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         final Event event = mEventList.get(position);
         //TODO сделать set для картинки
         holder.eventName.setText(event.getName());
-        holder.eventAddress.setText(event.getAddress());
+        holder.eventAddress.setText(event.getPlace().getAddress());
         holder.eventRaiting.setText(event.getRaiting());
-        holder.eventPrice.setText(event.getPrice());
+        holder.eventPrice.setText(event.getPrice()+"р.");
 
         holder.itemView.setOnClickListener(v->{
             if(mEventListener!=null){

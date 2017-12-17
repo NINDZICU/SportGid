@@ -1,22 +1,46 @@
 package com.kpfu.khlopunov.sportgid.models;
 
+import java.io.Serializable;
+import java.util.Set;
+
 /**
  * Created by hlopu on 13.12.2017.
  */
 
-public class Event {
+public class Event implements Serializable{
+
+    private int id;
     private String image;
     private String name;
-    private String address;
+    private Place place;
     private String price;
     private String raiting;
+    private int maxOfMembers;
+    private User avtor;
+    private String description;
+    private Set<User> members;
+    private KindSport kindSport;
 
-    public Event(String image, String name, String address, String price, String raiting) {
+    public Event(int id, String image, String name, Place place, String price, String raiting, int maxOfMembers, User avtor, String description, Set<User> members, KindSport kindSport) {
+        this.id = id;
         this.image = image;
         this.name = name;
-        this.address = address;
+        this.place = place;
         this.price = price;
         this.raiting = raiting;
+        this.maxOfMembers = maxOfMembers;
+        this.avtor = avtor;
+        this.description = description;
+        this.members = members;
+        this.kindSport = kindSport;
+    }
+
+    public Place getPlace() {
+        return place;
+    }
+
+    public void setPlace(Place place) {
+        this.place = place;
     }
 
     public String getImage() {
@@ -35,13 +59,6 @@ public class Event {
         this.name = name;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
 
     public String getPrice() {
         return price;
@@ -58,4 +75,53 @@ public class Event {
     public void setRaiting(String raiting) {
         this.raiting = raiting;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getMaxOfMembers() {
+        return maxOfMembers;
+    }
+
+    public void setMaxOfMembers(int maxOfMembers) {
+        this.maxOfMembers = maxOfMembers;
+    }
+
+    public User getAvtor() {
+        return avtor;
+    }
+
+    public void setAvtor(User avtor) {
+        this.avtor = avtor;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Set<User> getMembers() {
+        return members;
+    }
+
+    public void setMembers(Set<User> members) {
+        this.members = members;
+    }
+
+    public KindSport getKindSport() {
+        return kindSport;
+    }
+
+    public void setKindSport(KindSport kindSport) {
+        this.kindSport = kindSport;
+    }
 }
+

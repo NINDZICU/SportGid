@@ -6,4 +6,17 @@
     <string name="objects">Объекты</string>
     <string name="events">Мероприятия</string>
     <string name="sorting_by">Сортировать по:</string>
+    <string name="join">Присоединиться</string>
+    <string name="price">Цена: </string>
+    <string name="description">Описание: </string>
+    <string name="organizer">Организатор: </string>
+    <string name="kind_sport">Вид спорта: </string>
+    <string name="list_members">Список участников: </string>
+    <string name="take_over">Забронировать</string>
+    <string name="contacts">Контакты</string>
+    <string name="reviews">Отзывы:</string>
+    <string name="add_review">Оставить отзыв:</string>
+    <string name="send">Отправить</string>
+    <string name="complain">Пожаловаться</string>
+
 </resources>

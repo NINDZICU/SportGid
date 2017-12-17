@@ -1,31 +1,52 @@
 package com.kpfu.khlopunov.sportgid.models;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
 /**
  * Created by hlopu on 12.12.2017.
  */
 
-public class KindSport {
-    private String kindSport;
-    private String image;
+public class KindSport implements Serializable{
+    @SerializedName("id")
+    @Expose
+    private Integer id;
+    @SerializedName("name")
+    @Expose
+    private String name;
+    @SerializedName("photo")
+    @Expose
+    private String photo;
 
-    public KindSport(String kindSport, String image) {
-        this.kindSport = kindSport;
-        this.image = image;
+    public KindSport(Integer id, String name, String photo) {
+        this.id = id;
+        this.name = name;
+        this.photo = photo;
     }
 
-    public String getKindSport() {
-        return kindSport;
+    public Integer getId() {
+        return id;
     }
 
-    public void setKindSport(String kindSport) {
-        this.kindSport = kindSport;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getImage() {
-        return image;
+    public String getName() {
+        return name;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }

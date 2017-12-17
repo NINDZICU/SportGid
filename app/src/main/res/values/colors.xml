@@ -6,12 +6,14 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="error_color">#f4281d</color>
     <color name="background">#3F4261</color>
+    <color name="button_background">#4DC7BB</color>
     <color name="tab_background">#8f8f8f</color>
     <color name="button_pressed">#836e6e6e</color>
-    <color name="text_color">#FFFCFCFC</color>
-    <color name="button_orange">#FFF27050</color>
-    <color name="reg_gray">#FF9C9996</color>
-    <color name="event_background">#FF6A6E9E</color>
-    <color name="white">#FFFCFCFC</color>
+    <color name="text_color">#FCFCFC</color>
+    <color name="button_orange">#F27050</color>
+    <color name="reg_gray">#9C9996</color>
+    <color name="event_background">#6A6E9E</color>
+    <color name="white">#FCFCFC</color>
     <color name="black">#000</color>
+    <color name="member_background">#FFE79E</color>
 </resources>

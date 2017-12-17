@@ -8,6 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <style name="BottomTab" parent="Widget.AppCompat.ImageButton">
         <item name="android:layout_margin">@dimen/tab_margin</item>
         <item name="android:maxHeight">@dimen/tab_max_height</item>
@@ -18,6 +23,10 @@
 
     <style name="AppTheme.ButtonOrange" parent="Base.Widget.AppCompat.Button">
         <item name="android:background">@drawable/button_background_red</item>
+    </style>
+
+    <style name="AppTheme.ButtonBiruza" parent="Base.Widget.AppCompat.ImageButton">
+        <item name="android:background">@drawable/button_background_biruza</item>
     </style>
 
     <style name="AppTheme.ButtonWhite" parent="Base.Widget.AppCompat.Button">

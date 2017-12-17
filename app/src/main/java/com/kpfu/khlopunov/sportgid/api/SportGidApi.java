@@ -15,8 +15,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class SportGidApi {
-    private static final String BASE_URL = "http://10.17.32.141:8080/";
+    private static final String BASE_URL = "http://192.168.0.104:8080/";
     private SportGidApiRequests mSportGidApiRequests;
+    private static SportGidApi sportGidApi;
 
     public SportGidApi() {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
@@ -32,6 +33,15 @@ public class SportGidApi {
                 .build()
                 .create(SportGidApiRequests.class);
     }
+    public static SportGidApi getInstance(){
+        if(sportGidApi==null) sportGidApi = new SportGidApi();
+        return sportGidApi;
+    }
+
+    public SportGidApiRequests getmSportGidApiRequests() {
+        return mSportGidApiRequests;
+    }
+
     public Observable<String> registration(User user){
         return mSportGidApiRequests.registrtation(user.getName(), user.getSurname(), user.getLogin(), user.getPassword());
     }

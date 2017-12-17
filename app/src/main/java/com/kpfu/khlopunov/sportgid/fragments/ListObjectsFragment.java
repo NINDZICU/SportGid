@@ -19,6 +19,9 @@ import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.adapters.EventAdapter;
 import com.kpfu.khlopunov.sportgid.custom.NoDefaultSpinner;
 import com.kpfu.khlopunov.sportgid.models.Event;
+import com.kpfu.khlopunov.sportgid.models.KindSport;
+import com.kpfu.khlopunov.sportgid.models.Place;
+import com.kpfu.khlopunov.sportgid.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,10 +78,10 @@ public class ListObjectsFragment extends Fragment {
 //                    .commit();
         });
 
+        //TODO сменить на PLACE
         List<Event> events = new ArrayList<>();
-        events.add(new Event("SDDS", "SDSD", "sadasd", "123", "4.0"));
-        events.add(new Event("SDDS", "SDSD", "sadasd", "123", "4.0"));
-        events.add(new Event("SDDS", "SDSD", "sadasd", "123", "4.0"));
+        events.add(new Event(1, "EVENT", "EVENT", new Place(1,"sad",2,"s","s","s",new User("Sdad","s","s","s"),new KindSport(1,"sdad","asddasd"),null, "adsasd"),
+                "sadasd", "123", 2,new User("Sdad","s","s","s"), "dsadas", null ,new KindSport(1,"sdad","asddasd")));
         eventAdapter.setmEventList(events);
         rvEvents.setAdapter(eventAdapter);
 
