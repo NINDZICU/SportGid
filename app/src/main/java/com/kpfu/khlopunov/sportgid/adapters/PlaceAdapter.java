@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kpfu.khlopunov.sportgid.R;
+import com.kpfu.khlopunov.sportgid.fragments.NotifyFragment;
 import com.kpfu.khlopunov.sportgid.models.Place;
 
 import java.util.Collections;
@@ -22,10 +23,12 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceViewHol
     private Context context;
     private List<Place> mPlaceList;
     private PlaceListener mPlaceListener;
+    private NotifyFragment notifyFragment;
 
-    public PlaceAdapter(Context context) {
+    public PlaceAdapter(Context context, NotifyFragment notifyFragment) {
         this.context = context;
         mPlaceList = Collections.emptyList();
+        this.notifyFragment = notifyFragment;
     }
 
     public void setmPlaceList(List<Place> mPlaceList) {
@@ -84,5 +87,10 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceViewHol
 
     public void setmPlaceListener(PlaceListener mPlaceListener) {
         this.mPlaceListener = mPlaceListener;
+    }
+
+    public void notifyData(){
+        notifyDataSetChanged();
+        notifyFragment.notifyData();
     }
 }

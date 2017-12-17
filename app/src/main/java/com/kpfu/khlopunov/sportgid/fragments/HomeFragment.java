@@ -14,9 +14,12 @@ import android.widget.EditText;
 import com.kpfu.khlopunov.sportgid.activities.AuthentificationActivity;
 import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.adapters.KindSportsAdapter;
+import com.kpfu.khlopunov.sportgid.models.KindSport;
 import com.kpfu.khlopunov.sportgid.service.ApiService;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKSdk;
+
+import java.util.List;
 
 /**
  * Created by hlopu on 24.10.2017.
@@ -77,7 +80,8 @@ public class HomeFragment extends Fragment {
 //            List<KindSport> kindSports = new ArrayList<>();
 //            adapter.setKindSports(kindSports);
             ApiService apiService = new ApiService(getActivity());
-            apiService.getKindSports(adapter);
+            List<KindSport> kindSports =apiService.getKindSports();
+            adapter.setKindSports(kindSports);
             rvKinds.setAdapter(adapter);
         }
     }

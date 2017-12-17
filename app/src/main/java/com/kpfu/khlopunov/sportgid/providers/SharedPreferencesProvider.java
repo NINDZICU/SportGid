@@ -17,6 +17,8 @@ public class SharedPreferencesProvider {
     public static final String PREFERENCES_NAME = "PREFERENCES_NAME";
     public static final String VK_ID_PREFERENCES = "VK_ID";
     public static final String VK_NAME_PREFERENCES = "NAME_PREFEERENCES";
+    public static final String USER_TOKEN_PREFERENCES ="USER_TOKEN_PREFRENCES";
+    public static final String CITY_PREFERENCES ="CITY_PREFERENCES";
 
     private static SharedPreferencesProvider sInstance;
     private Context context;
@@ -82,6 +84,33 @@ public class SharedPreferencesProvider {
         Type listType = new TypeToken<String>() {
         }.getType();
         String jsonText = gson.toJson(name, listType);
+        editor.putString(PREFERENCES_NAME, jsonText);
+        editor.commit();
+    }
+
+    public String getCity() {
+        SharedPreferences preferences = context.getSharedPreferences(CITY_PREFERENCES, Context.MODE_PRIVATE);
+        if (preferences.contains(PREFERENCES_NAME)) {
+            Gson gson = new Gson();
+            String jsonText = preferences.getString(PREFERENCES_NAME, "");
+            Type listType = new TypeToken<String>() {
+            }.getType();
+            String city = gson.fromJson(jsonText, listType);
+            return city;
+        } else {
+            String city = null;
+            saveCity(city);
+            return city;
+        }
+    }
+
+    public void saveCity(String city) {
+        SharedPreferences preferences = context.getSharedPreferences(CITY_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        Gson gson = new Gson();
+        Type listType = new TypeToken<String>() {
+        }.getType();
+        String jsonText = gson.toJson(city, listType);
         editor.putString(PREFERENCES_NAME, jsonText);
         editor.commit();
     }

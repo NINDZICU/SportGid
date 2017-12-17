@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kpfu.khlopunov.sportgid.R;
+import com.kpfu.khlopunov.sportgid.fragments.NotifyFragment;
 import com.kpfu.khlopunov.sportgid.models.Event;
 
 import java.util.Collections;
@@ -22,10 +23,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     private Context context;
     private List<Event> mEventList;
     private EventListener mEventListener;
+    private NotifyFragment notifyFragment;
 
-    public EventAdapter(Context context) {
+    public EventAdapter(Context context, NotifyFragment notifyFragment) {
         this.context = context;
         mEventList = Collections.emptyList();
+        this.notifyFragment = notifyFragment;
     }
 
     public void setmEventList(List<Event> mEventList) {
@@ -86,5 +89,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
     public void setmEventListener(EventListener mEventListener) {
         this.mEventListener = mEventListener;
+    }
+
+    public void notifyData(){
+        notifyDataSetChanged();
+        notifyFragment.notifyData();
     }
 }

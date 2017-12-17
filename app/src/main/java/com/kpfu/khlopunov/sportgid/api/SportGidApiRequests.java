@@ -1,5 +1,6 @@
 package com.kpfu.khlopunov.sportgid.api;
 
+import com.kpfu.khlopunov.sportgid.models.ApiResult;
 import com.kpfu.khlopunov.sportgid.models.Event;
 import com.kpfu.khlopunov.sportgid.models.KindSport;
 import com.kpfu.khlopunov.sportgid.models.Place;
@@ -22,11 +23,17 @@ public interface SportGidApiRequests {
     Observable<String> registrtation(@Query("name") String name, @Query("surname") String surname, @Query("email") String email, @Query("password") String password);
 
     @GET("api/v1/sport/")
-    Observable<List<KindSport>> getKindSports();
+    Observable<ApiResult> getKindSports();
 
     @GET("api/v1/sport/{id}/events")
-    Observable<List<Event>> getEvents(@Path("id") int kindSportId, @Query("city") String city);
+    Observable<ApiResult> getEvents(@Path("id") int kindSportId, @Query("city") String city);
 
     @GET("api/v1/sport/{id}/places")
-    Observable<List<Place>> getPlaces(@Path("id") int kindSportId, @Query("city") String city);
+    Observable<ApiResult> getPlaces(@Path("id") int kindSportId, @Query("city") String city);
+
+    @POST("api/v1/place/add")
+    Observable<ApiResult> addPlace(@Query("address")String address, @Query("contact") String contact, @Query("title") String title,
+                                   @Query("description") String description, @Query("city") String city,
+                                   @Query("kindOfSport")List<Long> kindOfSport);
+
 }

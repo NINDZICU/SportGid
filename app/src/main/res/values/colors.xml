@@ -7,8 +7,8 @@
     <color name="error_color">#f4281d</color>
     <color name="background">#3F4261</color>
     <color name="button_background">#4DC7BB</color>
-    <color name="tab_background">#8f8f8f</color>
-    <color name="button_pressed">#836e6e6e</color>
+    <color name="tab_background">#F5734F</color>
+    <color name="button_pressed">#da5833</color>
     <color name="text_color">#FCFCFC</color>
     <color name="button_orange">#F27050</color>
     <color name="reg_gray">#9C9996</color>

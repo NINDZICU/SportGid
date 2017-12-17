@@ -5,6 +5,6 @@ package com.kpfu.khlopunov.sportgid;
  */
 
 public class Constants {
-    public static String[] DATA = {"Название", "Цена", "Ближе"};
+    public static String[] DATA = {"Название", "Цена", "Рейтинг"};
 
 }

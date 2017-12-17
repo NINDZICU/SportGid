@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import com.kpfu.khlopunov.sportgid.Constants;
@@ -22,6 +23,8 @@ import com.kpfu.khlopunov.sportgid.models.Event;
 import com.kpfu.khlopunov.sportgid.models.KindSport;
 import com.kpfu.khlopunov.sportgid.models.Place;
 import com.kpfu.khlopunov.sportgid.models.User;
+import com.kpfu.khlopunov.sportgid.service.ApiService;
+import com.kpfu.khlopunov.sportgid.service.SortService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +33,7 @@ import java.util.List;
  * Created by hlopu on 14.12.2017.
  */
 
-public class ListEventsFragment extends Fragment {
+public class ListEventsFragment extends Fragment implements NotifyFragment {
     private Button btnObjects;
     private Button btnEvents;
     private NoDefaultSpinner spinnerSort;
@@ -38,14 +41,16 @@ public class ListEventsFragment extends Fragment {
     private RecyclerView rvEvents;
     private EventAdapter eventAdapter;
     private EventsListener eventsListener;
+    private ProgressBar progressBar;
 
-    public static ListEventsFragment newInstance(int idKind){
+    public static ListEventsFragment newInstance(int idKind) {
         Bundle bundle = new Bundle();
         bundle.putInt("idKind", idKind);
         ListEventsFragment fragment = new ListEventsFragment();
         fragment.setArguments(bundle);
         return fragment;
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -60,9 +65,10 @@ public class ListEventsFragment extends Fragment {
         btnFilter = view.findViewById(R.id.button_filter);
         spinnerSort = view.findViewById(R.id.spinner);
         rvEvents = view.findViewById(R.id.rv_events);
-        System.out.println("SDJAKSHJSAKH");
+        progressBar = view.findViewById(R.id.pb_events);
+        setVisible();
         rvEvents.setLayoutManager(new LinearLayoutManager(getActivity()));
-        eventAdapter = new EventAdapter(getActivity());
+        eventAdapter = new EventAdapter(getActivity(), ListEventsFragment.this);
         eventAdapter.setmEventListener(event -> {
 
             //TODO
@@ -70,8 +76,8 @@ public class ListEventsFragment extends Fragment {
         });
 
         btnObjects.setOnClickListener(v -> {
-            if(eventsListener!= null){
-                ListObjectsFragment fragment = ListObjectsFragment.newInstance(getArguments().getInt("kindSport"));
+            if (eventsListener != null) {
+                ListObjectsFragment fragment = ListObjectsFragment.newInstance(getArguments().getInt("idKind"));
                 fragment.setEventsListener(eventsListener);
                 eventsListener.onButtonClicked(fragment);
             }
@@ -91,6 +97,7 @@ public class ListEventsFragment extends Fragment {
 //        events.add(new Event(1, "EVENT", "EVENT", new Place(1,"sad",2,"s","s","s",new User("Sdad","s","s","s"),new KindSport(1,"sdad","asddasd"),null, "adsasd"),
 //                "sadasd", "123", 2,new User("Sdad","s","s","s"), "dsadas", null ,new KindSport(1,"sdad","asddasd")));
 //        eventAdapter.setmEventList(events);
+        new ApiService(getActivity()).getEvents(getArguments().getInt("idKind"), "Kazan", eventAdapter);
         rvEvents.setAdapter(eventAdapter);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, Constants.DATA);
@@ -100,8 +107,10 @@ public class ListEventsFragment extends Fragment {
         spinnerSort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                SortService service = new SortService();
+//                service.sortEvents();
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -118,5 +127,20 @@ public class ListEventsFragment extends Fragment {
 
     public void setEventsListener(EventsListener eventsListener) {
         this.eventsListener = eventsListener;
+    }
+
+    @Override
+    public void notifyData() {
+        setVisible();
+    }
+
+    public void setVisible() {
+        if (progressBar.getVisibility() == View.VISIBLE) {
+            progressBar.setVisibility(View.GONE);
+            rvEvents.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.VISIBLE);
+            rvEvents.setVisibility(View.GONE);
+        }
     }
 }
