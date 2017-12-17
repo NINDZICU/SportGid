@@ -39,8 +39,12 @@ public class ListEventsFragment extends Fragment {
     private EventAdapter eventAdapter;
     private EventsListener eventsListener;
 
-    public static ListEventsFragment newInstance(){
-        return new ListEventsFragment();
+    public static ListEventsFragment newInstance(int idKind){
+        Bundle bundle = new Bundle();
+        bundle.putInt("idKind", idKind);
+        ListEventsFragment fragment = new ListEventsFragment();
+        fragment.setArguments(bundle);
+        return fragment;
     }
     @Nullable
     @Override
@@ -67,7 +71,7 @@ public class ListEventsFragment extends Fragment {
 
         btnObjects.setOnClickListener(v -> {
             if(eventsListener!= null){
-                ListObjectsFragment fragment = ListObjectsFragment.newInstance();
+                ListObjectsFragment fragment = ListObjectsFragment.newInstance(getArguments().getInt("kindSport"));
                 fragment.setEventsListener(eventsListener);
                 eventsListener.onButtonClicked(fragment);
             }
@@ -81,12 +85,12 @@ public class ListEventsFragment extends Fragment {
             DetailEventFragment fragment = DetailEventFragment.newInstance(event);
             eventsListener.onButtonClicked(fragment);
         });
-        List<Event> events = new ArrayList<>();
-        events.add(new Event(1, "EVENT", "EVENT", new Place(1,"sad",2,"s","s","s",new User("Sdad","s","s","s"),new KindSport(1,"sdad","asddasd"),null, "adsasd"),
-                "sadasd", "123", 2,new User("Sdad","s","s","s"), "dsadas", null ,new KindSport(1,"sdad","asddasd")));
-        events.add(new Event(1, "EVENT", "EVENT", new Place(1,"sad",2,"s","s","s",new User("Sdad","s","s","s"),new KindSport(1,"sdad","asddasd"),null, "adsasd"),
-                "sadasd", "123", 2,new User("Sdad","s","s","s"), "dsadas", null ,new KindSport(1,"sdad","asddasd")));
-        eventAdapter.setmEventList(events);
+//        List<Event> events = new ArrayList<>();
+//        events.add(new Event(1, "EVENT", "EVENT", new Place(1,"sad",2,"s","s","s",new User("Sdad","s","s","s"),new KindSport(1,"sdad","asddasd"),null, "adsasd"),
+//                "sadasd", "123", 2,new User("Sdad","s","s","s"), "dsadas", null ,new KindSport(1,"sdad","asddasd")));
+//        events.add(new Event(1, "EVENT", "EVENT", new Place(1,"sad",2,"s","s","s",new User("Sdad","s","s","s"),new KindSport(1,"sdad","asddasd"),null, "adsasd"),
+//                "sadasd", "123", 2,new User("Sdad","s","s","s"), "dsadas", null ,new KindSport(1,"sdad","asddasd")));
+//        eventAdapter.setmEventList(events);
         rvEvents.setAdapter(eventAdapter);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, Constants.DATA);

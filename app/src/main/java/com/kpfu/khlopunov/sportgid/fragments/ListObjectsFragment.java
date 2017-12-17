@@ -12,19 +12,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Spinner;
+import android.widget.ProgressBar;
 
 import com.kpfu.khlopunov.sportgid.Constants;
 import com.kpfu.khlopunov.sportgid.R;
-import com.kpfu.khlopunov.sportgid.adapters.EventAdapter;
+import com.kpfu.khlopunov.sportgid.adapters.PlaceAdapter;
 import com.kpfu.khlopunov.sportgid.custom.NoDefaultSpinner;
-import com.kpfu.khlopunov.sportgid.models.Event;
-import com.kpfu.khlopunov.sportgid.models.KindSport;
-import com.kpfu.khlopunov.sportgid.models.Place;
-import com.kpfu.khlopunov.sportgid.models.User;
+import com.kpfu.khlopunov.sportgid.service.ApiService;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by hlopu on 13.12.2017.
@@ -36,12 +31,16 @@ public class ListObjectsFragment extends Fragment {
     private NoDefaultSpinner spinnerSort;
     private ImageButton btnFilter;
     private RecyclerView rvEvents;
-    private EventAdapter eventAdapter;
-//    private EventsListener eventsListener;
+    private PlaceAdapter placeAdapter;
     private EventsListener eventsListener;
+    private ProgressBar progressBar;
 
-    public static ListObjectsFragment newInstance(){
-        return new ListObjectsFragment();
+    public static ListObjectsFragment newInstance(int idKind){
+        Bundle bundle = new Bundle();
+        bundle.putInt("idKind", idKind);
+        ListObjectsFragment fragment = new ListObjectsFragment();
+        fragment.setArguments(bundle);
+        return fragment;
     }
     @Nullable
     @Override
@@ -57,17 +56,19 @@ public class ListObjectsFragment extends Fragment {
         btnFilter = view.findViewById(R.id.button_filter);
         spinnerSort = view.findViewById(R.id.spinner);
         rvEvents = view.findViewById(R.id.rv_events);
+        progressBar = view.findViewById(R.id.pb_events);
         System.out.println("SDJAKSHJSAKH");
         rvEvents.setLayoutManager(new LinearLayoutManager(getActivity()));
-        eventAdapter = new EventAdapter(getActivity());
-        eventAdapter.setmEventListener(event -> {
-            //TODO
+        placeAdapter= new PlaceAdapter(getActivity());
+        placeAdapter.setmPlaceListener(place -> {
+            DetailPlaceFragment fragment = DetailPlaceFragment.newInstance(place);
+            eventsListener.onButtonClicked(fragment);
 
         });
 
         btnEvents.setOnClickListener(v -> {
             if(eventsListener!=null){
-               ListEventsFragment fragment= ListEventsFragment.newInstance();
+               ListEventsFragment fragment= ListEventsFragment.newInstance(getArguments().getInt("idKind"));
                fragment.setEventsListener(eventsListener);
                 eventsListener.onButtonClicked(fragment);
             }
@@ -78,12 +79,14 @@ public class ListObjectsFragment extends Fragment {
 //                    .commit();
         });
 
-        //TODO сменить на PLACE
-        List<Event> events = new ArrayList<>();
-        events.add(new Event(1, "EVENT", "EVENT", new Place(1,"sad",2,"s","s","s",new User("Sdad","s","s","s"),new KindSport(1,"sdad","asddasd"),null, "adsasd"),
-                "sadasd", "123", 2,new User("Sdad","s","s","s"), "dsadas", null ,new KindSport(1,"sdad","asddasd")));
-        eventAdapter.setmEventList(events);
-        rvEvents.setAdapter(eventAdapter);
+//        List<Place> events = new ArrayList<>();
+//        events.add(new Place(2,"asdasd", 2,"s","s", "s",
+//                new User("Sdad","s","s","s"),new KindSport(1,"sdad","asddasd"),null,"89274502477" ));
+//        placeAdapter.setmPlaceList(events);
+        ApiService service = new ApiService(getActivity());
+        System.out.println("LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "+getArguments().getInt("idKind"));
+        service.getPlaces(getArguments().getInt("idKind"), "sfs", placeAdapter);
+        rvEvents.setAdapter(placeAdapter);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, Constants.DATA);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -104,7 +107,6 @@ public class ListObjectsFragment extends Fragment {
 //    public interface EventsListener {
 //        void onButtonClick(Fragment nextFragment);
 //    }
-//
 //    public void setEventsListener(EventsListener eventsListener) {
 //        this.eventsListener = eventsListener;
 //    }

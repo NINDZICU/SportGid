@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +14,9 @@ import android.widget.EditText;
 import com.kpfu.khlopunov.sportgid.activities.AuthentificationActivity;
 import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.adapters.KindSportsAdapter;
-import com.kpfu.khlopunov.sportgid.adapters.TabPagerAdapter;
-import com.kpfu.khlopunov.sportgid.models.KindSport;
 import com.kpfu.khlopunov.sportgid.service.ApiService;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKSdk;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by hlopu on 24.10.2017.
@@ -63,7 +57,7 @@ public class HomeFragment extends Fragment {
 
             adapter = new KindSportsAdapter(getActivity());
             adapter.setmKindSportListener(kindSport ->{
-                ListObjectsFragment fragment = ListObjectsFragment.newInstance();
+                ListObjectsFragment fragment = ListObjectsFragment.newInstance(kindSport.getId());
                 fragment.setEventsListener(nextFragment->{
                     getChildFragmentManager().beginTransaction()
                             .add(R.id.frame_home_fragment, nextFragment, ListObjectsFragment.class.getName())
@@ -81,11 +75,6 @@ public class HomeFragment extends Fragment {
 //                pagerAdapter.setFragmentList(fragments);
             });
 //            List<KindSport> kindSports = new ArrayList<>();
-//            kindSports.add(new KindSport("futbol", "asd"));
-//            kindSports.add(new KindSport("Baseball", "asd"));
-//            kindSports.add(new KindSport("valleyball", "asd"));
-//            kindSports.add(new KindSport("NURISLAM", "asd"));
-//            kindSports.add(new KindSport("KEK", "asd"));
 //            adapter.setKindSports(kindSports);
             ApiService apiService = new ApiService(getActivity());
             apiService.getKindSports(adapter);

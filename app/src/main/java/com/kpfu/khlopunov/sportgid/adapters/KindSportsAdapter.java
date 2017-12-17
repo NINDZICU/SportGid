@@ -74,4 +74,5 @@ public class KindSportsAdapter extends RecyclerView.Adapter<KindSportsAdapter.Ki
     public void setmKindSportListener(KindSportListener mKindSportListener) {
         this.mKindSportListener = mKindSportListener;
     }
+
 }

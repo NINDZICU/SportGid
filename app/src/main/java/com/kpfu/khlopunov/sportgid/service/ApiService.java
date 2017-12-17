@@ -1,11 +1,11 @@
 package com.kpfu.khlopunov.sportgid.service;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.kpfu.khlopunov.sportgid.adapters.EventAdapter;
 import com.kpfu.khlopunov.sportgid.adapters.KindSportsAdapter;
+import com.kpfu.khlopunov.sportgid.adapters.PlaceAdapter;
 import com.kpfu.khlopunov.sportgid.api.SportGidApi;
 import com.kpfu.khlopunov.sportgid.api.SportGidApiRequests;
 import com.kpfu.khlopunov.sportgid.models.Event;
@@ -71,7 +71,7 @@ public class ApiService {
         requests.getPlaces(id,city).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(places1 -> {
-                    adapter.setmEventList(places1);
+                    adapter.setmPlaceList(places1);
                 },throwable -> {
                     Toast.makeText(context, "Throw " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                     System.out.println("THROOOOOWOWOWOWW OT NURIKA "+throwable.getMessage());
