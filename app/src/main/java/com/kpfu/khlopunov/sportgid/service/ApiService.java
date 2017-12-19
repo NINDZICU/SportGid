@@ -230,7 +230,7 @@ public class ApiService {
                 });
     }
 
-    public void updateReview(String token, String city, ApiCallback callback) {
+    public void updateCity(String token, String city, ApiCallback callback) {
         requests.updateCity(token, city).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(apiResult -> {

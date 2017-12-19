@@ -5,33 +5,47 @@
  */
 package com.kpfu.khlopunov.sportgid.models;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 public class Review implements Serializable{
-
-    private int id;
+    @SerializedName("id")
+    @Expose
+    private Integer id;
+    @SerializedName("date")
+    @Expose
     private Long date;
-    private User user;
+    @SerializedName("body")
+    @Expose
     private String body;
+    @SerializedName("rating")
+    @Expose
+    private Integer rating;
+    private User user;
     private Place place;
     private Event event;
-    private int rating;
 
-    public Review(int id, Long date, User user, String body, Place place, Event event, int rating) {
+
+    public Review(Integer id, Long date, String body, Integer rating, User user, Place place, Event event) {
         this.id = id;
         this.date = date;
-        this.user = user;
         this.body = body;
+        this.rating = rating;
+        this.user = user;
         this.place = place;
         this.event = event;
-        this.rating = rating;
     }
 
-    public int getId() {
+    public Review() {
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -43,20 +57,28 @@ public class Review implements Serializable{
         this.date = date;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public String getBody() {
         return body;
     }
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public Integer getRating() {
+        return rating;
+    }
+
+    public void setRating(Integer rating) {
+        this.rating = rating;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Place getPlace() {
@@ -73,13 +95,5 @@ public class Review implements Serializable{
 
     public void setEvent(Event event) {
         this.event = event;
-    }
-
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
     }
 }

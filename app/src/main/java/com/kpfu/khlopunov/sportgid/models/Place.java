@@ -14,57 +14,37 @@ import java.util.Set;
 public class Place implements Serializable {
     @SerializedName("id")
     @Expose
-    private int id;
+    private Integer id;
     @SerializedName("title")
     @Expose
     private String title;
     @SerializedName("rating")
     @Expose
-    private int rating;
+    private Integer rating;
     @SerializedName("description")
     @Expose
     private String description;
     @SerializedName("address")
     @Expose
     private String address;
-    @SerializedName("city")
-    @Expose
-    private String city;
-    private User user;
-    private KindSport sport;
-    @SerializedName("reviews")
-    @Expose
-    private List<Review> reviews;
-    private Set<Event> events;
-    //    private Set<Complaint> complaints;
-    @SerializedName("contact")
-    @Expose
-    private String contact;
     @SerializedName("photo")
     @Expose
     private String photo;
+    @SerializedName("city")
+    @Expose
+    private String city;
+    @SerializedName("reviews")
+    @Expose
+    private List<Review> reviews = null;
+    @SerializedName("contact")
+    @Expose
+    private String contact;
 
-    public Place(int id, String title, int rating, String description, String address, String city,
-                 User user, KindSport sport, List<Review> reviews, Set<Event> events, String contact, String photo) {
-        this.id = id;
-        this.title = title;
-        this.rating = rating;
-        this.description = description;
-        this.address = address;
-        this.city = city;
-        this.user = user;
-        this.sport = sport;
-        this.reviews = reviews;
-        this.events = events;
-        this.contact = contact;
-        this.photo = photo;
-    }
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -76,11 +56,11 @@ public class Place implements Serializable {
         this.title = title;
     }
 
-    public int getRating() {
+    public Integer getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(Integer rating) {
         this.rating = rating;
     }
 
@@ -100,44 +80,20 @@ public class Place implements Serializable {
         this.address = address;
     }
 
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
     public String getCity() {
         return city;
     }
 
     public void setCity(String city) {
         this.city = city;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public KindSport getSport() {
-        return sport;
-    }
-
-    public void setSport(KindSport sport) {
-        this.sport = sport;
-    }
-
-    public Set<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(Set<Event> events) {
-        this.events = events;
-    }
-
-    public String getContact() {
-        return contact;
-    }
-
-    public void setContact(String contact) {
-        this.contact = contact;
     }
 
     public List<Review> getReviews() {
@@ -148,12 +104,13 @@ public class Place implements Serializable {
         this.reviews = reviews;
     }
 
-    public String getPhoto() {
-        return photo;
+    public String getContact() {
+        return contact;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setContact(String contact) {
+        this.contact = contact;
     }
+
 }
 

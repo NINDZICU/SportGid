@@ -18,8 +18,11 @@ import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.adapters.ReviewAdapter;
 import com.kpfu.khlopunov.sportgid.models.ApiResult;
 import com.kpfu.khlopunov.sportgid.models.Place;
+import com.kpfu.khlopunov.sportgid.models.Review;
 import com.kpfu.khlopunov.sportgid.providers.SharedPreferencesProvider;
 import com.kpfu.khlopunov.sportgid.service.ApiService;
+
+import java.util.List;
 
 /**
  * Created by hlopu on 14.12.2017.
@@ -35,6 +38,7 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
     private TextView tvDescription;
     private TextView tvContacts;
     private RecyclerView rvReviews;
+    private TextView tvReviews;
     private EditText etReview;
     private TextView tvSendReview;
     private TextView tvComplain;
@@ -58,6 +62,7 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         bind(view);
+        checkAuthorisation();
         Place place = (Place) getArguments().getSerializable("place");
         //todo set картинку
         tvRaitng.setText(String.valueOf(place.getRating()));
@@ -70,6 +75,7 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
         rvReviews.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new ReviewAdapter(getActivity());
         adapter.setReviewList(place.getReviews());
+
         rvReviews.setAdapter(adapter);
 
         btnTakeOver.setOnClickListener(v -> {
@@ -82,7 +88,7 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
             else {
                 ApiService service = new ApiService(getActivity());
                 service.addReview(place.getId(), SharedPreferencesProvider.getInstance(getActivity()).getUserTokken(),
-                        etReview.getText().toString(), 4, DetailPlaceFragment.this);
+                        etReview.getText().toString(), 2, DetailPlaceFragment.this);
             }
         });
         tvComplain.setOnClickListener(v -> {
@@ -93,7 +99,7 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
 
     private void bind(View view) {
         ivPlace = view.findViewById(R.id.iv_place_detail);
-        tvRaitng = view.findViewById(R.id.tv_place_raiting);
+        tvRaitng = view.findViewById(R.id.tv_detail_raiting);
         tvName = view.findViewById(R.id.tv_detail_place_name);
         tvAddress = view.findViewById(R.id.tv_place_address);
         btnTakeOver = view.findViewById(R.id.btn_take_over);
@@ -104,17 +110,32 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
         etReview = view.findViewById(R.id.et_review);
         tvSendReview = view.findViewById(R.id.tv_send_review);
         tvComplain = view.findViewById(R.id.tv_complain);
+        tvReviews = view.findViewById(R.id.tv_detail_send_review);
     }
 
     @Override
     public void callback(Object object) {
         if ((Boolean) object == Boolean.TRUE) {
             Toast.makeText(getActivity(), "Отзыв успешно добавлен!!", Toast.LENGTH_SHORT).show();
+
+            List<Review> reviewList =adapter.getReviewList();       //TODO сделать подгрузку с сервера после добавления или что-то другое
+            reviewList.add(new Review(0, 0l, etReview.getText().toString(),4,       //хардкод поменять
+                    SharedPreferencesProvider.getInstance(getActivity()).getUser(),null,null  ));
+            adapter.setReviewList(reviewList);
+
             etReview.setText("");
             adapter.notifyDataSetChanged();
 
 
         } else
             Toast.makeText(getActivity(), "Не удалось добавить отзыв", Toast.LENGTH_SHORT).show();
+    }
+
+    public void checkAuthorisation(){
+        if (SharedPreferencesProvider.getInstance(getActivity()).getUserTokken()==null){
+            etReview.setVisibility(View.GONE);
+            tvSendReview.setVisibility(View.GONE);
+            tvReviews.setVisibility(View.GONE);
+        }
     }
 }

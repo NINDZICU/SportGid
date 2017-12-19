@@ -12,17 +12,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 
+import com.google.android.gms.auth.api.Auth;
 import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.providers.SharedPreferencesProvider;
+import com.kpfu.khlopunov.sportgid.service.ApiService;
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKSdk;
 
 /**
  * Created by hlopu on 24.10.2017.
  */
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment implements ApiCallback {
     private Toolbar toolbar;
     private TextView toolbarTitle;
     private TextView tvCity;
@@ -75,11 +80,11 @@ public class SettingsFragment extends Fragment {
             etCity.setText(tvCity.getText());
         });
         ibEditCityOk.setOnClickListener(v -> {
-            viewSwitcher.showNext();
-            viewSwitcherBtn.showNext();
-            if(etCity.length()!=0) {
-                tvCity.setText(etCity.getText());
-                SharedPreferencesProvider.getInstance(getActivity()).saveCity(etCity.getText().toString());
+            if (etCity.length() != 0) {
+                ApiService apiService = new ApiService(getActivity());
+                apiService.updateCity(SharedPreferencesProvider.getInstance(getActivity()).getUserTokken(),
+                        etCity.getText().toString(), SettingsFragment.this);
+
             }
 
         });
@@ -87,6 +92,10 @@ public class SettingsFragment extends Fragment {
         btnExit.setOnClickListener(v -> {
             btnExit.setVisibility(View.GONE);
             SharedPreferencesProvider.getInstance(getActivity()).deleteUserTokken();
+            SharedPreferencesProvider.getInstance(getActivity()).deleteUser();
+            VKAccessToken.removeTokenAtKey(getActivity(), VKAccessToken.ACCESS_TOKEN);
+            VKSdk.logout();
+//            Auth.GoogleSignInApi.signOut();//TODO реализовать
             notifyFragment.notifyData();
         });
 
@@ -105,5 +114,16 @@ public class SettingsFragment extends Fragment {
 
     public void setNotifyFragment(NotifyFragment notifyFragment) {
         this.notifyFragment = notifyFragment;
+    }
+
+    @Override
+    public void callback(Object object) {
+        if ((Boolean) object) {
+            tvCity.setText(etCity.getText());
+            SharedPreferencesProvider.getInstance(getActivity()).saveCity(etCity.getText().toString());
+            viewSwitcher.showNext();
+            viewSwitcherBtn.showNext();
+        } else
+            Toast.makeText(getActivity(), "Не удалось изменить город!", Toast.LENGTH_SHORT).show();
     }
 }

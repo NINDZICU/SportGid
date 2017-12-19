@@ -3,6 +3,7 @@ package com.kpfu.khlopunov.sportgid.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,7 +32,7 @@ import java.util.List;
  * Created by hlopu on 13.12.2017.
  */
 
-public class ListObjectsFragment extends Fragment implements ApiCallback {
+public class ListObjectsFragment extends Fragment implements ApiCallback, OnBackPressedListener {
     private Button btnObjects;
     private Button btnEvents;
     private NoDefaultSpinner spinnerSort;
@@ -102,14 +103,19 @@ public class ListObjectsFragment extends Fragment implements ApiCallback {
         spinnerSort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("POSITION "+position);
+                System.out.println("POSITION " + position);
                 SortService sort = new SortService();
                 List<Place> sortPlace = new ArrayList<>();
                 switch (position) {
-                    case 0: sortPlace = sort.sortPlaces(placeAdapter.getmPlaceList(), "name", SortService.ASC);
-
-                    case 1:sortPlace = sort.sortPlaces(placeAdapter.getmPlaceList(), "price", SortService.ASC);
-                    case 2:sortPlace = sort.sortPlaces(placeAdapter.getmPlaceList(), "rating", SortService.ASC);
+                    case 0:
+                        sortPlace = sort.sortPlaces(placeAdapter.getmPlaceList(), "name", SortService.ASC);
+                        break;
+                    case 1:
+                        sortPlace = sort.sortPlaces(placeAdapter.getmPlaceList(), "price", SortService.ASC);
+                        break;
+                    case 2:
+                        sortPlace = sort.sortPlaces(placeAdapter.getmPlaceList(), "rating", SortService.ASC);
+                        break;
                 }
                 placeAdapter.setmPlaceList(sortPlace);
 //                placeAdapter.notifyDataSetChanged();
@@ -135,13 +141,14 @@ public class ListObjectsFragment extends Fragment implements ApiCallback {
 
 
     public void onVisibleProgBar() {
-            progressBar.setVisibility(View.VISIBLE);
-            rvEvents.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        rvEvents.setVisibility(View.GONE);
+
     }
 
     @Override
     public void callback(Object object) {
-        if(object== null){
+        if (object == null) {
             Toast.makeText(getActivity(), "Не удалось загрузить данные", Toast.LENGTH_SHORT).show();
         } else {
             List<Place> places = (List<Place>) object;
@@ -149,5 +156,16 @@ public class ListObjectsFragment extends Fragment implements ApiCallback {
         }
         progressBar.setVisibility(View.GONE);
         rvEvents.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onBackPressed() {
+        System.out.println("BUTTON BACK FRAGMENT");
+//        eventsListener.onButtonBack();
+//        getFragmentManager().popBackStack(HomeFragment.class.getName(), 2);
+//        getChildFragmentManager().popBackStack(HomeFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//        getChildFragmentManager().popBackStack(R.id.frame_home_fragment, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//        getChildFragmentManager().popBackStackImmediate();
+//        getFragmentManager().popBackStackImmediate();
     }
 }

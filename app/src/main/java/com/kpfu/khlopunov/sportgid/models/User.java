@@ -28,6 +28,9 @@ public class User implements Serializable {
     @SerializedName("avatar")
     @Expose
     private String avatar;
+    @SerializedName("token")
+    @Expose
+    private UserToken userToken;
 
     public User(String name, String surname, String login, String password, String avatar) {
         this.name = name;
@@ -88,5 +91,13 @@ public class User implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public UserToken getUserToken() {
+        return userToken;
+    }
+
+    public void setUserToken(UserToken userToken) {
+        this.userToken = userToken;
     }
 }

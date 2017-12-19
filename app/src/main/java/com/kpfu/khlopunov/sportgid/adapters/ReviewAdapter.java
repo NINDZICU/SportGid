@@ -68,6 +68,10 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         this.reviewList = reviewList;
     }
 
+    public List<Review> getReviewList() {
+        return reviewList;
+    }
+
     public void setEventsListener(EventsListener eventsListener) {
         this.eventsListener = eventsListener;
     }

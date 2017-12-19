@@ -21,6 +21,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.fragments.ApiCallback;
 import com.kpfu.khlopunov.sportgid.fragments.RegistrationFragment;
+import com.kpfu.khlopunov.sportgid.models.User;
 import com.kpfu.khlopunov.sportgid.providers.SharedPreferencesProvider;
 import com.kpfu.khlopunov.sportgid.service.ApiService;
 import com.vk.sdk.VKAccessToken;
@@ -135,7 +136,9 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
                 // Пользователь успешно авторизовался
                 System.out.println("SUCUCUCEESSSSSSSSSSSSSSSSSSSS");
                 access_token = res;
+
                 access_token.saveTokenToSharedPreferences(getApplicationContext(), VKAccessToken.ACCESS_TOKEN);
+                SharedPreferencesProvider.getInstance(AuthentificationActivity.this).saveUserTokken(access_token.toString()); //TODO Переделать на запрос к серверу
 
                 final VKRequest request = VKApi.users().get(VKParameters.from(VKApiConst.ACCESS_TOKEN, access_token.accessToken));
                 request.executeWithListener(new VKRequest.VKRequestListener() {
@@ -155,6 +158,10 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
                                 SharedPreferencesProvider.getInstance(AuthentificationActivity.this).saveVkId(vkID);
                                 SharedPreferencesProvider.getInstance(AuthentificationActivity.this)
                                         .saveVkName(list.get(i).fields.get("first_name").toString() + " " + list.get(i).fields.get("last_name"));
+                                SharedPreferencesProvider.getInstance(AuthentificationActivity.this)
+                                        .saveUser(new User(list.get(i).fields.get("first_name").toString(), list.get(i).fields.get("last_name").toString()));
+
+                                successAuthorisation(list.get(i).fields.get("first_name").toString(), list.get(i).fields.get("last_name").toString());
 //                                apiService = new ApiService(getApplicationContext());
 //                                apiService.saveUser(vkID, list.get(i).fields.get("first_name").toString()+" "+list.get(i).fields.get("last_name"), "kazan" );
                             } catch (JSONException e) {
@@ -189,7 +196,12 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
 
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
+
             System.out.println("DISPLAY NAME    " + acct.getDisplayName());
+            SharedPreferencesProvider.getInstance(AuthentificationActivity.this).saveUserTokken(acct.getId());//Todo через сервер
+            SharedPreferencesProvider.getInstance(AuthentificationActivity.this)
+                    .saveUser(new User(acct.getDisplayName(), ""));
+            successAuthorisation(acct.getDisplayName(), "");
             finish();
 //            mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
 //            updateUI(true);
@@ -201,12 +213,21 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
 
     @Override
     public void callback(Object object) {
-        System.out.println("TOKKKKEKEN OT NURIKA "+(String)object);
-        if (((String)object).equals("ERROR")) Toast.makeText(AuthentificationActivity.this,
+        System.out.println("TOKKKKEKEN OT NURIKA " + (String) object);
+        if (((String) object).equals("ERROR")) Toast.makeText(AuthentificationActivity.this,
                 "Не удалось авторизоваться", Toast.LENGTH_SHORT).show();
         else {
             SharedPreferencesProvider.getInstance(AuthentificationActivity.this).saveUserTokken((String) object);
+            successAuthorisation("Анатолий", "Хлопунов");
             finish();
         }
+    }
+
+    public void successAuthorisation(String name, String surname) {
+        SharedPreferencesProvider.getInstance(AuthentificationActivity.this)
+                .saveUser(new User(name, surname));
+        Intent intent = new Intent(AuthentificationActivity.this, MainActivity.class);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }

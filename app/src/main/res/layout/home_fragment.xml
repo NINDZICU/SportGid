@@ -45,6 +45,7 @@
             android:drawableEnd="@drawable/find"
             android:drawableRight="@drawable/find"
             android:ems="10"
+            android:paddingLeft="10dp"
             android:hint="@string/find"
             android:inputType="textPersonName"
             android:paddingEnd="10dp"

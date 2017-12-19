@@ -3,6 +3,7 @@ package com.kpfu.khlopunov.sportgid.activities;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import com.kpfu.khlopunov.sportgid.adapters.TabPagerAdapter;
 import com.kpfu.khlopunov.sportgid.custom.TabViewWrapper;
 import com.kpfu.khlopunov.sportgid.fragments.HomeFragment;
 import com.kpfu.khlopunov.sportgid.fragments.NotifyFragment;
+import com.kpfu.khlopunov.sportgid.fragments.OnBackPressedListener;
 import com.kpfu.khlopunov.sportgid.fragments.ProfileFragment;
 import com.kpfu.khlopunov.sportgid.fragments.SettingsFragment;
 import com.kpfu.khlopunov.sportgid.providers.SharedPreferencesProvider;
@@ -26,7 +28,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements TabViewWrapper.TabListener,NotifyFragment {
+public class MainActivity extends AppCompatActivity implements TabViewWrapper.TabListener, NotifyFragment {
 
     @BindView(R.id.tab_pager)
     ViewPager mTabPager;
@@ -55,13 +57,13 @@ public class MainActivity extends AppCompatActivity implements TabViewWrapper.Ta
         profileFragment.setNotifyFragment(this);
 //        profileFragment.setUpdateData(() -> homeFragment.notifyDataSetChanged());
         tabFragment.add(profileFragment);
-        SettingsFragment settingsFragment =SettingsFragment.getInstance();
+        SettingsFragment settingsFragment = SettingsFragment.getInstance();
         settingsFragment.setNotifyFragment(this);
         tabFragment.add(settingsFragment);
         mTabPagerAdapter.setFragmentList(tabFragment);
         mTabPager.setAdapter(mTabPagerAdapter);
 
-        if(SharedPreferencesProvider.getInstance(this).getCity()==null||SharedPreferencesProvider.getInstance(this).getCity()=="")
+        if (SharedPreferencesProvider.getInstance(this).getCity() == null || SharedPreferencesProvider.getInstance(this).getCity() == "")
             SharedPreferencesProvider.getInstance(this).saveCity("Казань");
 
 
@@ -94,6 +96,24 @@ public class MainActivity extends AppCompatActivity implements TabViewWrapper.Ta
     @Override
     public void notifyData() {
         mTabPagerAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onBackPressed() {
+        FragmentManager fm = getSupportFragmentManager();
+        OnBackPressedListener backPressedListener = null;
+        for (Fragment fragment : fm.getFragments()) {
+            if (fragment instanceof OnBackPressedListener) {
+                backPressedListener = (OnBackPressedListener) fragment;
+                break;
+            }
+        }
+
+        if (backPressedListener != null) {
+            backPressedListener.onBackPressed();
+        } else {
+            super.onBackPressed();
+        }
     }
 }
 

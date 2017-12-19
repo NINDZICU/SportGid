@@ -31,12 +31,15 @@ import com.kpfu.khlopunov.sportgid.service.ApiService;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by hlopu on 24.10.2017.
  */
 
 public class ProfileFragment extends Fragment implements ApiCallback {
 
+    public final static int REQUEST_CODE_SIGN_IN = 110;
     private TextView toolbarTitle;
     private ImageButton btnAddEvent;
     private Toolbar toolbar;
@@ -107,7 +110,7 @@ public class ProfileFragment extends Fragment implements ApiCallback {
             btnAddEvent.setVisibility(View.GONE);
             btnSignIn.setOnClickListener(v -> {
                 Intent intent = new Intent(getActivity(), AuthentificationActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_SIGN_IN);
             });
         }
     }
@@ -125,4 +128,16 @@ public class ProfileFragment extends Fragment implements ApiCallback {
     public void setNotifyFragment(NotifyFragment notifyFragment) {
         this.notifyFragment = notifyFragment;
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CODE_SIGN_IN:
+                    notifyFragment.notifyData();
+
+            }
+        }
+    }
 }
+

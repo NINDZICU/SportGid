@@ -174,4 +174,10 @@ public class SharedPreferencesProvider {
         editor.putString(PREFERENCES_NAME, jsonText);
         editor.commit();
     }
+    public void deleteUser() {
+        SharedPreferences preferences = context.getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.commit();
+    }
 }
