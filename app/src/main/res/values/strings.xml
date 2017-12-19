@@ -28,6 +28,10 @@
     <string name="address">Адрес</string>
     <string name="number">Номер телефона</string>
     <string name="save">Сохранить</string>
+    <string name="city">Город:</string>
+    <string name="exit_from_accounts">Выйти из аккаунта</string>
+    <string name="callback">Обратная связь</string>
+    <string name="sign_in">Войти</string>
 
     <string-array name="event">
         <item>Объект</item>

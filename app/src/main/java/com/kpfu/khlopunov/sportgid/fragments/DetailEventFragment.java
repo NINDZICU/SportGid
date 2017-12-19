@@ -11,11 +11,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.adapters.MemberListAdapter;
 import com.kpfu.khlopunov.sportgid.models.Event;
 import com.kpfu.khlopunov.sportgid.models.User;
+import com.kpfu.khlopunov.sportgid.service.ApiService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,7 @@ import java.util.List;
  * Created by hlopu on 14.12.2017.
  */
 
-public class DetailEventFragment extends Fragment {
+public class DetailEventFragment extends Fragment implements ApiCallback {
     private ImageView ivPhotoEvent;
     private TextView tvCountJoin;
     private TextView tvCountMember;
@@ -39,7 +41,7 @@ public class DetailEventFragment extends Fragment {
     private MemberListAdapter memberListAdapter;
     private EventsListener eventsListener;
 
-    public static DetailEventFragment newInstance(Event event){
+    public static DetailEventFragment newInstance(Event event) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("event", event);
         DetailEventFragment fragment = new DetailEventFragment();
@@ -59,9 +61,10 @@ public class DetailEventFragment extends Fragment {
         bind(view);
 
         Event event = (Event) getArguments().getSerializable("event");
-        //TODO photo
-//        tvCountJoin.setText(event.getMembers().size());
-        tvCountJoin.setText("2");
+//        int id = getArguments().getInt("id");
+//        ApiService apiService = new ApiService(getActivity());
+//        apiService.getEvent(id, DetailEventFragment.this);
+        tvCountJoin.setText(event.getMembers().size());
         tvCountMember.setText(String.valueOf(event.getMaxOfMembers()));
         tvNameEvent.setText(event.getName());
         tvAddressEvent.setText(event.getPlace().getAddress());
@@ -72,9 +75,6 @@ public class DetailEventFragment extends Fragment {
 
         rvMembers.setLayoutManager(new LinearLayoutManager(getActivity()));
         List<User> users = new ArrayList<>();
-        users.add(new User("sdaasdasd","asdasdsad", null, null));
-        users.add(new User("Nurik","asdasdsad", null, null));
-        users.add(new User("Tolya","asdasdsad", null, null));
         memberListAdapter = new MemberListAdapter(getActivity(), users);
         memberListAdapter.setmUsers(users);
         rvMembers.setAdapter(memberListAdapter);
@@ -84,7 +84,8 @@ public class DetailEventFragment extends Fragment {
         });
     }
 
-    public void bind(View view){
+    public void bind(View view) {
+
         ivPhotoEvent = view.findViewById(R.id.iv_event_detail);
         tvCountJoin = view.findViewById(R.id.tv_signed_up);
         tvCountMember = view.findViewById(R.id.tv_count_members);
@@ -100,5 +101,18 @@ public class DetailEventFragment extends Fragment {
 
     public void setEventsListener(EventsListener eventsListener) {
         this.eventsListener = eventsListener;
+    }
+
+    @Override
+    public void callback(Object object) {
+        if (object != null) {
+            Event event = (Event) object;
+//            tvCountJoin.setText("2");
+            //TODO photo
+
+
+        } else {
+            Toast.makeText(getActivity(), "Не удалось загрузить данные", Toast.LENGTH_SHORT).show();
+        }
     }
 }

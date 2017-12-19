@@ -15,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class SportGidApi {
-    private static final String BASE_URL = "http://192.168.0.104:8080/";
+    private static final String BASE_URL = "http://192.168.0.102:8080/";
     private SportGidApiRequests mSportGidApiRequests;
     private static SportGidApi sportGidApi;
 
@@ -42,7 +42,4 @@ public class SportGidApi {
         return mSportGidApiRequests;
     }
 
-    public Observable<String> registration(User user){
-        return mSportGidApiRequests.registrtation(user.getName(), user.getSurname(), user.getLogin(), user.getPassword());
-    }
 }

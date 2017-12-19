@@ -1,6 +1,10 @@
 package com.kpfu.khlopunov.sportgid.models;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -8,21 +12,40 @@ import java.util.Set;
  */
 
 public class Place implements Serializable {
-
+    @SerializedName("id")
+    @Expose
     private int id;
+    @SerializedName("title")
+    @Expose
     private String title;
+    @SerializedName("rating")
+    @Expose
     private int rating;
+    @SerializedName("description")
+    @Expose
     private String description;
+    @SerializedName("address")
+    @Expose
     private String address;
+    @SerializedName("city")
+    @Expose
     private String city;
     private User user;
     private KindSport sport;
-//    private Set<Review> reviews;
+    @SerializedName("reviews")
+    @Expose
+    private List<Review> reviews;
     private Set<Event> events;
-//    private Set<Complaint> complaints;
+    //    private Set<Complaint> complaints;
+    @SerializedName("contact")
+    @Expose
     private String contact;
+    @SerializedName("photo")
+    @Expose
+    private String photo;
 
-    public Place(int id, String title, int rating, String description, String address, String city, User user, KindSport sport, Set<Event> events, String contact) {
+    public Place(int id, String title, int rating, String description, String address, String city,
+                 User user, KindSport sport, List<Review> reviews, Set<Event> events, String contact, String photo) {
         this.id = id;
         this.title = title;
         this.rating = rating;
@@ -31,8 +54,10 @@ public class Place implements Serializable {
         this.city = city;
         this.user = user;
         this.sport = sport;
+        this.reviews = reviews;
         this.events = events;
         this.contact = contact;
+        this.photo = photo;
     }
 
     public int getId() {
@@ -113,6 +138,22 @@ public class Place implements Serializable {
 
     public void setContact(String contact) {
         this.contact = contact;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }
 

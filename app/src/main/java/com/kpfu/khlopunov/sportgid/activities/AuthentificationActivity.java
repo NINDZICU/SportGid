@@ -19,8 +19,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.kpfu.khlopunov.sportgid.R;
+import com.kpfu.khlopunov.sportgid.fragments.ApiCallback;
 import com.kpfu.khlopunov.sportgid.fragments.RegistrationFragment;
 import com.kpfu.khlopunov.sportgid.providers.SharedPreferencesProvider;
+import com.kpfu.khlopunov.sportgid.service.ApiService;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKScope;
@@ -39,7 +41,7 @@ import org.json.JSONException;
  * Created by hlopu on 30.10.2017.
  */
 
-public class AuthentificationActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class AuthentificationActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, ApiCallback {
 
     private static final int RC_SIGN_IN = 9001;
     public static final String FRAGMENT_TAG = "my_super_fragment_tag";
@@ -88,6 +90,8 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
         btnEnter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ApiService apiService = new ApiService(AuthentificationActivity.this);
+                apiService.authentification(etLogin.getText().toString(), etPassword.getText().toString(), AuthentificationActivity.this);
                 //TODO запрос на сервер
             }
         });
@@ -132,7 +136,6 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
                 System.out.println("SUCUCUCEESSSSSSSSSSSSSSSSSSSS");
                 access_token = res;
                 access_token.saveTokenToSharedPreferences(getApplicationContext(), VKAccessToken.ACCESS_TOKEN);
-
 
                 final VKRequest request = VKApi.users().get(VKParameters.from(VKApiConst.ACCESS_TOKEN, access_token.accessToken));
                 request.executeWithListener(new VKRequest.VKRequestListener() {
@@ -193,6 +196,17 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
         } else {
             // Signed out, show unauthenticated UI.
 //            updateUI(false);
+        }
+    }
+
+    @Override
+    public void callback(Object object) {
+        System.out.println("TOKKKKEKEN OT NURIKA "+(String)object);
+        if (((String)object).equals("ERROR")) Toast.makeText(AuthentificationActivity.this,
+                "Не удалось авторизоваться", Toast.LENGTH_SHORT).show();
+        else {
+            SharedPreferencesProvider.getInstance(AuthentificationActivity.this).saveUserTokken((String) object);
+            finish();
         }
     }
 }

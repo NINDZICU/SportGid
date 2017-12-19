@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.kpfu.khlopunov.sportgid.R;
+import com.kpfu.khlopunov.sportgid.fragments.NotifyFragment;
 import com.kpfu.khlopunov.sportgid.models.KindSport;
 
 import java.util.Collections;
@@ -22,10 +23,12 @@ public class KindSportsAdapter extends RecyclerView.Adapter<KindSportsAdapter.Ki
     private Context context;
     private List<KindSport> mKindSports;
     private KindSportListener mKindSportListener;
+    private NotifyFragment notifyFragment;
 
-    public KindSportsAdapter(Context context) {
+    public KindSportsAdapter(Context context, NotifyFragment notifyFragment) {
         this.context = context;
         mKindSports = Collections.emptyList();
+        this.notifyFragment = notifyFragment;
     }
 
     public void setKindSports(List<KindSport> kindSports) {
@@ -74,5 +77,8 @@ public class KindSportsAdapter extends RecyclerView.Adapter<KindSportsAdapter.Ki
     public void setmKindSportListener(KindSportListener mKindSportListener) {
         this.mKindSportListener = mKindSportListener;
     }
-
+    public void notifyData(){
+        notifyDataSetChanged();
+        notifyFragment.notifyData();
+    }
 }

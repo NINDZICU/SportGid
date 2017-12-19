@@ -23,16 +23,17 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceViewHol
     private Context context;
     private List<Place> mPlaceList;
     private PlaceListener mPlaceListener;
-    private NotifyFragment notifyFragment;
+//    private NotifyFragment notifyFragment;
 
-    public PlaceAdapter(Context context, NotifyFragment notifyFragment) {
+    public PlaceAdapter(Context context) {
         this.context = context;
         mPlaceList = Collections.emptyList();
-        this.notifyFragment = notifyFragment;
+//        this.notifyFragment = notifyFragment;
     }
 
     public void setmPlaceList(List<Place> mPlaceList) {
         this.mPlaceList = mPlaceList;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -89,8 +90,12 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceViewHol
         this.mPlaceListener = mPlaceListener;
     }
 
-    public void notifyData(){
-        notifyDataSetChanged();
-        notifyFragment.notifyData();
+    public List<Place> getmPlaceList() {
+        return mPlaceList;
     }
+
+//    public void notifyData(){
+//        notifyDataSetChanged();
+//        notifyFragment.notifyData();
+//    }
 }

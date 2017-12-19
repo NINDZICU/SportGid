@@ -45,7 +45,8 @@
         <EditText
             android:id="@+id/et_reg_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/white" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -57,7 +58,8 @@
         <EditText
             android:id="@+id/et_reg_surname"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/white" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -81,7 +83,8 @@
         <EditText
             android:id="@+id/et_reg_email"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/white" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -106,7 +109,8 @@
             android:id="@+id/et_reg_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword"
+            android:textColor="@color/white" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -131,7 +135,7 @@
             android:id="@+id/et_reg_repassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword" />
 
         <Button
             android:id="@+id/btn_reg"
@@ -140,12 +144,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="7dp"
+            android:layout_marginTop="5dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:layout_marginTop="5dp"
             android:text="Зарегистрироваться"
-            android:textColor="@color/text_color"
-            />
+            android:textColor="@color/text_color" />
 
         <TextView
             android:layout_width="wrap_content"

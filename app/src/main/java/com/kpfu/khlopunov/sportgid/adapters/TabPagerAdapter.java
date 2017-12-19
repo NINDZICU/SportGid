@@ -36,12 +36,20 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
         notifyDataSetChanged();
     }
 
-//    public List<Fragment> getmFragmentList() {
+    public List<Fragment> getmFragmentList() {
+        return mFragmentList;
+    }
+    //    public List<Fragment> getmFragmentList() {
 //        return mFragmentList;
 //    }
 
     @Override
     public int getCount() {
         return mFragmentList.size();
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE; // есть более высокопроизводительный http://qaru.site/questions/14357/viewpager-pageradapter-not-updating-the-view
     }
 }

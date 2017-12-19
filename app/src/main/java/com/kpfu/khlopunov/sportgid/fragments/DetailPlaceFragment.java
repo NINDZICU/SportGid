@@ -12,16 +12,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.adapters.ReviewAdapter;
+import com.kpfu.khlopunov.sportgid.models.ApiResult;
 import com.kpfu.khlopunov.sportgid.models.Place;
+import com.kpfu.khlopunov.sportgid.providers.SharedPreferencesProvider;
+import com.kpfu.khlopunov.sportgid.service.ApiService;
 
 /**
  * Created by hlopu on 14.12.2017.
  */
 
-public class DetailPlaceFragment extends Fragment {
+public class DetailPlaceFragment extends Fragment implements ApiCallback {
     private ImageView ivPlace;
     private TextView tvRaitng;
     private TextView tvName;
@@ -34,6 +38,7 @@ public class DetailPlaceFragment extends Fragment {
     private EditText etReview;
     private TextView tvSendReview;
     private TextView tvComplain;
+    private ReviewAdapter adapter;
 
     public static DetailPlaceFragment newInstance(Place place) {
         Bundle bundle = new Bundle();
@@ -63,15 +68,22 @@ public class DetailPlaceFragment extends Fragment {
         tvContacts.setText(place.getContact());
 
         rvReviews.setLayoutManager(new LinearLayoutManager(getActivity()));
-        ReviewAdapter adapter = new ReviewAdapter(getActivity());
-//        adapter.setReviewList(place.getReview().getTitle()); //todo сказать Нурику чтоб сделал
+        adapter = new ReviewAdapter(getActivity());
+        adapter.setReviewList(place.getReviews());
         rvReviews.setAdapter(adapter);
 
         btnTakeOver.setOnClickListener(v -> {
 
         });
+
         tvSendReview.setOnClickListener(v -> {
-            //TODO
+            if (etReview.length() == 0)
+                Toast.makeText(getActivity(), "Заполите поле", Toast.LENGTH_SHORT).show();
+            else {
+                ApiService service = new ApiService(getActivity());
+                service.addReview(place.getId(), SharedPreferencesProvider.getInstance(getActivity()).getUserTokken(),
+                        etReview.getText().toString(), 4, DetailPlaceFragment.this);
+            }
         });
         tvComplain.setOnClickListener(v -> {
 
@@ -92,5 +104,17 @@ public class DetailPlaceFragment extends Fragment {
         etReview = view.findViewById(R.id.et_review);
         tvSendReview = view.findViewById(R.id.tv_send_review);
         tvComplain = view.findViewById(R.id.tv_complain);
+    }
+
+    @Override
+    public void callback(Object object) {
+        if ((Boolean) object == Boolean.TRUE) {
+            Toast.makeText(getActivity(), "Отзыв успешно добавлен!!", Toast.LENGTH_SHORT).show();
+            etReview.setText("");
+            adapter.notifyDataSetChanged();
+
+
+        } else
+            Toast.makeText(getActivity(), "Не удалось добавить отзыв", Toast.LENGTH_SHORT).show();
     }
 }

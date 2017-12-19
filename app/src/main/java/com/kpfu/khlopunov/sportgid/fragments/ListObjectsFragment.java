@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.kpfu.khlopunov.sportgid.Constants;
 import com.kpfu.khlopunov.sportgid.R;
@@ -30,7 +31,7 @@ import java.util.List;
  * Created by hlopu on 13.12.2017.
  */
 
-public class ListObjectsFragment extends Fragment implements NotifyFragment {
+public class ListObjectsFragment extends Fragment implements ApiCallback {
     private Button btnObjects;
     private Button btnEvents;
     private NoDefaultSpinner spinnerSort;
@@ -63,9 +64,9 @@ public class ListObjectsFragment extends Fragment implements NotifyFragment {
         spinnerSort = view.findViewById(R.id.spinner);
         rvEvents = view.findViewById(R.id.rv_events);
         progressBar = view.findViewById(R.id.pb_events);
-        setVisible();
+        onVisibleProgBar();
         rvEvents.setLayoutManager(new LinearLayoutManager(getActivity()));
-        placeAdapter = new PlaceAdapter(getActivity(), ListObjectsFragment.this);
+        placeAdapter = new PlaceAdapter(getActivity());
         placeAdapter.setmPlaceListener(place -> {
             DetailPlaceFragment fragment = DetailPlaceFragment.newInstance(place);
             eventsListener.onButtonClicked(fragment);
@@ -91,7 +92,7 @@ public class ListObjectsFragment extends Fragment implements NotifyFragment {
 //                new User("Sdad","s","s","s"),new KindSport(1,"sdad","asddasd"),null,"89274502477" ));
 //        placeAdapter.setmPlaceList(events);
         ApiService service = new ApiService(getActivity());
-        List<Place> placeList = service.getPlaces(getArguments().getInt("idKind"), "Kazan", placeAdapter);
+        service.getPlaces(getArguments().getInt("idKind"), "Kazan", ListObjectsFragment.this);
         rvEvents.setAdapter(placeAdapter);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, Constants.DATA);
@@ -105,12 +106,13 @@ public class ListObjectsFragment extends Fragment implements NotifyFragment {
                 SortService sort = new SortService();
                 List<Place> sortPlace = new ArrayList<>();
                 switch (position) {
-                    case 0: sortPlace = sort.sortPlaces(placeList, "name", SortService.ASC);
-                    case 1:sortPlace = sort.sortPlaces(placeList, "price", SortService.ASC);
-                    case 2:sortPlace = sort.sortPlaces(placeList, "rating", SortService.ASC);
+                    case 0: sortPlace = sort.sortPlaces(placeAdapter.getmPlaceList(), "name", SortService.ASC);
+
+                    case 1:sortPlace = sort.sortPlaces(placeAdapter.getmPlaceList(), "price", SortService.ASC);
+                    case 2:sortPlace = sort.sortPlaces(placeAdapter.getmPlaceList(), "rating", SortService.ASC);
                 }
                 placeAdapter.setmPlaceList(sortPlace);
-                placeAdapter.notifyDataSetChanged();
+//                placeAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -131,18 +133,21 @@ public class ListObjectsFragment extends Fragment implements NotifyFragment {
         this.eventsListener = eventsListener;
     }
 
-    @Override
-    public void notifyData() {
-        setVisible();
-    }
 
-    public void setVisible() {
-        if (progressBar.getVisibility() == View.VISIBLE) {
-            progressBar.setVisibility(View.GONE);
-            rvEvents.setVisibility(View.VISIBLE);
-        } else {
+    public void onVisibleProgBar() {
             progressBar.setVisibility(View.VISIBLE);
             rvEvents.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void callback(Object object) {
+        if(object== null){
+            Toast.makeText(getActivity(), "Не удалось загрузить данные", Toast.LENGTH_SHORT).show();
+        } else {
+            List<Place> places = (List<Place>) object;
+            placeAdapter.setmPlaceList(places);
         }
+        progressBar.setVisibility(View.GONE);
+        rvEvents.setVisibility(View.VISIBLE);
     }
 }

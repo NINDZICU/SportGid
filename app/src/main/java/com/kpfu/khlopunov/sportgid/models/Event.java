@@ -1,5 +1,8 @@
 package com.kpfu.khlopunov.sportgid.models;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.Set;
 
@@ -9,21 +12,33 @@ import java.util.Set;
 
 public class Event implements Serializable{
 
+    @SerializedName("id")
+    @Expose
     private int id;
-    private String image;
+    @SerializedName("photo")
+    @Expose
+    private String photo;
+    @SerializedName("title")
+    @Expose
     private String name;
     private Place place;
+    @SerializedName("price")
+    @Expose
     private String price;
     private String raiting;
+    @SerializedName("maxOfMembers")
+    @Expose
     private int maxOfMembers;
     private User avtor;
+    @SerializedName("description")
+    @Expose
     private String description;
     private Set<User> members;
     private KindSport kindSport;
 
-    public Event(int id, String image, String name, Place place, String price, String raiting, int maxOfMembers, User avtor, String description, Set<User> members, KindSport kindSport) {
+    public Event(int id, String photo, String name, Place place, String price, String raiting, int maxOfMembers, User avtor, String description, Set<User> members, KindSport kindSport) {
         this.id = id;
-        this.image = image;
+        this.photo = photo;
         this.name = name;
         this.place = place;
         this.price = price;
@@ -43,12 +58,12 @@ public class Event implements Serializable{
         this.place = place;
     }
 
-    public String getImage() {
-        return image;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     public String getName() {

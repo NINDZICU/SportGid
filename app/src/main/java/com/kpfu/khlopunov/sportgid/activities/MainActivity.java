@@ -13,8 +13,10 @@ import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.adapters.TabPagerAdapter;
 import com.kpfu.khlopunov.sportgid.custom.TabViewWrapper;
 import com.kpfu.khlopunov.sportgid.fragments.HomeFragment;
+import com.kpfu.khlopunov.sportgid.fragments.NotifyFragment;
 import com.kpfu.khlopunov.sportgid.fragments.ProfileFragment;
 import com.kpfu.khlopunov.sportgid.fragments.SettingsFragment;
+import com.kpfu.khlopunov.sportgid.providers.SharedPreferencesProvider;
 import com.vk.sdk.util.VKUtil;
 
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements TabViewWrapper.TabListener {
+public class MainActivity extends AppCompatActivity implements TabViewWrapper.TabListener,NotifyFragment {
 
     @BindView(R.id.tab_pager)
     ViewPager mTabPager;
@@ -50,11 +52,17 @@ public class MainActivity extends AppCompatActivity implements TabViewWrapper.Ta
         HomeFragment homeFragment = HomeFragment.newInstance();
         tabFragment.add(homeFragment);
         ProfileFragment profileFragment = ProfileFragment.getInstance();
+        profileFragment.setNotifyFragment(this);
 //        profileFragment.setUpdateData(() -> homeFragment.notifyDataSetChanged());
         tabFragment.add(profileFragment);
-        tabFragment.add(SettingsFragment.getInstance());
+        SettingsFragment settingsFragment =SettingsFragment.getInstance();
+        settingsFragment.setNotifyFragment(this);
+        tabFragment.add(settingsFragment);
         mTabPagerAdapter.setFragmentList(tabFragment);
         mTabPager.setAdapter(mTabPagerAdapter);
+
+        if(SharedPreferencesProvider.getInstance(this).getCity()==null||SharedPreferencesProvider.getInstance(this).getCity()=="")
+            SharedPreferencesProvider.getInstance(this).saveCity("Казань");
 
 
         mTabPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -81,6 +89,11 @@ public class MainActivity extends AppCompatActivity implements TabViewWrapper.Ta
     @Override
     public void onTabClick(int position, View tab) {
         mTabPager.setCurrentItem(position, true);
+    }
+
+    @Override
+    public void notifyData() {
+        mTabPagerAdapter.notifyDataSetChanged();
     }
 }
 

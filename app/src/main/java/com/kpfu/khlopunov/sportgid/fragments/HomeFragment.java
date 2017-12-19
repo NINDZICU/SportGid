@@ -10,11 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.kpfu.khlopunov.sportgid.activities.AuthentificationActivity;
 import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.adapters.KindSportsAdapter;
 import com.kpfu.khlopunov.sportgid.models.KindSport;
+import com.kpfu.khlopunov.sportgid.providers.SharedPreferencesProvider;
 import com.kpfu.khlopunov.sportgid.service.ApiService;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKSdk;
@@ -25,12 +28,13 @@ import java.util.List;
  * Created by hlopu on 24.10.2017.
  */
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements NotifyFragment, ApiCallback {
     private VKAccessToken access_token;
 
     private RecyclerView rvKinds;
     private EditText etSearch;
     private KindSportsAdapter adapter;
+    private ProgressBar progressBar;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -47,21 +51,20 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 //        VKSdk.initialize(getActivity().getApplicationContext()); // TODO в onCreate приложения
         access_token = VKAccessToken.tokenFromSharedPreferences(getContext(), VKAccessToken.ACCESS_TOKEN);
-        System.out.println("ACCESS TOKEN VK "+access_token);
-        if (VKSdk.isLoggedIn()) {
-            Intent intent = new Intent(getActivity(), AuthentificationActivity.class);
-            startActivity(intent);
-        }
-        else{
+        System.out.println("ACCESS TOKEN VK " + access_token);
+//        if (!VKSdk.isLoggedIn()) {
+
             rvKinds = view.findViewById(R.id.rv_kind_of_sports);
             etSearch = view.findViewById(R.id.et_search);
+            progressBar = view.findViewById(R.id.pb_home);
 
             rvKinds.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
-            adapter = new KindSportsAdapter(getActivity());
-            adapter.setmKindSportListener(kindSport ->{
+            setVisible();
+            adapter = new KindSportsAdapter(getActivity(), HomeFragment.this);
+            adapter.setmKindSportListener(kindSport -> {
                 ListObjectsFragment fragment = ListObjectsFragment.newInstance(kindSport.getId());
-                fragment.setEventsListener(nextFragment->{
+                fragment.setEventsListener(nextFragment -> {
                     getChildFragmentManager().beginTransaction()
                             .add(R.id.frame_home_fragment, nextFragment, ListObjectsFragment.class.getName())
                             .addToBackStack(HomeFragment.class.getName())
@@ -80,9 +83,40 @@ public class HomeFragment extends Fragment {
 //            List<KindSport> kindSports = new ArrayList<>();
 //            adapter.setKindSports(kindSports);
             ApiService apiService = new ApiService(getActivity());
-            List<KindSport> kindSports =apiService.getKindSports();
-            adapter.setKindSports(kindSports);
+//            List<KindSport> kindSports = apiService.getKindSports(HomeFragment.this);
+            apiService.getKindSports(HomeFragment.this);
+//            adapter.setKindSports(kindSports);
             rvKinds.setAdapter(adapter);
+    }
+
+    @Override
+    public void notifyData() {
+        setVisible();
+        //TODO убрать
+    }
+
+    public void setVisible() {
+        progressBar.setVisibility(View.VISIBLE);
+        rvKinds.setVisibility(View.GONE);
+//        if (progressBar.getVisibility() == View.VISIBLE) {
+//            progressBar.setVisibility(View.GONE);
+//            rvKinds.setVisibility(View.VISIBLE);
+//        } else {
+//            progressBar.setVisibility(View.VISIBLE);
+//            rvKinds.setVisibility(View.GONE);
+//        }
+    }
+
+    @Override
+    public void callback(Object object) {
+        if (object instanceof String) {
+            if (((String) object).equals("ERROR"))
+                Toast.makeText(getActivity(), "Не удалось загрузить", Toast.LENGTH_SHORT).show();
+        } else {
+            adapter.setKindSports((List<KindSport>) object);
+            adapter.notifyDataSetChanged();
         }
+        progressBar.setVisibility(View.GONE);
+        rvKinds.setVisibility(View.VISIBLE);
     }
 }
