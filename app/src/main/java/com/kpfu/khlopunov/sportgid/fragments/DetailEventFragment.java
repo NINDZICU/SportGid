@@ -61,16 +61,19 @@ public class DetailEventFragment extends Fragment implements ApiCallback {
         bind(view);
 
         Event event = (Event) getArguments().getSerializable("event");
+        //TODo открыть комменты
 //        int id = getArguments().getInt("id");
 //        ApiService apiService = new ApiService(getActivity());
 //        apiService.getEvent(id, DetailEventFragment.this);
-        tvCountJoin.setText(event.getMembers().size());
+//        tvCountJoin.setText(event.getMembers().size());
+        tvCountJoin.setText("0");
         tvCountMember.setText(String.valueOf(event.getMaxOfMembers()));
         tvNameEvent.setText(event.getName());
         tvAddressEvent.setText(event.getPlace().getAddress());
         tvPrice.setText(event.getPrice());
         tvDescription.setText(event.getDescription());
-        tvOrganizer.setText(event.getAvtor().getName());
+//        tvOrganizer.setText(event.getAvtor().getName());
+        tvOrganizer.setText("USER");
         tvKindSport.setText(event.getKindSport().getName());
 
         rvMembers.setLayoutManager(new LinearLayoutManager(getActivity()));

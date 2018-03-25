@@ -1,7 +1,9 @@
 {
   "project_info": {
     "project_number": "663224699304",
-    "project_id": "firebase-sportgid"
+    "firebase_url": "https://fir-sportgid.firebaseio.com",
+    "project_id": "firebase-sportgid",
+    "storage_bucket": "firebase-sportgid.appspot.com"
   },
   "client": [
     {
@@ -12,6 +14,10 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "663224699304-5tm5ehjcf1upppq3d7co8rsap6hn1duc.apps.googleusercontent.com",
+          "client_type": 3
+        },
         {
           "client_id": "663224699304-7kam7o8aok4fg11i7pjb0gsjmokm7vd1.apps.googleusercontent.com",
           "client_type": 3
@@ -35,11 +41,16 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "663224699304-5tm5ehjcf1upppq3d7co8rsap6hn1duc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }

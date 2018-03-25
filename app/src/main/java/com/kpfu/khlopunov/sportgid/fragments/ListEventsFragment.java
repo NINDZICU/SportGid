@@ -23,6 +23,7 @@ import com.kpfu.khlopunov.sportgid.models.Event;
 import com.kpfu.khlopunov.sportgid.models.KindSport;
 import com.kpfu.khlopunov.sportgid.models.Place;
 import com.kpfu.khlopunov.sportgid.models.User;
+import com.kpfu.khlopunov.sportgid.providers.SharedPreferencesProvider;
 import com.kpfu.khlopunov.sportgid.service.ApiService;
 import com.kpfu.khlopunov.sportgid.service.SortService;
 
@@ -97,7 +98,8 @@ public class ListEventsFragment extends Fragment implements NotifyFragment {
 //        events.add(new Event(1, "EVENT", "EVENT", new Place(1,"sad",2,"s","s","s",new User("Sdad","s","s","s"),new KindSport(1,"sdad","asddasd"),null, "adsasd"),
 //                "sadasd", "123", 2,new User("Sdad","s","s","s"), "dsadas", null ,new KindSport(1,"sdad","asddasd")));
 //        eventAdapter.setmEventList(events);
-        new ApiService(getActivity()).getEvents(getArguments().getInt("idKind"), "Kazan", eventAdapter);
+        new ApiService(getActivity()).getEvents(getArguments().getInt("idKind"),
+                SharedPreferencesProvider.getInstance(getContext()).getCity(), eventAdapter);
         rvEvents.setAdapter(eventAdapter);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, Constants.DATA);

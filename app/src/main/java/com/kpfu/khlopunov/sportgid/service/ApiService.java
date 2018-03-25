@@ -113,9 +113,9 @@ public class ApiService {
     }
 
     public void addPlace(String address, String contact, String title,
-                         String description, String city, List<Integer> kindOfSport, ApiCallback callback) {
+                         String description, String city,String photo, List<Integer> kindOfSport, ApiCallback callback) {
         System.out.println("CODE NURIK BESIT1111111 ");
-        requests.addPlace(address, contact, title, description, city, kindOfSport).subscribeOn(Schedulers.io())
+        requests.addPlace(address, contact, title, description, city, photo, kindOfSport).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(apiResult -> {
                     System.out.println("CODE NURIK BESIT " + apiResult.getCode());

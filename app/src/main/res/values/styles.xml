@@ -29,6 +29,7 @@
         <item name="android:background">@drawable/button_background_biruza</item>
     </style>
 
+
     <style name="AppTheme.ButtonWhite" parent="Base.Widget.AppCompat.Button">
         <item name="android:background">@drawable/button_background_white</item>
     </style>

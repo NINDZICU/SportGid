@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.fragments.NotifyFragment;
 import com.kpfu.khlopunov.sportgid.models.Place;
@@ -45,10 +47,15 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceViewHol
     @Override
     public void onBindViewHolder(PlaceAdapter.PlaceViewHolder holder, int position) {
         final Place place = mPlaceList.get(position);
-        //TODO сделать set для картинки
         holder.placeName.setText(place.getTitle());
         holder.placeAddress.setText(place.getAddress());
         holder.placeRaiting.setText(String.valueOf(place.getRating()));
+        System.out.println("PHOTOO "+place.getPhoto());
+        Glide
+                .with(context)
+                .load(place.getPhoto())
+                .apply(RequestOptions.centerCropTransform())
+                .into(holder.placeImage);
         holder.placePrice.setText("р.");        //TODO Сказать Нурику
 
         holder.itemView.setOnClickListener(v->{

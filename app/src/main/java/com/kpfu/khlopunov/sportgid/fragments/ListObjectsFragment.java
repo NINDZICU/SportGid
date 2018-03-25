@@ -21,6 +21,7 @@ import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.adapters.PlaceAdapter;
 import com.kpfu.khlopunov.sportgid.custom.NoDefaultSpinner;
 import com.kpfu.khlopunov.sportgid.models.Place;
+import com.kpfu.khlopunov.sportgid.providers.SharedPreferencesProvider;
 import com.kpfu.khlopunov.sportgid.service.ApiService;
 import com.kpfu.khlopunov.sportgid.service.SortService;
 
@@ -93,7 +94,8 @@ public class ListObjectsFragment extends Fragment implements ApiCallback, OnBack
 //                new User("Sdad","s","s","s"),new KindSport(1,"sdad","asddasd"),null,"89274502477" ));
 //        placeAdapter.setmPlaceList(events);
         ApiService service = new ApiService(getActivity());
-        service.getPlaces(getArguments().getInt("idKind"), "Kazan", ListObjectsFragment.this);
+        service.getPlaces(getArguments().getInt("idKind"),
+                SharedPreferencesProvider.getInstance(getContext()).getCity(), ListObjectsFragment.this);
         rvEvents.setAdapter(placeAdapter);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, Constants.DATA);

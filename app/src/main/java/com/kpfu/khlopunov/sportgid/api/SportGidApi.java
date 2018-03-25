@@ -15,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class SportGidApi {
-    private static final String BASE_URL = "http://10.17.1.34:8080/";
+    private static final String BASE_URL = "https://sportgid.herokuapp.com/";
     private SportGidApiRequests mSportGidApiRequests;
     private static SportGidApi sportGidApi;
 

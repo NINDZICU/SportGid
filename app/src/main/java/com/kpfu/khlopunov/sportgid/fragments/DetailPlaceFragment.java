@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.adapters.ReviewAdapter;
 import com.kpfu.khlopunov.sportgid.models.ApiResult;
@@ -64,7 +66,11 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
         bind(view);
         checkAuthorisation();
         Place place = (Place) getArguments().getSerializable("place");
-        //todo set картинку
+        Glide
+                .with(getContext())
+                .load(place.getPhoto())
+                .apply(RequestOptions.fitCenterTransform())
+                .into(ivPlace);
         tvRaitng.setText(String.valueOf(place.getRating()));
         tvName.setText(place.getTitle());
         tvAddress.setText(place.getAddress());

@@ -31,7 +31,7 @@ public interface SportGidApiRequests {
 
     @POST("api/v1/place/add")
     Observable<ApiResult> addPlace(@Query("address") String address, @Query("contact") String contact, @Query("title") String title,
-                                   @Query("description") String description, @Query("city") String city,
+                                   @Query("description") String description, @Query("city") String city, @Query("photo") String photo,
                                    @Query("sport") List<Integer> kindOfSport);
 
     @POST("api/v1/sign_up")

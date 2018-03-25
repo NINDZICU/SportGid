@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.fragments.NotifyFragment;
 import com.kpfu.khlopunov.sportgid.models.Event;
@@ -44,9 +46,15 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     @Override
     public void onBindViewHolder(EventViewHolder holder, int position) {
         final Event event = mEventList.get(position);
-        //TODO сделать set для картинки
+        Glide
+                .with(context)
+                .load(event.getPhoto())
+                .apply(RequestOptions.fitCenterTransform())
+                .into(holder.eventImage);
+
         holder.eventName.setText(event.getName());
-        holder.eventAddress.setText(event.getPlace().getAddress());
+//        holder.eventAddress.setText(event.getPlace().getAddress());
+        holder.eventAddress.setText("");
         holder.eventRaiting.setText(event.getRaiting());
         holder.eventPrice.setText(event.getPrice()+"р.");
 
