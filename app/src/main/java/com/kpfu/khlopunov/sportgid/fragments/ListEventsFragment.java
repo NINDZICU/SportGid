@@ -19,16 +19,9 @@ import com.kpfu.khlopunov.sportgid.Constants;
 import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.adapters.EventAdapter;
 import com.kpfu.khlopunov.sportgid.custom.NoDefaultSpinner;
-import com.kpfu.khlopunov.sportgid.models.Event;
-import com.kpfu.khlopunov.sportgid.models.KindSport;
-import com.kpfu.khlopunov.sportgid.models.Place;
-import com.kpfu.khlopunov.sportgid.models.User;
 import com.kpfu.khlopunov.sportgid.providers.SharedPreferencesProvider;
 import com.kpfu.khlopunov.sportgid.service.ApiService;
 import com.kpfu.khlopunov.sportgid.service.SortService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by hlopu on 14.12.2017.

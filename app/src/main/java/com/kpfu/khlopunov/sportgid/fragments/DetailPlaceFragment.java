@@ -1,6 +1,10 @@
 package com.kpfu.khlopunov.sportgid.fragments;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,12 +21,15 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.kpfu.khlopunov.sportgid.R;
+import com.kpfu.khlopunov.sportgid.activities.AddPlaceActivity;
 import com.kpfu.khlopunov.sportgid.adapters.ReviewAdapter;
 import com.kpfu.khlopunov.sportgid.models.ApiResult;
 import com.kpfu.khlopunov.sportgid.models.Place;
 import com.kpfu.khlopunov.sportgid.models.Review;
 import com.kpfu.khlopunov.sportgid.providers.SharedPreferencesProvider;
+import com.kpfu.khlopunov.sportgid.service.ActiveSystemService;
 import com.kpfu.khlopunov.sportgid.service.ApiService;
+import com.kpfu.khlopunov.sportgid.service.PermissionService;
 
 import java.util.List;
 
@@ -88,6 +95,11 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
 
         });
 
+        tvContacts.setOnClickListener(v->{
+            ActiveSystemService activeSystemService = new ActiveSystemService(getContext());
+            activeSystemService.makeCall(tvContacts.getText().toString());
+        });
+
         tvSendReview.setOnClickListener(v -> {
             if (etReview.length() == 0)
                 Toast.makeText(getActivity(), "Заполите поле", Toast.LENGTH_SHORT).show();
@@ -142,6 +154,25 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
             etReview.setVisibility(View.GONE);
             tvSendReview.setVisibility(View.GONE);
             tvReviews.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case PermissionService.REQUEST_PERMISSION:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    ActiveSystemService activeSystemService = new ActiveSystemService(getContext());
+                    activeSystemService.makeCall(tvContacts.getText().toString());
+                } else {
+                    Toast.makeText(getContext(), "Call Denied",
+                            Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions,
+                        grantResults);
         }
     }
 }

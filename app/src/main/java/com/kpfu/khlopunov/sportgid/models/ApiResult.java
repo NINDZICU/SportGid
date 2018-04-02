@@ -9,15 +9,15 @@ import java.io.Serializable;
  * Created by hlopu on 17.12.2017.
  */
 
-public class ApiResult implements Serializable {
+public class ApiResult<TYPE> implements Serializable {
     @SerializedName("code")
     @Expose
     private int code;
     @SerializedName("body")
     @Expose
-    private Object body;
+    private TYPE body;
 
-    public ApiResult(int code, Object body) {
+    public ApiResult(int code, TYPE body) {
         this.code = code;
         this.body = body;
     }
@@ -30,11 +30,11 @@ public class ApiResult implements Serializable {
         this.code = code;
     }
 
-    public Object getBody() {
+    public TYPE getBody() {
         return body;
     }
 
-    public void setBody(Object body) {
+    public void setBody(TYPE body) {
         this.body = body;
     }
 }

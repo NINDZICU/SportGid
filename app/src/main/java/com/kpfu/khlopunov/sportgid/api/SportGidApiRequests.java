@@ -4,6 +4,8 @@ import com.kpfu.khlopunov.sportgid.models.ApiResult;
 import com.kpfu.khlopunov.sportgid.models.Event;
 import com.kpfu.khlopunov.sportgid.models.KindSport;
 import com.kpfu.khlopunov.sportgid.models.Place;
+import com.kpfu.khlopunov.sportgid.models.User;
+import com.kpfu.khlopunov.sportgid.models.UserToken;
 
 import java.util.List;
 
@@ -21,13 +23,13 @@ import retrofit2.http.Query;
 public interface SportGidApiRequests {
 
     @GET("api/v1/sport/")
-    Observable<ApiResult> getKindSports();
+    Observable<ApiResult<List<KindSport>>> getKindSports();
 
     @GET("api/v1/sport/{id}/events")
-    Observable<ApiResult> getEvents(@Path("id") int kindSportId, @Query("city") String city);
+    Observable<ApiResult<List<Event>>> getEvents(@Path("id") int kindSportId, @Query("city") String city);
 
     @GET("api/v1/sport/{id}/places")
-    Observable<ApiResult> getPlaces(@Path("id") int kindSportId, @Query("city") String city);
+    Observable<ApiResult<List<Place>>> getPlaces(@Path("id") int kindSportId, @Query("city") String city);
 
     @POST("api/v1/place/add")
     Observable<ApiResult> addPlace(@Query("address") String address, @Query("contact") String contact, @Query("title") String title,
@@ -35,11 +37,11 @@ public interface SportGidApiRequests {
                                    @Query("sport") List<Integer> kindOfSport);
 
     @POST("api/v1/sign_up")
-    Observable<ApiResult> registration(@Query("name") String name, @Query("surname") String surname, @Query("email") String email, @Query("password") String password,
-                                       @Query("city") String city);
+    Observable<ApiResult<UserToken>> registration(@Query("name") String name, @Query("surname") String surname, @Query("email") String email, @Query("password") String password,
+                                                  @Query("city") String city);
 
     @POST("api/v1/sign_in")
-    Observable<ApiResult> authentification(@Query("login") String login, @Query("password") String password);
+    Observable<ApiResult<UserToken>> authentification(@Query("login") String login, @Query("password") String password);
 
     @POST("api/v1/place/{id}/review")
     Observable<ApiResult> addReview(@Path("id") int idPlace, @Query("token") String token,
@@ -50,11 +52,11 @@ public interface SportGidApiRequests {
 
 
     @GET("api/v1/profile")
-    Observable<ApiResult> getUser(@Query("token") String token);
+    Observable<ApiResult<User>> getUser(@Query("token") String token);
 
     @GET("api/v1/event/{id}")
-    Observable<ApiResult> getEvent(@Path("id") int id);
+    Observable<ApiResult<Event>> getEvent(@Path("id") int id);
 
     @GET("api/v1/place/{id}")
-    Observable<ApiResult> getPlace(@Path("id") int id);
+    Observable<ApiResult<Place>> getPlace(@Path("id") int id);
 }

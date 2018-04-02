@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 import com.kpfu.khlopunov.sportgid.adapters.EventAdapter;
 import com.kpfu.khlopunov.sportgid.adapters.KindSportsAdapter;
 import com.kpfu.khlopunov.sportgid.adapters.PlaceAdapter;
@@ -18,6 +19,7 @@ import com.kpfu.khlopunov.sportgid.models.Place;
 import com.kpfu.khlopunov.sportgid.models.User;
 import com.kpfu.khlopunov.sportgid.models.UserToken;
 
+import java.io.StringReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -55,11 +57,8 @@ public class ApiService {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(apiResult -> {
                     if (apiResult.getCode() == 0) {
-                        Type type = new TypeToken<List<KindSport>>() {
-                        }.getType();
-                        List<KindSport> kindSports = gson.fromJson(apiResult.getBody().toString(), type);
-                        kinds.addAll(kindSports);
-                        callback.callback(kindSports);
+                        kinds.addAll(apiResult.getBody());
+                        callback.callback(apiResult.getBody());
                     }
                 }, throwable -> {
                     callback.callback("ERROR");
@@ -75,11 +74,11 @@ public class ApiService {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(apiResult -> {
                     if (apiResult.getCode() == 0) {
-                        Type type = new TypeToken<List<Event>>() {
-                        }.getType();
-                        List<Event> events1 = gson.fromJson(apiResult.getBody().toString(), type);
-                        events.addAll(events1);
-                        adapter.setmEventList(events1);
+//                        Type type = new TypeToken<List<Event>>() {
+//                        }.getType();
+//                        List<Event> events1 = gson.fromJson(apiResult.getBody().toString(), type);
+                        events.addAll(apiResult.getBody());
+                        adapter.setmEventList(apiResult.getBody());
                         adapter.notifyData();
                     }
                 }, throwable -> {
@@ -96,18 +95,15 @@ public class ApiService {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(apiResult -> {
                     if (apiResult.getCode() == 0) {
-                        Type type = new TypeToken<List<Place>>() {
-                        }.getType();
-                        List<Place> places1 = gson.fromJson(apiResult.getBody().toString(), type);
-                        places.addAll(places1);
+                        places.addAll(apiResult.getBody());
                         callback.callback(places);
 //                        adapter.setmPlaceList(places1);
 //                        adapter.notifyData();
                     }
                 }, throwable -> {
-                    callback.callback(null);
-                    Toast.makeText(context, "Throw " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                    System.out.println("THROW OT NURIKA getPlaces" + throwable.getMessage());
+                    callback.callback("THROW OT NURIKA getPlaces" + throwable.getMessage());
+                    Log.d("THROWGETMESSAGE", throwable.getMessage());
+                    Toast.makeText(context, "Throw getPlaces " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                 });
         return places;
     }
@@ -134,9 +130,9 @@ public class ApiService {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(apiResult -> {
                     if (apiResult.getCode() == 0) {
-                        Type type = new TypeToken<UserToken>() {
-                        }.getType();
-                        UserToken tokken1 = gson.fromJson(apiResult.getBody().toString(), type);
+//                        Type type = new TypeToken<UserToken>() {
+//                        }.getType();
+                        UserToken tokken1 = apiResult.getBody();
                         callback.callback(tokken1.getAccessToken());
                     } else if (apiResult.getCode() == 14) {
                         callback.callback("SAME_LOGIN");
@@ -153,9 +149,9 @@ public class ApiService {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(apiResult -> {
                     if (apiResult.getCode() == 0) {
-                        Type type = new TypeToken<UserToken>() {
-                        }.getType();
-                        UserToken tokken1 = gson.fromJson(apiResult.getBody().toString(), type);
+//                        Type type = new TypeToken<UserToken>() {
+//                        }.getType();
+                        UserToken tokken1 = apiResult.getBody();
                         callback.callback(tokken1.getAccessToken());
                     }
                 }, throwable -> {
@@ -170,9 +166,9 @@ public class ApiService {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(apiResult -> {
                     if (apiResult.getCode() == 0) {
-                        Type type = new TypeToken<User>() {
-                        }.getType();
-                        User user = gson.fromJson(apiResult.getBody().toString(), type);
+//                        Type type = new TypeToken<User>() {
+//                        }.getType();
+                        User user = apiResult.getBody();
                         callback.callback(user);
                     }
                 }, throwable -> {
@@ -187,9 +183,9 @@ public class ApiService {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(apiResult -> {
                     if (apiResult.getCode() == 0) {
-                        Type type = new TypeToken<Event>() {
-                        }.getType();
-                        Event event = gson.fromJson(apiResult.getBody().toString(), type);
+//                        Type type = new TypeToken<Event>() {
+//                        }.getType();
+                        Event event = apiResult.getBody();
                         callback.callback(event);
                     }
                 }, throwable -> {
@@ -204,9 +200,9 @@ public class ApiService {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(apiResult -> {
                     if (apiResult.getCode() == 0) {
-                        Type type = new TypeToken<Place>() {
-                        }.getType();
-                        Place place = gson.fromJson(apiResult.getBody().toString(), type);
+//                        Type type = new TypeToken<Place>() {
+//                        }.getType();
+                        Place place = apiResult.getBody();
                         callback.callback(place);
                     }
                 }, throwable -> {
