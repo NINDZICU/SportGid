@@ -8,13 +8,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.RadioButton;
+import android.widget.EditText;
 
 import com.kpfu.khlopunov.sportgid.R;
+import com.kpfu.khlopunov.sportgid.activities.AddEventActivity;
 import com.kpfu.khlopunov.sportgid.activities.AddPlaceActivity;
 
 import java.util.ArrayList;
@@ -73,7 +71,8 @@ public class AddEventDialogFragment extends DialogFragment implements View.OnCli
                             Intent intent = new Intent(getActivity(), AddPlaceActivity.class);
                             startActivity(intent);
                         } else if (selected.get(0) == 1) {
-
+                            Intent intent = new Intent(getActivity(), AddEventActivity.class);
+                            startActivity(intent);
                         }
                     }
                 })

@@ -1,5 +1,6 @@
 package com.kpfu.khlopunov.sportgid.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -28,6 +29,7 @@ import com.kpfu.khlopunov.sportgid.models.Place;
 import com.kpfu.khlopunov.sportgid.models.Review;
 import com.kpfu.khlopunov.sportgid.providers.SharedPreferencesProvider;
 import com.kpfu.khlopunov.sportgid.service.ActiveSystemService;
+import com.kpfu.khlopunov.sportgid.service.ActiveSystemServiceInt;
 import com.kpfu.khlopunov.sportgid.service.ApiService;
 import com.kpfu.khlopunov.sportgid.service.PermissionService;
 
@@ -52,6 +54,8 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
     private TextView tvSendReview;
     private TextView tvComplain;
     private ReviewAdapter adapter;
+
+    private ActiveSystemServiceInt activeSystemService;
 
     public static DetailPlaceFragment newInstance(Place place) {
         Bundle bundle = new Bundle();
@@ -88,15 +92,14 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
         rvReviews.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new ReviewAdapter(getActivity());
         adapter.setReviewList(place.getReviews());
-
         rvReviews.setAdapter(adapter);
+        activeSystemService = new ActiveSystemService(getContext());
 
         btnTakeOver.setOnClickListener(v -> {
 
         });
 
         tvContacts.setOnClickListener(v->{
-            ActiveSystemService activeSystemService = new ActiveSystemService(getContext());
             activeSystemService.makeCall(tvContacts.getText().toString());
         });
 
@@ -110,7 +113,9 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
             }
         });
         tvComplain.setOnClickListener(v -> {
-
+        ComplaintFragment fragment = ComplaintFragment.newInstance(getActivity(), place.getId(),
+                ComplaintFragment.COMPLAINT_FOR_PLACE);
+        fragment.show(getFragmentManager(), "COMPLAINT_FRAGMENT");
         });
 
     }
@@ -137,6 +142,7 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
             Toast.makeText(getActivity(), "Отзыв успешно добавлен!!", Toast.LENGTH_SHORT).show();
 
             List<Review> reviewList =adapter.getReviewList();       //TODO сделать подгрузку с сервера после добавления или что-то другое
+            //Todo date
             reviewList.add(new Review(0, 0l, etReview.getText().toString(),4,       //хардкод поменять
                     SharedPreferencesProvider.getInstance(getActivity()).getUser(),null,null  ));
             adapter.setReviewList(reviewList);
@@ -163,7 +169,6 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
         switch (requestCode) {
             case PermissionService.REQUEST_PERMISSION:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    ActiveSystemService activeSystemService = new ActiveSystemService(getContext());
                     activeSystemService.makeCall(tvContacts.getText().toString());
                 } else {
                     Toast.makeText(getContext(), "Call Denied",

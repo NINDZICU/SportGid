@@ -1,4 +1,4 @@
-package com.kpfu.khlopunov.sportgid.adapters;
+package com.kpfu.khlopunov.sportgid.adapters.InterestSelect;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -12,21 +12,17 @@ import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.models.KindSport;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by hlopu on 18.12.2017.
  */
 
-public class InteresSelectAdapter extends RecyclerView.Adapter<InteresSelectAdapter.InteresViewHolder> {
-    private Context context;
-    private List<KindSport> kindSports;
+public class InteresSelectAdapter extends InteresSelect {
     private List<KindSport> selected;
 
     public InteresSelectAdapter(Context context) {
-        this.context = context;
-        kindSports = Collections.emptyList();
+        super(context);
         selected = new ArrayList<>();
     }
 
@@ -37,13 +33,16 @@ public class InteresSelectAdapter extends RecyclerView.Adapter<InteresSelectAdap
     }
 
     @Override
-    public void onBindViewHolder(InteresViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final KindSport kindSport = kindSports.get(position);
-        holder.tvInteresName.setText(kindSport.getName());
-        holder.cbInteres.setOnClickListener(v -> {
-            if(holder.cbInteres.isChecked()) selected.add(kindSport);
+        InteresSelectAdapter.InteresViewHolder viewHolder = (InteresSelectAdapter.InteresViewHolder) holder;
+        viewHolder.tvInteresName.setText(kindSport.getName());
+        View.OnClickListener l = v -> {
+            if (viewHolder.cbInteres.isChecked()) selected.add(kindSport);
             else selected.remove(kindSport);
-        });
+        };
+        viewHolder.cbInteres.setOnClickListener(l);
+        viewHolder.itemView.setOnClickListener(l);
     }
 
     @Override
@@ -61,12 +60,9 @@ public class InteresSelectAdapter extends RecyclerView.Adapter<InteresSelectAdap
             cbInteres = itemView.findViewById(R.id.checkbox_interes_item);
         }
     }
-
+    @Override
     public List<KindSport> getSelected() {
         return selected;
     }
 
-    public void setKindSports(List<KindSport> kindSports) {
-        this.kindSports = kindSports;
-    }
 }

@@ -14,7 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kpfu.khlopunov.sportgid.R;
-import com.kpfu.khlopunov.sportgid.adapters.InteresSelectAdapter;
+import com.kpfu.khlopunov.sportgid.adapters.InterestSelect.InteresSelect;
+import com.kpfu.khlopunov.sportgid.adapters.InterestSelect.InteresSelectAdapter;
+import com.kpfu.khlopunov.sportgid.adapters.InterestSelect.InteresSelectAdapterRadio;
 import com.kpfu.khlopunov.sportgid.fragments.ApiCallback;
 import com.kpfu.khlopunov.sportgid.models.KindSport;
 import com.kpfu.khlopunov.sportgid.service.ApiService;
@@ -23,11 +25,14 @@ import java.io.Serializable;
 import java.util.List;
 
 public class SelectInterestsActivtiy extends AppCompatActivity implements ApiCallback {
+    public static final String TYPE_CHECK_BUTTON = "TYPE_CHECK_BUTTON";
+    public static final String CHECKBOX = "CHECKBOX";
+    public static final String RADIO = "RADIO";
     private Toolbar toolbar;
     private TextView toolbarTitle;
     private RecyclerView rvInterests;
     private Button btnSave;
-    private InteresSelectAdapter adapter;
+    private InteresSelect adapter;
     private ProgressBar progressBar;
 
     @Override
@@ -48,19 +53,28 @@ public class SelectInterestsActivtiy extends AppCompatActivity implements ApiCal
         toolbarTitle.setText("Виды спорта");
 
         rvInterests.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new InteresSelectAdapter(SelectInterestsActivtiy.this);
-
+        if (getIntent().getStringExtra(TYPE_CHECK_BUTTON).equals(CHECKBOX)) {
+            adapter = new InteresSelectAdapter(SelectInterestsActivtiy.this);
+            rvInterests.setAdapter(adapter);
+        } else if (getIntent().getStringExtra(TYPE_CHECK_BUTTON).equals(RADIO)) {
+            adapter = new InteresSelectAdapterRadio(SelectInterestsActivtiy.this);
+            rvInterests.setAdapter(adapter);
+        }
         ApiService apiService = new ApiService(SelectInterestsActivtiy.this);
         apiService.getKindSports(SelectInterestsActivtiy.this);
-        rvInterests.setAdapter(adapter);
 
         btnSave.setOnClickListener(v -> {
             List<KindSport> selected = adapter.getSelected();
-            Intent intent = new Intent(this, AddPlaceActivity.class);
+            Intent intent = null;
+            if (getIntent().getStringExtra(TYPE_CHECK_BUTTON).equals(CHECKBOX)) {
+                intent = new Intent(this, AddPlaceActivity.class);
+            } else if (getIntent().getStringExtra(TYPE_CHECK_BUTTON).equals(RADIO)) {
+                intent = new Intent(this, AddEventActivity.class);
+            }
             Bundle bundle = new Bundle();
             System.out.println("SEND SIZE " + selected.size());
             bundle.putSerializable("selected", (Serializable) selected);
-            intent.putExtras(bundle);
+            if (intent != null) intent.putExtras(bundle);
             setResult(RESULT_OK, intent);
             finish();
         });

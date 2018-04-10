@@ -33,6 +33,7 @@
     <style name="AppTheme.ButtonWhite" parent="Base.Widget.AppCompat.Button">
         <item name="android:background">@drawable/button_background_white</item>
     </style>
+
     <style name="AppTheme.ButtonBlue" parent="Base.Widget.AppCompat.Button">
         <item name="android:background">@drawable/button_background_blue</item>
     </style>
@@ -42,5 +43,9 @@
         <item name="android:gravity">center_vertical|center_horizontal</item>
         <item name="background">@color/white</item>
     </style>
+
+    <style name="AppTheme.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

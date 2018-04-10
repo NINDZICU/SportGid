@@ -109,12 +109,12 @@ public class ApiService {
     }
 
     public void addPlace(String address, String contact, String title,
-                         String description, String city,String photo, List<Integer> kindOfSport, ApiCallback callback) {
-        System.out.println("CODE NURIK BESIT1111111 ");
-        requests.addPlace(address, contact, title, description, city, photo, kindOfSport).subscribeOn(Schedulers.io())
+                         String description, String city, String photo, List<Integer> kindOfSport, String token,
+                         ApiCallback callback) {
+        requests.addPlace(address, contact, title, description, city, photo, kindOfSport, token).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(apiResult -> {
-                    System.out.println("CODE NURIK BESIT " + apiResult.getCode());
+                    System.out.println("CODE add Place " + apiResult.getCode());
                     if (apiResult.getCode() == 0) {
                         callback.callback(true);
                     }
@@ -122,6 +122,21 @@ public class ApiService {
                     callback.callback(false);
                     Toast.makeText(context, "Throw " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                     System.out.println("THROW OT NURIKA addPlace" + throwable.getMessage());
+                });
+    }
+
+    public void addEvent(String title, String description, int maxOfMembers, String price, String token,
+                         String photo, String sport, Place place, ApiCallback apiCallback) {
+        requests.addEvent(title, description, maxOfMembers, price, token, photo, sport, place).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(apiResult -> {
+                    if(apiResult.getCode() == 0){
+                        apiCallback.callback(true);
+                    }
+                }, throwable -> {
+                    apiCallback.callback(false);
+                    Toast.makeText(context, "Throw "+throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.d("Throw add Event ", throwable.getMessage());
                 });
     }
 
@@ -226,6 +241,20 @@ public class ApiService {
                 });
     }
 
+    public void sendComplaint(int idPlace, String token, String title, String body, ApiCallback callback) {
+        requests.sendComplaint(idPlace, token, title, body).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(apiResult -> {
+                    if (apiResult.getCode() == 0) {
+                        callback.callback(true);
+                    }
+                }, throwable -> {
+                    callback.callback(false);
+                    Toast.makeText(context, "Throw " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    System.out.println("THROW OT NURIKA sendComplaint " + throwable.getMessage());
+                });
+    }
+
     public void updateCity(String token, String city, ApiCallback callback) {
         requests.updateCity(token, city).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -237,6 +266,26 @@ public class ApiService {
                     callback.callback(false);
                     Toast.makeText(context, "Throw " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                     System.out.println("THROW OT NURIKA updateReview " + throwable.getMessage());
+                });
+    }
+
+    public void deleteEvent(String token, int id) {
+        requests.deleteEvent(id, token).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(apiResult -> {
+
+                }, throwable -> {
+
+                });
+    }
+
+    public void deletePlace(String token, int id) {
+        requests.deletePlace(id, token).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(apiResult -> {
+
+                }, throwable -> {
+
                 });
     }
 

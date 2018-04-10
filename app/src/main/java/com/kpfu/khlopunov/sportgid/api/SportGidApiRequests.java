@@ -34,7 +34,12 @@ public interface SportGidApiRequests {
     @POST("api/v1/place/add")
     Observable<ApiResult> addPlace(@Query("address") String address, @Query("contact") String contact, @Query("title") String title,
                                    @Query("description") String description, @Query("city") String city, @Query("photo") String photo,
-                                   @Query("sport") List<Integer> kindOfSport);
+                                   @Query("sport") List<Integer> kindOfSport, @Query("token") String token);
+
+    @POST("api/v1/event/add")
+    Observable<ApiResult> addEvent(@Query("title") String title, @Query("description") String description,
+                                   @Query("maxOfMembers") int maxOfMembers, @Query("price") String price, @Query("token") String token,
+                                   @Query("photo") String photo, @Query("sport") String sport, @Query("place") Place place);
 
     @POST("api/v1/sign_up")
     Observable<ApiResult<UserToken>> registration(@Query("name") String name, @Query("surname") String surname, @Query("email") String email, @Query("password") String password,
@@ -59,4 +64,14 @@ public interface SportGidApiRequests {
 
     @GET("api/v1/place/{id}")
     Observable<ApiResult<Place>> getPlace(@Path("id") int id);
+
+    @POST("api/v1/event/{id}/delete")
+    Observable<ApiResult> deleteEvent(@Path("id") int id, @Query("token") String token);
+
+    @POST("api/v1/place/{id}/delete")
+    Observable<ApiResult> deletePlace(@Path("id") int id, @Query("token") String token);
+
+    @POST("api/v1/place/{id}/complaint")
+    Observable<ApiResult> sendComplaint(@Path("id") int id, @Query("token") String token,
+                                        @Query("title") String title, @Query("body") String body);
 }

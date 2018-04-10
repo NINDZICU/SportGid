@@ -5,5 +5,6 @@ package com.kpfu.khlopunov.sportgid.fragments;
  */
 
 public interface ApiCallback {
+    //TODO set object to T
     void callback(Object object);
 }

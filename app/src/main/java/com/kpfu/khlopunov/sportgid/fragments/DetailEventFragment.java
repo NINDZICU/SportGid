@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import java.util.List;
  */
 
 public class DetailEventFragment extends Fragment implements ApiCallback {
+    //TODO сделать фото
     private ImageView ivPhotoEvent;
     private TextView tvCountJoin;
     private TextView tvCountMember;
@@ -61,21 +63,21 @@ public class DetailEventFragment extends Fragment implements ApiCallback {
         bind(view);
 
         Event event = (Event) getArguments().getSerializable("event");
-        //TODo открыть комменты
         int id = getArguments().getInt("id");
-        ApiService apiService = new ApiService(getActivity());
-        apiService.getEvent(id, DetailEventFragment.this);
-        tvCountJoin.setText(event.getMembers().size());
-//        tvCountJoin.setText("0");
+//        ApiService apiService = new ApiService(getActivity());
+//        apiService.getEvent(event.getId(), DetailEventFragment.this);
+        tvCountJoin.setText(event != null ? Integer.toString(event.getMembers().size()) : "0");
         tvCountMember.setText(String.valueOf(event.getMaxOfMembers()));
         tvNameEvent.setText(event.getName());
-        tvAddressEvent.setText(event.getPlace().getAddress());
+        tvAddressEvent.setText(event.getPlace()!=null? event.getPlace().getAddress(): "");
         tvPrice.setText(event.getPrice());
         tvDescription.setText(event.getDescription());
-        tvOrganizer.setText(event.getAvtor().getName());
+        //TODO У Нурика нет в бд
+//        tvOrganizer.setText(event.getAvtor().getName());
         tvOrganizer.setText("USER");
-        tvKindSport.setText(event.getKindSport().getName());
-
+        //TODO У Нурика нет
+//        tvKindSport.setText(event.getKindSport().getName());
+        tvKindSport.setText("Test");
         rvMembers.setLayoutManager(new LinearLayoutManager(getActivity()));
         List<User> users = new ArrayList<>();
         memberListAdapter = new MemberListAdapter(getActivity(), users);

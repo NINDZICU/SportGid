@@ -21,6 +21,8 @@ public class Event implements Serializable{
     @SerializedName("title")
     @Expose
     private String name;
+    @SerializedName("place")
+    @Expose
     private Place place;
     @SerializedName("price")
     @Expose
@@ -29,14 +31,16 @@ public class Event implements Serializable{
     @SerializedName("maxOfMembers")
     @Expose
     private int maxOfMembers;
-    private User avtor;
+    @SerializedName("token")
+    @Expose
+    private String author;
     @SerializedName("description")
     @Expose
     private String description;
     private Set<User> members;
     private KindSport kindSport;
 
-    public Event(int id, String photo, String name, Place place, String price, String raiting, int maxOfMembers, User avtor, String description, Set<User> members, KindSport kindSport) {
+    public Event(int id, String photo, String name, Place place, String price, String raiting, int maxOfMembers, String authorToken, String description, Set<User> members, KindSport kindSport) {
         this.id = id;
         this.photo = photo;
         this.name = name;
@@ -44,7 +48,7 @@ public class Event implements Serializable{
         this.price = price;
         this.raiting = raiting;
         this.maxOfMembers = maxOfMembers;
-        this.avtor = avtor;
+        this.author = authorToken;
         this.description = description;
         this.members = members;
         this.kindSport = kindSport;
@@ -107,12 +111,12 @@ public class Event implements Serializable{
         this.maxOfMembers = maxOfMembers;
     }
 
-    public User getAvtor() {
-        return avtor;
+    public String getAvtor() {
+        return author;
     }
 
-    public void setAvtor(User avtor) {
-        this.avtor = avtor;
+    public void setAvtor(String author) {
+        this.author = author;
     }
 
     public String getDescription() {

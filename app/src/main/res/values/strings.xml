@@ -32,10 +32,18 @@
     <string name="exit_from_accounts">Выйти из аккаунта</string>
     <string name="callback">Обратная связь</string>
     <string name="sign_in">Войти</string>
+    <string name="count_members">Количество участников</string>
 
     <string-array name="event">
         <item>Объект</item>
         <item>Мероприятие</item>
     </string-array>
+    <string-array name="type_complaints">
+        <item>Не соответсвует описанию</item>
+        <item>Не существует</item>
+        <item>Призыв к эстремизму</item>
+    </string-array>
+    <string name="title_activity_add_event">AddEventActivity</string>
+    <string name="title_activity_main2">Main2Activity</string>
 
 </resources>
