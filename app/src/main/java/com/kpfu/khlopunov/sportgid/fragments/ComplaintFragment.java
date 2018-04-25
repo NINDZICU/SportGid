@@ -46,6 +46,7 @@ public class ComplaintFragment extends DialogFragment implements ApiCallback{
         }
 //        List<Integer> selected = new ArrayList<>();
         editTextComplaint = new EditText(getActivity());
+        ((EditText)editTextComplaint).setHint("Опишите подробнее:");
 //        selected.add(0);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Пожаловаться")
@@ -57,7 +58,6 @@ public class ComplaintFragment extends DialogFragment implements ApiCallback{
 //                        selected.add(which);
                     }
                 })
-                .setMessage("Опишите подробнее:")
                 .setView(editTextComplaint)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override

@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,7 @@ public class HomeFragment extends Fragment implements NotifyFragment, OnBackPres
     private VKAccessToken access_token;
 
     private RecyclerView rvKinds;
-    private EditText etSearch;
+    private SearchView searchView;
     private KindSportsAdapter adapter;
     private ProgressBar progressBar;
 
@@ -56,7 +57,7 @@ public class HomeFragment extends Fragment implements NotifyFragment, OnBackPres
 //        if (!VKSdk.isLoggedIn()) {
 
         rvKinds = view.findViewById(R.id.rv_kind_of_sports);
-        etSearch = view.findViewById(R.id.et_search);
+        searchView = view.findViewById(R.id.et_search);
         progressBar = view.findViewById(R.id.pb_home);
 
         rvKinds.setLayoutManager(new GridLayoutManager(getActivity(), 2));
@@ -79,13 +80,25 @@ public class HomeFragment extends Fragment implements NotifyFragment, OnBackPres
 //                fragments.set(0, ListObjectsFragment.newInstance());
 //                pagerAdapter.setFragmentList(fragments);
         });
-//            List<KindSport> kindSports = new ArrayList<>();
-//            adapter.setKindSports(kindSports);
         ApiService apiService = new ApiService(getActivity());
 //            List<KindSport> kindSports = apiService.getKindSports(HomeFragment.this);
         apiService.getKindSports(HomeFragment.this);
 //            adapter.setKindSports(kindSports);
         rvKinds.setAdapter(adapter);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                return false;
+            }
+        });
+
     }
 
     @Override

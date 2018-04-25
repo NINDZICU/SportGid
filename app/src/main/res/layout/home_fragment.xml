@@ -36,24 +36,21 @@
         android:orientation="horizontal"
         android:paddingLeft="12dp">
 
-        <EditText
+        <SearchView
             android:id="@+id/et_search"
             android:layout_width="0dp"
             android:layout_height="34dp"
             android:layout_weight="9"
             android:background="@color/white"
-            android:drawableEnd="@drawable/find"
-            android:drawableRight="@drawable/find"
             android:ems="10"
-            android:paddingLeft="10dp"
             android:hint="@string/find"
             android:inputType="textPersonName"
             android:paddingEnd="10dp"
+            android:paddingLeft="10dp"
             android:paddingRight="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
     </LinearLayout>
 
 

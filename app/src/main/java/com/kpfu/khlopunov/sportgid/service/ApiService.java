@@ -94,6 +94,7 @@ public class ApiService {
         requests.getPlaces(id, city).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(apiResult -> {
+                    Log.d("GET PLACES CODE", String.valueOf(apiResult.getCode()));
                     if (apiResult.getCode() == 0) {
                         places.addAll(apiResult.getBody());
                         callback.callback(places);
@@ -101,8 +102,8 @@ public class ApiService {
 //                        adapter.notifyData();
                     }
                 }, throwable -> {
-                    callback.callback("THROW OT NURIKA getPlaces" + throwable.getMessage());
-                    Log.d("THROWGETMESSAGE", throwable.getMessage());
+                    callback.callback(null);
+                    Log.d("THROW OT NUR getPlaces", throwable.getMessage());
                     Toast.makeText(context, "Throw getPlaces " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                 });
         return places;
@@ -251,7 +252,7 @@ public class ApiService {
                 }, throwable -> {
                     callback.callback(false);
                     Toast.makeText(context, "Throw " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                    System.out.println("THROW OT NURIKA sendComplaint " + throwable.getMessage());
+                    System.out.println("THROW OT NURIKA addReview " + throwable.getMessage());
                 });
     }
 

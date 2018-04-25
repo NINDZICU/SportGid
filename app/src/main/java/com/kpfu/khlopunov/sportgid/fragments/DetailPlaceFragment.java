@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.activities.AddPlaceActivity;
+import com.kpfu.khlopunov.sportgid.activities.MapsActivity;
 import com.kpfu.khlopunov.sportgid.adapters.ReviewAdapter;
 import com.kpfu.khlopunov.sportgid.models.ApiResult;
 import com.kpfu.khlopunov.sportgid.models.Place;
@@ -54,6 +56,7 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
     private TextView tvSendReview;
     private TextView tvComplain;
     private ReviewAdapter adapter;
+    private FloatingActionButton floatingMap;
 
     private ActiveSystemServiceInt activeSystemService;
 
@@ -112,12 +115,16 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
                         etReview.getText().toString(), 2, DetailPlaceFragment.this);
             }
         });
+
         tvComplain.setOnClickListener(v -> {
         ComplaintFragment fragment = ComplaintFragment.newInstance(getActivity(), place.getId(),
                 ComplaintFragment.COMPLAINT_FOR_PLACE);
         fragment.show(getFragmentManager(), "COMPLAINT_FRAGMENT");
         });
-
+        floatingMap.setOnClickListener(v->{
+            Intent intent = new Intent(getActivity(), MapsActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void bind(View view) {
@@ -134,6 +141,7 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
         tvSendReview = view.findViewById(R.id.tv_send_review);
         tvComplain = view.findViewById(R.id.tv_complain);
         tvReviews = view.findViewById(R.id.tv_detail_send_review);
+        floatingMap = view.findViewById(R.id.fab_map_event);
     }
 
     @Override
