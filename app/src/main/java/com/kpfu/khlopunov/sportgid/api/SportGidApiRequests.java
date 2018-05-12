@@ -25,6 +25,9 @@ public interface SportGidApiRequests {
     @GET("api/v1/sport/")
     Observable<ApiResult<List<KindSport>>> getKindSports();
 
+    @GET("api/v1/sport/search")
+    Observable<ApiResult<List<KindSport>>> searchKindSport(@Query("name") String name);
+
     @GET("api/v1/sport/{id}/events")
     Observable<ApiResult<List<Event>>> getEvents(@Path("id") int kindSportId, @Query("city") String city);
 
@@ -74,4 +77,5 @@ public interface SportGidApiRequests {
     @POST("api/v1/place/{id}/complaint")
     Observable<ApiResult> sendComplaint(@Path("id") int id, @Query("token") String token,
                                         @Query("title") String title, @Query("body") String body);
+
 }

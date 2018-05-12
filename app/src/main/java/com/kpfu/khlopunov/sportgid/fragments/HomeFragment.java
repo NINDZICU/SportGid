@@ -1,30 +1,37 @@
 package com.kpfu.khlopunov.sportgid.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.kpfu.khlopunov.sportgid.activities.AuthentificationActivity;
 import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.adapters.KindSportsAdapter;
+import com.kpfu.khlopunov.sportgid.api.SportGidApi;
+import com.kpfu.khlopunov.sportgid.api.SportGidApiRequests;
+import com.kpfu.khlopunov.sportgid.models.ApiResult;
 import com.kpfu.khlopunov.sportgid.models.KindSport;
-import com.kpfu.khlopunov.sportgid.providers.SharedPreferencesProvider;
 import com.kpfu.khlopunov.sportgid.service.ApiService;
+import com.kpfu.khlopunov.sportgid.service.SearchService;
 import com.vk.sdk.VKAccessToken;
-import com.vk.sdk.VKSdk;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.ObservableSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by hlopu on 24.10.2017.
@@ -86,18 +93,33 @@ public class HomeFragment extends Fragment implements NotifyFragment, OnBackPres
 //            adapter.setKindSports(kindSports);
         rvKinds.setAdapter(adapter);
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-                return false;
-            }
-        });
+        SportGidApiRequests requests = SportGidApi.getInstance().getmSportGidApiRequests();
+        SearchService.fromView(searchView)
+                .debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .filter(new Predicate<String>() {
+                    @Override
+                    public boolean test(String text) throws Exception {
+                        return !text.isEmpty();
+                    }
+                })
+                .distinctUntilChanged()
+                .switchMap(query -> {
+                    setVisible();
+                    Log.d("SWITCH MAP", "SWITCH MAP");
+                    return requests.searchKindSport(query)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread());
+                })
+                .subscribe(apiResult -> {
+                    if (apiResult.getCode() == 0) {
+                        callback(apiResult.getBody());
+                    }
+                }, throwable -> {
+                    callback("ERROR");
+                    //Todo переделать на контекст
+                    Toast.makeText(getActivity(), "Throw " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    System.out.println("THROW OT NURIKA SearchKindSports " + throwable.getMessage());
+                });
 
     }
 

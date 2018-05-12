@@ -1,11 +1,14 @@
 package com.kpfu.khlopunov.sportgid.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -27,7 +30,7 @@ import com.kpfu.khlopunov.sportgid.service.SortService;
  * Created by hlopu on 14.12.2017.
  */
 
-public class ListEventsFragment extends Fragment implements NotifyFragment {
+public class ListEventsFragment extends Fragment implements NotifyFragment,NavigationView.OnNavigationItemSelectedListener {
     private Button btnObjects;
     private Button btnEvents;
     private NoDefaultSpinner spinnerSort;
@@ -36,6 +39,7 @@ public class ListEventsFragment extends Fragment implements NotifyFragment {
     private EventAdapter eventAdapter;
     private EventsListener eventsListener;
     private ProgressBar progressBar;
+    private NavigationView navigationView;
 
     public static ListEventsFragment newInstance(int idKind) {
         Bundle bundle = new Bundle();
@@ -60,6 +64,8 @@ public class ListEventsFragment extends Fragment implements NotifyFragment {
         spinnerSort = view.findViewById(R.id.spinner);
         rvEvents = view.findViewById(R.id.rv_events);
         progressBar = view.findViewById(R.id.pb_events);
+        navigationView = view.findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
         setVisible();
         rvEvents.setLayoutManager(new LinearLayoutManager(getActivity()));
         eventAdapter = new EventAdapter(getActivity(), ListEventsFragment.this);
@@ -137,5 +143,10 @@ public class ListEventsFragment extends Fragment implements NotifyFragment {
             progressBar.setVisibility(View.VISIBLE);
             rvEvents.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return false;
     }
 }

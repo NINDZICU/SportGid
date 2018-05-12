@@ -68,6 +68,21 @@ public class ApiService {
         return kinds;
     }
 
+    public void searchKindSports(ApiCallback callback, String query){
+        requests.searchKindSport(query).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(apiResult -> {
+                    if (apiResult.getCode() == 0) {
+                        callback.callback(apiResult.getBody());
+                    }
+                },throwable -> {
+                        callback.callback("ERROR");
+                        Toast.makeText(context, "Throw " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                        System.out.println("THROW OT NURIKA getKindSports " + throwable.getMessage());
+                    });
+
+    }
+
     public List<Event> getEvents(int id, String city, EventAdapter adapter) {
         List<Event> events = new ArrayList<>();
         requests.getEvents(id, city).subscribeOn(Schedulers.io())
