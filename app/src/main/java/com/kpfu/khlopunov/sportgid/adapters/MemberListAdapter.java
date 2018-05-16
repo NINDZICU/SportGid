@@ -37,9 +37,9 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Me
     @Override
     public void onBindViewHolder(MemberViewHolder holder, int position) {
         final User user = mUsers.get(position);
-        holder.tvName.setText(user.getName());
+        holder.tvName.setText((user.getName()+" "+user.getSurname()));
         holder.itemView.setOnClickListener(v -> {
-            memberListener.onAlarmClick(user);
+//            memberListener.onAlarmClick(user);
         });
     }
 

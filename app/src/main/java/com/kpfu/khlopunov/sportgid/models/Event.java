@@ -4,13 +4,14 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 /**
  * Created by hlopu on 13.12.2017.
  */
 
-public class Event implements Serializable{
+public class Event implements Serializable {
 
     @SerializedName("id")
     @Expose
@@ -21,44 +22,71 @@ public class Event implements Serializable{
     @SerializedName("title")
     @Expose
     private String name;
+    @SerializedName("rating")
+    @Expose
+    private String rating;
     @SerializedName("place")
     @Expose
-    private Place place;
+    private int place;
+    @SerializedName("address")
+    @Expose
+    private String address;
+    @SerializedName("x")
+    @Expose
+    private int x;
+    @SerializedName("y")
+    @Expose
+    private int y;
     @SerializedName("price")
     @Expose
     private String price;
-    private String raiting;
     @SerializedName("maxOfMembers")
     @Expose
     private int maxOfMembers;
-    @SerializedName("token")
+
+    @SerializedName("avtor")
     @Expose
-    private String author;
+    private User author;
     @SerializedName("description")
     @Expose
     private String description;
-    private Set<User> members;
+    @SerializedName("is_subscribed")
+    @Expose
+    private boolean is_subscribed;
+    @SerializedName("map")
+    @Expose
+    private int map;
+    @SerializedName("members")
+    @Expose
+    private List<User> members;
     private KindSport kindSport;
 
-    public Event(int id, String photo, String name, Place place, String price, String raiting, int maxOfMembers, String authorToken, String description, Set<User> members, KindSport kindSport) {
+
+    public Event(int id, String photo, String name, String rating, int place, int x, int y, String price, int maxOfMembers,
+                 User author, String description, String address, boolean is_subscribed, int map, List<User> members, KindSport kindSport) {
         this.id = id;
         this.photo = photo;
         this.name = name;
+        this.rating = rating;
         this.place = place;
+        this.x = x;
+        this.y = y;
         this.price = price;
-        this.raiting = raiting;
         this.maxOfMembers = maxOfMembers;
-        this.author = authorToken;
+        this.author = author;
         this.description = description;
+        this.is_subscribed = is_subscribed;
+        this.map = map;
         this.members = members;
         this.kindSport = kindSport;
+        this.address = address;
     }
 
-    public Place getPlace() {
+    public int getPlace() {
         return place;
     }
 
-    public void setPlace(Place place) {
+    public void setPlace(int place) {
         this.place = place;
     }
 
@@ -87,14 +115,6 @@ public class Event implements Serializable{
         this.price = price;
     }
 
-    public String getRaiting() {
-        return raiting;
-    }
-
-    public void setRaiting(String raiting) {
-        this.raiting = raiting;
-    }
-
     public int getId() {
         return id;
     }
@@ -111,11 +131,11 @@ public class Event implements Serializable{
         this.maxOfMembers = maxOfMembers;
     }
 
-    public String getAvtor() {
+    public User getAvtor() {
         return author;
     }
 
-    public void setAvtor(String author) {
+    public void setAvtor(User author) {
         this.author = author;
     }
 
@@ -127,11 +147,11 @@ public class Event implements Serializable{
         this.description = description;
     }
 
-    public Set<User> getMembers() {
+    public List<User> getMembers() {
         return members;
     }
 
-    public void setMembers(Set<User> members) {
+    public void setMembers(List<User> members) {
         this.members = members;
     }
 
@@ -141,6 +161,63 @@ public class Event implements Serializable{
 
     public void setKindSport(KindSport kindSport) {
         this.kindSport = kindSport;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+
+    public void setAuthor(User author) {
+        this.author = author;
+    }
+
+    public boolean isIs_subscribed() {
+        return is_subscribed;
+    }
+
+    public void setIs_subscribed(boolean is_subscribed) {
+        this.is_subscribed = is_subscribed;
+    }
+
+    public int getMap() {
+        return map;
+    }
+
+    public void setMap(int map) {
+        this.map = map;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
 

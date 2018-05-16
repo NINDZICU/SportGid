@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,6 +57,7 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
     private TextView tvSendReview;
     private TextView tvComplain;
     private ReviewAdapter adapter;
+    private RatingBar ratingBar;
     private FloatingActionButton floatingMap;
 
     private ActiveSystemServiceInt activeSystemService;
@@ -106,13 +108,15 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
             activeSystemService.makeCall(tvContacts.getText().toString());
         });
 
+        ratingBar.setStepSize(1);
         tvSendReview.setOnClickListener(v -> {
             if (etReview.length() == 0)
-                Toast.makeText(getActivity(), "Заполите поле", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Заполните поле", Toast.LENGTH_SHORT).show();
+            else if(ratingBar.getRating()==0) Toast.makeText(getActivity(), "Поставьте оценку", Toast.LENGTH_SHORT).show();
             else {
                 ApiService service = new ApiService(getActivity());
                 service.addReview(place.getId(), SharedPreferencesProvider.getInstance(getActivity()).getUserTokken(),
-                        etReview.getText().toString(), 2, DetailPlaceFragment.this);
+                        etReview.getText().toString(), (int) ratingBar.getRating(), DetailPlaceFragment.this);
             }
         });
 
@@ -142,6 +146,7 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
         tvComplain = view.findViewById(R.id.tv_complain);
         tvReviews = view.findViewById(R.id.tv_detail_send_review);
         floatingMap = view.findViewById(R.id.fab_map_event);
+        ratingBar = view.findViewById(R.id.ratingBar);
     }
 
     @Override

@@ -26,10 +26,7 @@ import com.vk.sdk.VKAccessToken;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
@@ -74,7 +71,7 @@ public class HomeFragment extends Fragment implements NotifyFragment, OnBackPres
         adapter.setmKindSportListener(kindSport -> {
             ListObjectsFragment fragment = ListObjectsFragment.newInstance(kindSport.getId());
             fragment.setEventsListener(nextFragment -> getChildFragmentManager().beginTransaction()
-                    .add(R.id.frame_home_fragment, nextFragment, ListObjectsFragment.class.getName())
+                    .replace(R.id.frame_home_fragment, nextFragment, ListObjectsFragment.class.getName())
                     .addToBackStack(HomeFragment.class.getName())
                     .commit());
             getChildFragmentManager().beginTransaction()

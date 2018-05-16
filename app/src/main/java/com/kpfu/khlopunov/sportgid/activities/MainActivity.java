@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements TabViewWrapper.Ta
         List<Fragment> tabFragment = new ArrayList<>();
         HomeFragment homeFragment = HomeFragment.newInstance();
         tabFragment.add(homeFragment);
-        ProfileFragment profileFragment = ProfileFragment.getInstance();
+        ProfileFragment profileFragment = ProfileFragment.getInstance(MainActivity.this);
         profileFragment.setNotifyFragment(this);
 //        profileFragment.setUpdateData(() -> homeFragment.notifyDataSetChanged());
         tabFragment.add(profileFragment);

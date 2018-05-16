@@ -89,20 +89,5 @@
 
     </android.support.v7.widget.RecyclerView>
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_feed"
-        app:menu="@menu/activity_feed_drawer">
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:layout_marginBottom="32dp"
-        android:text="ИСКАТЬ"/>
-    </android.support.design.widget.NavigationView>
 
 </android.support.constraint.ConstraintLayout>

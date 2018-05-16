@@ -55,7 +55,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.eventName.setText(event.getName());
 //        holder.eventAddress.setText(event.getPlace().getAddress());
         holder.eventAddress.setText("");
-        holder.eventRaiting.setText(event.getRaiting());
+        holder.eventRaiting.setText(String.valueOf(event.getRating()));
         holder.eventPrice.setText(event.getPrice()+"р.");
 
         holder.itemView.setOnClickListener(v->{

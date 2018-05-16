@@ -28,6 +28,7 @@ import com.kpfu.khlopunov.sportgid.firebase.FireBaseCallback;
 import com.kpfu.khlopunov.sportgid.firebase.UploadImage;
 import com.kpfu.khlopunov.sportgid.fragments.ApiCallback;
 import com.kpfu.khlopunov.sportgid.models.KindSport;
+import com.kpfu.khlopunov.sportgid.models.Place;
 import com.kpfu.khlopunov.sportgid.providers.SharedPreferencesProvider;
 import com.kpfu.khlopunov.sportgid.service.ActiveSystemService;
 import com.kpfu.khlopunov.sportgid.service.ActiveSystemServiceInt;
@@ -73,6 +74,11 @@ public class AddPlaceActivity extends AppCompatActivity implements ApiCallback, 
         setContentView(R.layout.activity_add_place);
         bind();
 
+        Place editPlace = (Place) getIntent().getSerializableExtra("EDIT_PLACE");
+        if(editPlace!=null){
+            fillFields(editPlace);
+        }
+
         if (savedInstanceState != null) {
             String sUri = savedInstanceState.getString(KEY_URL);
             if (sUri != null) {
@@ -88,7 +94,11 @@ public class AddPlaceActivity extends AppCompatActivity implements ApiCallback, 
         });
 
         btnSave.setOnClickListener(v -> {
-            uploadImage();
+            if(editPlace!=null){
+
+            }else {
+                uploadImage();
+            }
         });
 
         tvKindSport.setOnClickListener(v -> {
@@ -155,6 +165,10 @@ public class AddPlaceActivity extends AppCompatActivity implements ApiCallback, 
                     , kindsSport, SharedPreferencesProvider.getInstance(this).getUserTokken() , AddPlaceActivity.this);
         }
     }
+    private void updateDataOnServer(){
+        ApiService apiService = new ApiService(this);
+
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -183,7 +197,8 @@ public class AddPlaceActivity extends AppCompatActivity implements ApiCallback, 
                         names += kindSport.getName() + ", ";
                         kindsSport.add(kindSport.getId());
                     }
-                    tvKindSport.setText(names.substring(0, names.length() - 2));
+                    if(names.length()!=0) tvKindSport.setText(names.substring(0, names.length() - 2));
+                    else tvKindSport.setText("");
                     break;
                 case GALLERY_REQUEST:
                     selectedImage = data.getData();
@@ -247,5 +262,15 @@ public class AddPlaceActivity extends AppCompatActivity implements ApiCallback, 
             scrollView.setVisibility(View.VISIBLE);
 
         }
+    }
+
+    private void fillFields(Place place){
+        etName.setText(place.getTitle());
+        etPrice.setText("0");
+        etDescription.setText(place.getDescription());
+        etAddress.setText(place.getAddress());
+        etNumber.setText(place.getContact());
+        fillImage(Uri.parse(place.getPhoto()));
+        //TODO заполнение видов спорта
     }
 }

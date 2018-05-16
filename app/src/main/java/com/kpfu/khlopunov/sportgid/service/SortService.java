@@ -25,7 +25,8 @@ public class SortService {
                 return events;
 
             case "rating":
-                Collections.sort(events, (event1, event2) -> Integer.valueOf(event1.getRaiting()) - Integer.valueOf(event2.getRaiting()));
+                //TODO сортировка не только по целым числам а и по флоат
+                Collections.sort(events, (event1, event2) -> Integer.valueOf(event1.getRating()) - Integer.valueOf(event2.getRating()));
                 return events;
 
         }

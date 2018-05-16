@@ -15,7 +15,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/image_event"
+            android:id="@+id/image_my_event"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
@@ -30,15 +30,15 @@
         android:paddingLeft="8dp">
 
         <TextView
-            android:id="@+id/tv_name_event"
+            android:id="@+id/tv_name_my_event"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="asdasdsad"
             android:textColor="@color/white"
-            android:textSize="15sp" />
+            android:textSize="17sp" />
 
         <TextView
-            android:id="@+id/tv_address_event"
+            android:id="@+id/tv_address_my_event"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="sadasd"
@@ -53,21 +53,22 @@
         android:orientation="vertical"
         android:gravity="center_vertical|end">
 
-        <TextView
-            android:id="@+id/tv_price_event"
+        <ImageButton
+            android:id="@+id/btn_edit_my_event"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="asdasdsad"
-            android:textColor="@color/white"
-            android:textSize="15sp" />
-
-        <TextView
-            android:id="@+id/tv_raiting_event"
+            android:src="@drawable/icon_edit"
+            android:background="@color/event_background"/>
+        <ImageButton
+            android:id="@+id/btn_delete_my_event"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:drawableRight="@drawable/star"
-            android:drawableEnd="@drawable/star" />
+            android:src="@drawable/icon_remove"
+            android:background="@color/event_background"/>
+        <ProgressBar
+            android:id="@+id/pb_profile_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
     </LinearLayout>
 </LinearLayout>

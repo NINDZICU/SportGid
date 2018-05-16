@@ -6,9 +6,10 @@ import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -70,18 +71,11 @@ public class AddEventActivity extends AppCompatActivity implements ApiCallback, 
     }
 
     private void bind() {
-        setSupportActionBar(r.include.myToolbarSet);
+        setSupportActionBar(r.includeAddEvent.include.myToolbarSet);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        r.include.toolbarTitleSet.setText("Добавить мероприятие");
-//        toolbar = findViewById(R.id.my_toolbar_set);
-//        toolbarTitle = findViewById(R.id.toolbar_title_set);
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayShowTitleEnabled(false);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setDisplayShowHomeEnabled(true);
-//        toolbarTitle.setText("Добавить объект");
+        r.includeAddEvent.include.toolbarTitleSet.setText("Добавить мероприятие");
     }
 
     @Override
@@ -110,11 +104,12 @@ public class AddEventActivity extends AppCompatActivity implements ApiCallback, 
     private void uploadDataToServer() {
         if (checkCorrectData()) {
             ApiService apiService = new ApiService(this);
+            //todo возвращать координаты
             apiService.addEvent(r.includeAddEvent.etEventName.getText().toString(), r.includeAddEvent.etEventDescription.getText().toString(),
                     Integer.valueOf(r.includeAddEvent.etEventCountMembers.getText().toString()),
                     r.includeAddEvent.etEventPrice.getText().toString(), SharedPreferencesProvider.getInstance(this).getUserTokken(),
                     //Todo норм place и kindSport
-                    photoUrlFirebase, String.valueOf(kindSport.getId()), null, AddEventActivity.this);
+                    photoUrlFirebase, String.valueOf(kindSport.getId()), null, 12, 12, AddEventActivity.this);
 
         }
     }
