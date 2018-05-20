@@ -2,11 +2,10 @@ package com.kpfu.khlopunov.sportgid.activities;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
+import android.location.Address;
 import android.net.Uri;
-import android.provider.MediaStore;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -28,18 +27,22 @@ import com.kpfu.khlopunov.sportgid.firebase.FireBaseCallback;
 import com.kpfu.khlopunov.sportgid.firebase.UploadImage;
 import com.kpfu.khlopunov.sportgid.fragments.ApiCallback;
 import com.kpfu.khlopunov.sportgid.models.KindSport;
+import com.kpfu.khlopunov.sportgid.models.Map;
 import com.kpfu.khlopunov.sportgid.models.Place;
 import com.kpfu.khlopunov.sportgid.providers.SharedPreferencesProvider;
 import com.kpfu.khlopunov.sportgid.service.ActiveSystemService;
 import com.kpfu.khlopunov.sportgid.service.ActiveSystemServiceInt;
 import com.kpfu.khlopunov.sportgid.service.ApiService;
+import com.kpfu.khlopunov.sportgid.service.GeocodeAddressIntentService;
 import com.kpfu.khlopunov.sportgid.service.PermissionService;
+import com.kpfu.khlopunov.sportgid.service.ServiceConstants;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static android.widget.Toast.LENGTH_SHORT;
 import static com.kpfu.khlopunov.sportgid.service.ServiceConstants.GALLERY_REQUEST;
 
 public class AddPlaceActivity extends AppCompatActivity implements ApiCallback, FireBaseCallback {
@@ -58,15 +61,19 @@ public class AddPlaceActivity extends AppCompatActivity implements ApiCallback, 
     private ProgressBar progressBar;
     private ScrollView scrollView;
 
+
     public static final String KEY_URL = "KEY_URL";
 
     private List<Integer> kindsSport;
     private String photoUrlFirebase = null;
     private Uri selectedImage = null;
     private ActiveSystemServiceInt activeSystemService;
+    private AddressResultReceiver mResultReceiver;
 
     private Pattern patternPhone = Pattern.compile(PHONE_PATTERN);
-
+    private Place editPlace;
+    private double longitude;
+    private double latitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +81,9 @@ public class AddPlaceActivity extends AppCompatActivity implements ApiCallback, 
         setContentView(R.layout.activity_add_place);
         bind();
 
-        Place editPlace = (Place) getIntent().getSerializableExtra("EDIT_PLACE");
-        if(editPlace!=null){
+        mResultReceiver = new AddressResultReceiver(null);
+        editPlace = (Place) getIntent().getSerializableExtra("EDIT_PLACE");
+        if (editPlace != null) {
             fillFields(editPlace);
         }
 
@@ -94,16 +102,18 @@ public class AddPlaceActivity extends AppCompatActivity implements ApiCallback, 
         });
 
         btnSave.setOnClickListener(v -> {
-            if(editPlace!=null){
-
-            }else {
-                uploadImage();
-            }
+            geocoding();
+            setVisibleProgressBar(true);
+//            if (photoUrlFirebase == null && selectedImage == null) {
+//                Toast.makeText(AddPlaceActivity.this, "Выберите фото", Toast.LENGTH_SHORT).show();
+//            } else if (editPlace != null && editPlace.getPhoto().equals(photoUrlFirebase))
+//                setFirebaseLink(photoUrlFirebase);
+//            else uploadImage();
         });
 
         tvKindSport.setOnClickListener(v -> {
             Intent intent = new Intent(AddPlaceActivity.this, SelectInterestsActivtiy.class);
-            intent.putExtra(SelectInterestsActivtiy.TYPE_CHECK_BUTTON,SelectInterestsActivtiy.CHECKBOX);
+            intent.putExtra(SelectInterestsActivtiy.TYPE_CHECK_BUTTON, SelectInterestsActivtiy.CHECKBOX);
             startActivityForResult(intent, REQUEST_CODE_INTERESTS);
         });
     }
@@ -131,21 +141,23 @@ public class AddPlaceActivity extends AppCompatActivity implements ApiCallback, 
     @Override
     public void setFirebaseLink(String firebaseLink) {
         this.photoUrlFirebase = firebaseLink;
-        uploadDataToServer();
+        if (editPlace != null) updateDataOnServer();
+        else uploadDataToServer();
+
         setVisibleProgressBar(false);
     }
 
 
     public boolean checkCorrectData() {
         if (!validatePhone(etNumber.getText().toString())) {
-            Toast.makeText(this, "Введите корректный номер телефона", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Введите корректный номер телефона", LENGTH_SHORT).show();
             return false;
         } else if (etName.length() == 0 || etAddress.length() == 0 || etDescription.length() == 0 ||
                 tvKindSport.length() == 0 || etPrice.length() == 0 || etPrice.length() == 0) {
-            Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Заполните все поля", LENGTH_SHORT).show();
             return false;
         } else if (photoUrlFirebase == null) {
-            Toast.makeText(this, "Не удалось загрузить фото на сервер", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Не удалось загрузить фото на сервер", LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -161,13 +173,19 @@ public class AddPlaceActivity extends AppCompatActivity implements ApiCallback, 
             ApiService apiService = new ApiService(this);
             apiService.addPlace(etAddress.getText().toString(), etNumber.getText().toString(), etName.getText().toString(),
                     etDescription.getText().toString(),
-                    SharedPreferencesProvider.getInstance(AddPlaceActivity.this).getCity(), photoUrlFirebase
-                    , kindsSport, SharedPreferencesProvider.getInstance(this).getUserTokken() , AddPlaceActivity.this);
+                    SharedPreferencesProvider.getInstance(AddPlaceActivity.this).getCity(), photoUrlFirebase,
+                    kindsSport, SharedPreferencesProvider.getInstance(this).getUserTokken(), latitude, longitude, AddPlaceActivity.this);
         }
     }
-    private void updateDataOnServer(){
-        ApiService apiService = new ApiService(this);
 
+    private void updateDataOnServer() {
+        if (checkCorrectData()) {
+            ApiService apiService = new ApiService(this);
+            apiService.updatePlace(editPlace.getId(), etAddress.getText().toString(), etNumber.getText().toString(), etName.getText().toString(),
+                    etDescription.getText().toString(),
+                    SharedPreferencesProvider.getInstance(AddPlaceActivity.this).getCity(), photoUrlFirebase
+                    , kindsSport, SharedPreferencesProvider.getInstance(this).getUserTokken(), AddPlaceActivity.this);
+        }
     }
 
     @Override
@@ -197,7 +215,8 @@ public class AddPlaceActivity extends AppCompatActivity implements ApiCallback, 
                         names += kindSport.getName() + ", ";
                         kindsSport.add(kindSport.getId());
                     }
-                    if(names.length()!=0) tvKindSport.setText(names.substring(0, names.length() - 2));
+                    if (names.length() != 0)
+                        tvKindSport.setText(names.substring(0, names.length() - 2));
                     else tvKindSport.setText("");
                     break;
                 case GALLERY_REQUEST:
@@ -222,10 +241,24 @@ public class AddPlaceActivity extends AppCompatActivity implements ApiCallback, 
 
     @Override
     public void callback(Object object) {
-        if ((Boolean) object) {
-            Toast.makeText(this, "Добавление успешно выполнено!", Toast.LENGTH_SHORT).show();
-            finish();
-        } else Toast.makeText(this, "Не удалось добавить объект", Toast.LENGTH_SHORT).show();
+        if(object instanceof Boolean) {
+            if ((Boolean) object) {
+                Toast.makeText(this, "Добавление успешно выполнено!", LENGTH_SHORT).show();
+                setResult(RESULT_OK);
+                finish();
+            } else Toast.makeText(this, "Не удалось добавить объект", LENGTH_SHORT).show();
+        }
+        else if(object instanceof Map){
+            latitude = ((Map) object).getX();
+            longitude = ((Map) object).getY();
+        }
+        else if(object instanceof String){
+            if(object.equals("MAP_NON")){
+                Log.e("MAP", "Не удалось загрузить координаты");
+                Toast.makeText(this, "Не удалось подгрузить данные с сервера", LENGTH_SHORT).show();
+                setVisibleProgressBar(false);
+            }
+        }
     }
 
     private void uploadImage() {
@@ -243,7 +276,7 @@ public class AddPlaceActivity extends AppCompatActivity implements ApiCallback, 
                     activeSystemService.runPhotoPicker();
                 } else {
                     Toast.makeText(AddPlaceActivity.this, "GET_ACCOUNTS Denied",
-                            Toast.LENGTH_SHORT).show();
+                            LENGTH_SHORT).show();
                 }
                 break;
             default:
@@ -264,13 +297,96 @@ public class AddPlaceActivity extends AppCompatActivity implements ApiCallback, 
         }
     }
 
-    private void fillFields(Place place){
+    private void fillFields(Place place) {
         etName.setText(place.getTitle());
         etPrice.setText("0");
         etDescription.setText(place.getDescription());
         etAddress.setText(place.getAddress());
         etNumber.setText(place.getContact());
+        photoUrlFirebase = place.getPhoto();
+        kindsSport = place.getSport();
+
+        setVisibleProgressBar(true);
+        ApiService apiService = new ApiService(this);
+        apiService.getMap(place.getMap(), this);
+        //TODO getMap обрабатывать лучше
         fillImage(Uri.parse(place.getPhoto()));
-        //TODO заполнение видов спорта
+
+        String names = "";
+        for (Integer idKindSport : kindsSport) {
+            for (KindSport kindSportLocal : SharedPreferencesProvider.getInstance(AddPlaceActivity.this).getKindsSports()) {
+                if (idKindSport.equals(kindSportLocal.getId())) {
+                    names += kindSportLocal.getName() + ", ";
+                }
+            }
+        }
+        if (names.length() != 0) tvKindSport.setText(names.substring(0, names.length() - 2));
+        else tvKindSport.setText("");
+    }
+
+    //    private void geocoding(String address){
+//        System.out.println("START GEOCODING");
+//        GoogleRequests googleRequests = GoogleApi.getInstance().getmGoogleRequests();
+//        googleRequests.geocodeByAddress(address, API_KEY_GOOGLE).subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(geocoding -> {
+//                    Log.d("STATUS", geocoding.getStatus());
+//                    Log.d("Error Message", geocoding.getError_message());
+//                   if(geocoding.getStatus().equals("OK")){
+//                       Log.d("LONGITUDE", geocoding.getResults().get(0).getGeometry().getLocation().getLat().toString()
+//                       +"   "+geocoding.getResults().get(0).getGeometry().getLocation().getLng());
+//                   }
+//                }, throwable -> {
+//                    Log.d("THROW geocoding", throwable.getMessage());
+//                    Toast.makeText(AddPlaceActivity.this, "geocoding" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+//                });
+//    }
+    private void geocoding() {
+        //TODO добавить проверку на то, изменился ли адрес когда изменяют плэйс, и у евента тоже
+        Intent intent = new Intent(this, GeocodeAddressIntentService.class);
+        intent.putExtra(ServiceConstants.RECEIVER, mResultReceiver);
+        intent.putExtra(ServiceConstants.FETCH_TYPE_EXTRA, ServiceConstants.USE_ADDRESS_NAME);
+        if (etAddress.getText().length() == 0) {
+            Toast.makeText(AddPlaceActivity.this, "Введите Адрес", LENGTH_SHORT).show();
+            setVisibleProgressBar(false);
+            return;
+        }
+        intent.putExtra(ServiceConstants.LOCATION_NAME_DATA_EXTRA, etAddress.getText().toString());
+        Log.e("ADDPLACEACTIVITY", "Starting Service");
+        startService(intent);
+    }
+
+    class AddressResultReceiver extends ResultReceiver {
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, final Bundle resultData) {
+            if (resultCode == ServiceConstants.SUCCESS_RESULT) {
+                final Address address = resultData.getParcelable(ServiceConstants.RESULT_ADDRESS);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("Latitude: " + address.getLatitude() + "\n" +
+                                "Longitude: " + address.getLongitude() + "\n" +
+                                "Address: " + resultData.getString(ServiceConstants.RESULT_DATA_KEY));
+                        longitude = address.getLongitude();
+                        latitude = address.getLatitude();
+                        if (photoUrlFirebase == null && selectedImage == null) {
+                            Toast.makeText(AddPlaceActivity.this, "Выберите фото", Toast.LENGTH_SHORT).show();
+                        } else if (editPlace != null && editPlace.getPhoto().equals(photoUrlFirebase))
+                            setFirebaseLink(photoUrlFirebase);
+                        else uploadImage();
+                    }
+                });
+            } else {
+                runOnUiThread(() -> {
+                    System.out.println("receiveERROR " + resultData.getString(ServiceConstants.RESULT_DATA_KEY));
+                    Toast.makeText(AddPlaceActivity.this, "Адрес не существует", LENGTH_SHORT).show();
+                });
+
+            }
+        }
     }
 }

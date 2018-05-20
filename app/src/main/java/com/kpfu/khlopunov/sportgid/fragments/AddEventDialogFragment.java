@@ -14,15 +14,22 @@ import android.widget.EditText;
 import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.activities.AddEventActivity;
 import com.kpfu.khlopunov.sportgid.activities.AddPlaceActivity;
+import com.kpfu.khlopunov.sportgid.models.KindSport;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
+import static com.kpfu.khlopunov.sportgid.activities.AddPlaceActivity.REQUEST_CODE_INTERESTS;
+import static com.kpfu.khlopunov.sportgid.service.ServiceConstants.GALLERY_REQUEST;
 
 /**
  * Created by hlopu on 17.12.2017.
  */
 
 public class AddEventDialogFragment extends DialogFragment implements View.OnClickListener {
+    private StartEventActivity startEventActivity;
+    private StartPlaceActivity startPlaceActivity;
 //    Button btnCancel;
 //    Button btnOk;
 //    RadioButton rbEvent;
@@ -34,6 +41,7 @@ public class AddEventDialogFragment extends DialogFragment implements View.OnCli
 //    }
 
     @Override
+
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 //        super.onViewCreated(view, savedInstanceState);
 //        getDialog().setTitle("Добавить");
@@ -68,11 +76,9 @@ public class AddEventDialogFragment extends DialogFragment implements View.OnCli
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (selected.get(0) == 0) {
-                            Intent intent = new Intent(getActivity(), AddPlaceActivity.class);
-                            startActivity(intent);
+                            startPlaceActivity.onClick();
                         } else if (selected.get(0) == 1) {
-                            Intent intent = new Intent(getActivity(), AddEventActivity.class);
-                            startActivity(intent);
+                            startEventActivity.onClick();
                         }
                     }
                 })
@@ -85,8 +91,25 @@ public class AddEventDialogFragment extends DialogFragment implements View.OnCli
         return builder.create();
     }
 
+
     @Override
     public void onClick(View v) {
 
+    }
+
+    public interface StartEventActivity {
+        void onClick();
+    }
+
+    public interface StartPlaceActivity {
+        void onClick();
+    }
+
+    public void setStartEventActivity(StartEventActivity startEventActivity) {
+        this.startEventActivity = startEventActivity;
+    }
+
+    public void setStartPlaceActivity(StartPlaceActivity startPlaceActivity) {
+        this.startPlaceActivity = startPlaceActivity;
     }
 }

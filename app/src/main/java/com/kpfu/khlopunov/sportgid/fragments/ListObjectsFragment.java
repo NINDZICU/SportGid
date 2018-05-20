@@ -53,11 +53,12 @@ public class ListObjectsFragment extends Fragment implements ApiCallback,
     private PlaceAdapter placeAdapter;
     private EventsListener eventsListener;
     private ProgressBar progressBar;
-    private DrawerLayout drawer;
-    private MultiSlider multiSliderPrice;
-    private TextView tvMinPrice;
-    private TextView tvMaxPrice;
-    private Button btnFilterSearch;
+    //TODO Если будет нужен фильтр раскоментить строки здесь и вернуть в верстку drawer
+//    private DrawerLayout drawer;
+//    private MultiSlider multiSliderPrice;
+//    private TextView tvMinPrice;
+//    private TextView tvMaxPrice;
+//    private Button btnFilterSearch;
 
     public static ListObjectsFragment newInstance(int idKind) {
         Bundle bundle = new Bundle();
@@ -70,7 +71,7 @@ public class ListObjectsFragment extends Fragment implements ApiCallback,
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_objects_events_drawer_layout, container, false);
+        return inflater.inflate(R.layout.list_events_fragment, container, false);
     }
 
     @Override
@@ -84,6 +85,8 @@ public class ListObjectsFragment extends Fragment implements ApiCallback,
         progressBar = view.findViewById(R.id.pb_events);
         onVisibleProgBar();
 
+        btnFilter.setVisibility(View.GONE);
+        /**
         btnFilterSearch = view.findViewById(R.id.btn_filter_search);
         tvMaxPrice = view.findViewById(R.id.tv_filter_max_price);
         tvMinPrice = view.findViewById(R.id.tv_filter_min_price);
@@ -96,7 +99,7 @@ public class ListObjectsFragment extends Fragment implements ApiCallback,
 
         NavigationView navigationView = (NavigationView) view.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+         */
         rvEvents.setLayoutManager(new LinearLayoutManager(getActivity()));
         placeAdapter = new PlaceAdapter(getActivity());
         placeAdapter.setmPlaceListener(place -> {
@@ -104,7 +107,7 @@ public class ListObjectsFragment extends Fragment implements ApiCallback,
             eventsListener.onButtonClicked(fragment);
         });
 
-
+        /**
         multiSliderPrice.setMax(PRICEMAX);
         tvMinPrice.setText("0");
         tvMaxPrice.setText(String.valueOf(PRICEMAX));
@@ -122,8 +125,8 @@ public class ListObjectsFragment extends Fragment implements ApiCallback,
             drawer.openDrawer(GravityCompat.START);
         });
         btnFilterSearch.setOnClickListener(v ->{
-
         });
+         */
         btnEvents.setOnClickListener(v -> {
             if (eventsListener != null) {
                 System.out.println("NURIKU IDKIND " + getArguments().getInt("idKind"));
@@ -217,7 +220,7 @@ public class ListObjectsFragment extends Fragment implements ApiCallback,
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-        drawer.closeDrawer(GravityCompat.START);
+//        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 }

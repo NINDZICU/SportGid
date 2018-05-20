@@ -18,6 +18,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.activities.AddEventActivity;
 import com.kpfu.khlopunov.sportgid.activities.AddPlaceActivity;
+import com.kpfu.khlopunov.sportgid.fragments.AddEventDialogFragment;
 import com.kpfu.khlopunov.sportgid.fragments.ApiCallback;
 import com.kpfu.khlopunov.sportgid.models.Event;
 import com.kpfu.khlopunov.sportgid.models.Place;
@@ -44,6 +45,9 @@ public class MyEventsAdapter extends RecyclerView.Adapter<MyEventsAdapter.MyEven
     private ProgressBar progressBar;
     private ImageButton btnDelete;
     private ImageButton btnEdit;
+
+    private StartPlaceActivity startPlaceActivity;
+    private StartEventActivity startEventActivity;
 
     public MyEventsAdapter(Context context) {
         this.context = context;
@@ -81,9 +85,7 @@ public class MyEventsAdapter extends RecyclerView.Adapter<MyEventsAdapter.MyEven
                 setVisiblePB(View.VISIBLE);
             });
             holder.btnEdit.setOnClickListener(v -> {
-                Intent intent = new Intent(context, AddEventActivity.class);
-                intent.putExtra("EDIT_EVENT", event);
-                context.startActivity(intent);
+                startEventActivity.onClick(event);
 //                setVisiblePB(View.VISIBLE);
             });
             holder.itemView.setOnClickListener(v -> {
@@ -108,9 +110,7 @@ public class MyEventsAdapter extends RecyclerView.Adapter<MyEventsAdapter.MyEven
                 setVisiblePB(View.VISIBLE);
             });
             holder.btnEdit.setOnClickListener(v -> {
-                Intent intent = new Intent(context, AddPlaceActivity.class);
-                intent.putExtra("EDIT_PLACE", place);
-                context.startActivity(intent);
+                startPlaceActivity.onClick(place);
 //                setVisiblePB(View.VISIBLE);
             });
             holder.itemView.setOnClickListener(v -> {
@@ -214,5 +214,21 @@ public class MyEventsAdapter extends RecyclerView.Adapter<MyEventsAdapter.MyEven
             btnEdit.setVisibility(View.GONE);
             btnDelete.setVisibility(View.GONE);
         }
+    }
+
+    public interface StartEventActivity {
+        void onClick(Event event);
+    }
+
+    public interface StartPlaceActivity {
+        void onClick(Place place);
+    }
+
+    public void setStartEventActivity(StartEventActivity startEventActivity) {
+        this.startEventActivity = startEventActivity;
+    }
+
+    public void setStartPlaceActivity(StartPlaceActivity startPlaceActivity) {
+        this.startPlaceActivity = startPlaceActivity;
     }
 }

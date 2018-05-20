@@ -6,9 +6,11 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.kpfu.khlopunov.sportgid.models.KindSport;
 import com.kpfu.khlopunov.sportgid.models.User;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
 /**
  * Created by hlopu on 30.10.2017.
@@ -18,9 +20,10 @@ public class SharedPreferencesProvider {
     public static final String PREFERENCES_NAME = "PREFERENCES_NAME";
     public static final String VK_ID_PREFERENCES = "VK_ID";
     public static final String VK_NAME_PREFERENCES = "NAME_PREFEERENCES";
-    public static final String USER_TOKEN_PREFERENCES ="USER_TOKEN_PREFRENCES";
-    public static final String CITY_PREFERENCES ="CITY_PREFERENCES";
-    public static final String USER_PREFERENCES ="USER_PREFERENCES";
+    public static final String USER_TOKEN_PREFERENCES = "USER_TOKEN_PREFRENCES";
+    public static final String CITY_PREFERENCES = "CITY_PREFERENCES";
+    public static final String USER_PREFERENCES = "USER_PREFERENCES";
+    public static final String KIND_SPORT_PREFERENCES = "KIND_SPORT_PREFERENCES";
 
     private static SharedPreferencesProvider sInstance;
     private Context context;
@@ -116,6 +119,7 @@ public class SharedPreferencesProvider {
         editor.putString(PREFERENCES_NAME, jsonText);
         editor.commit();
     }
+
     public String getUserTokken() {
         SharedPreferences preferences = context.getSharedPreferences(USER_TOKEN_PREFERENCES, Context.MODE_PRIVATE);
         if (preferences.contains(PREFERENCES_NAME)) {
@@ -142,6 +146,7 @@ public class SharedPreferencesProvider {
         editor.putString(PREFERENCES_NAME, jsonText);
         editor.commit();
     }
+
     public void deleteUserTokken() {
         SharedPreferences preferences = context.getSharedPreferences(USER_TOKEN_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -154,7 +159,8 @@ public class SharedPreferencesProvider {
         if (preferences.contains(PREFERENCES_NAME)) {
             Gson gson = new Gson();
             String jsonText = preferences.getString(PREFERENCES_NAME, "");
-            Type listType = new TypeToken<User>() {}.getType();
+            Type listType = new TypeToken<User>() {
+            }.getType();
             User user = gson.fromJson(jsonText, listType);
             return user;
         } else {
@@ -174,10 +180,38 @@ public class SharedPreferencesProvider {
         editor.putString(PREFERENCES_NAME, jsonText);
         editor.commit();
     }
+
     public void deleteUser() {
         SharedPreferences preferences = context.getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
         editor.commit();
+    }
+
+    public void saveKindSports(List<KindSport> kindsSports) {
+        SharedPreferences preferences = context.getSharedPreferences(KIND_SPORT_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        Gson gson = new Gson();
+        Type listType = new TypeToken<List<KindSport>>() {
+        }.getType();
+        String jsonText = gson.toJson(kindsSports, listType);
+        editor.putString(PREFERENCES_NAME, jsonText);
+        editor.commit();
+    }
+
+    public List<KindSport> getKindsSports() {
+        SharedPreferences preferences = context.getSharedPreferences(KIND_SPORT_PREFERENCES, Context.MODE_PRIVATE);
+        if (preferences.contains(PREFERENCES_NAME)) {
+            Gson gson = new Gson();
+            String jsonText = preferences.getString(PREFERENCES_NAME, "");
+            Type listType = new TypeToken<List<KindSport>>() {
+            }.getType();
+            List<KindSport> kindSports = gson.fromJson(jsonText, listType);
+            return kindSports;
+        } else {
+            List<KindSport> kindSports = null;
+            saveKindSports(kindSports);
+            return kindSports;
+        }
     }
 }

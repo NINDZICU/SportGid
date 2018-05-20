@@ -60,6 +60,8 @@ public class ApiService {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(apiResult -> {
                     if (apiResult.getCode() == 0) {
+                        //TODO чтобы не каждый раз сохраняло а только когда нужно
+                        SharedPreferencesProvider.getInstance(context).saveKindSports(apiResult.getBody());
                         kinds.addAll(apiResult.getBody());
                         callback.callback(apiResult.getBody());
                     }
@@ -123,7 +125,7 @@ public class ApiService {
 
 
     public void getMyEvents(String token, ApiCallback callback) {
-        List<Event> events = Collections.emptyList();
+        List<Event> events = new ArrayList<>();
         requests.getMyEvents(token).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(apiResult -> {
@@ -162,6 +164,9 @@ public class ApiService {
                 .subscribe(apiResult -> {
                     if (apiResult.getCode() == 0) {
                         apiCallback.callback(true);
+                    } else {
+                        Toast.makeText(context, "Не удалось", Toast.LENGTH_SHORT).show();
+                        apiCallback.callback(null);
                     }
                 }, throwable -> {
                     apiCallback.callback(null);
@@ -169,12 +174,16 @@ public class ApiService {
                     Toast.makeText(context, "Throw subscribeEvent " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
+
     public void unsubscribeEvent(int idEvent, String token, ApiCallback apiCallback) {
         requests.unsubscribe(idEvent, token).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(apiResult -> {
                     if (apiResult.getCode() == 0) {
                         apiCallback.callback(false);
+                    } else {
+                        Toast.makeText(context, "Не удалось", Toast.LENGTH_SHORT).show();
+                        apiCallback.callback(null);
                     }
                 }, throwable -> {
                     apiCallback.callback(null);
@@ -204,9 +213,10 @@ public class ApiService {
     }
 
     public void addPlace(String address, String contact, String title,
-                         String description, String city, String photo, List<Integer> kindOfSport, String token,
-                         ApiCallback callback) {
-        requests.addPlace(address, contact, title, description, city, photo, kindOfSport, token).subscribeOn(Schedulers.io())
+                         String description, String city, String photo, List<Integer> kindOfSport, String token, double x,
+                         double y, ApiCallback callback) {
+        requests.addPlace(address, contact, title, description, city, photo, kindOfSport, token, x, y)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(apiResult -> {
                     System.out.println("CODE add Place " + apiResult.getCode());
@@ -236,12 +246,45 @@ public class ApiService {
                 });
     }
 
+    public void updatePlace(int idPlace, String address, String contact, String title,
+                            String description, String city, String photo, List<Integer> kindOfSport, String token,
+                            ApiCallback callback) {
+        requests.updatePlace(idPlace, address, contact, title, description, city, photo, kindOfSport, token).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(apiResult -> {
+                    System.out.println("CODE add Place " + apiResult.getCode());
+                    if (apiResult.getCode() == 0) {
+                        callback.callback(true);
+                    }
+                }, throwable -> {
+                    callback.callback(false);
+                    Toast.makeText(context, "Throw " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    System.out.println("THROW OT NURIKA editPlace" + throwable.getMessage());
+                });
+    }
+
+    public void updateEvent(int idPlace, String title, String description, int maxOfMembers, String price, String token,
+                            String photo, String sport, Place place, double x, double y, ApiCallback apiCallback) {
+        requests.updateEvent(idPlace, title, description, maxOfMembers, price, token, photo, sport, place, x, y)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(apiResult -> {
+                    if (apiResult.getCode() == 0) {
+                        apiCallback.callback(true);
+                    }
+                }, throwable -> {
+                    apiCallback.callback(false);
+                    Toast.makeText(context, "Throw " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.d("Throw add Event ", throwable.getMessage());
+                });
+    }
+
     public void deletePlace(int idPlace, String token, ApiCallback apiCallback) {
         requests.deletePlace(idPlace, token).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(apiResult -> {
                     if (apiResult.getCode() == 0) {
-                        apiCallback.callback(MyEventsAdapter.DELETE_PLACE_SUCCESS+idPlace);
+                        apiCallback.callback(MyEventsAdapter.DELETE_PLACE_SUCCESS + idPlace);
                     } else if (apiResult.getCode() == 2) {
                         apiCallback.callback(MyEventsAdapter.DELETE_FAILURE);
                         Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show();
@@ -257,7 +300,7 @@ public class ApiService {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(apiResult -> {
                     if (apiResult.getCode() == 0) {
-                        apiCallback.callback(MyEventsAdapter.DELETE_EVENT_SUCCESS+idEvent);
+                        apiCallback.callback(MyEventsAdapter.DELETE_EVENT_SUCCESS + idEvent);
                     } else if (apiResult.getCode() == 2) {
                         apiCallback.callback(MyEventsAdapter.DELETE_FAILURE);
                         Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show();
@@ -394,6 +437,20 @@ public class ApiService {
                     callback.callback(false);
                     Toast.makeText(context, "Throw " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                     System.out.println("THROW OT NURIKA updateReview " + throwable.getMessage());
+                });
+    }
+
+    public void getMap(int id, ApiCallback callback) {
+        requests.getMap(id).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(apiResult -> {
+                    if (apiResult.getCode() == 0) {
+                        callback.callback(apiResult.getBody());
+                    }
+                }, throwable -> {
+                    callback.callback("MAP_NON");
+                    Toast.makeText(context, "Throw " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    System.out.println("THROW OT NURIKA getMap" + throwable.getMessage());
                 });
     }
 }

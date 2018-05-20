@@ -3,10 +3,14 @@ package com.kpfu.khlopunov.sportgid.activities;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.location.Address;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -19,15 +23,21 @@ import com.kpfu.khlopunov.sportgid.databinding.ActivityAddEventBinding;
 import com.kpfu.khlopunov.sportgid.firebase.FireBaseCallback;
 import com.kpfu.khlopunov.sportgid.firebase.UploadImage;
 import com.kpfu.khlopunov.sportgid.fragments.ApiCallback;
+import com.kpfu.khlopunov.sportgid.models.Event;
 import com.kpfu.khlopunov.sportgid.models.KindSport;
+import com.kpfu.khlopunov.sportgid.models.Map;
+import com.kpfu.khlopunov.sportgid.models.Place;
 import com.kpfu.khlopunov.sportgid.providers.SharedPreferencesProvider;
 import com.kpfu.khlopunov.sportgid.service.ActiveSystemService;
 import com.kpfu.khlopunov.sportgid.service.ActiveSystemServiceInt;
 import com.kpfu.khlopunov.sportgid.service.ApiService;
+import com.kpfu.khlopunov.sportgid.service.GeocodeAddressIntentService;
 import com.kpfu.khlopunov.sportgid.service.PermissionService;
+import com.kpfu.khlopunov.sportgid.service.ServiceConstants;
 
 import java.util.List;
 
+import static android.widget.Toast.LENGTH_SHORT;
 import static com.kpfu.khlopunov.sportgid.activities.AddPlaceActivity.KEY_URL;
 import static com.kpfu.khlopunov.sportgid.activities.AddPlaceActivity.REQUEST_CODE_INTERESTS;
 import static com.kpfu.khlopunov.sportgid.service.ServiceConstants.GALLERY_REQUEST;
@@ -40,15 +50,24 @@ public class AddEventActivity extends AppCompatActivity implements ApiCallback, 
     private String photoUrlFirebase = null;
     private Uri selectedImage = null;
     private ActiveSystemServiceInt activeSystemService;
-
+    private Event editEvent;
+    private AddressResultReceiver mResultReceiver;
+    private double longitude;
+    private double latitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         r = DataBindingUtil.setContentView(this, R.layout.activity_add_event);
         bind();
+
+        mResultReceiver = new AddressResultReceiver(null);
         activeSystemService = new ActiveSystemService(this);
 
+        editEvent = (Event) getIntent().getSerializableExtra("EDIT_EVENT");
+        if (editEvent != null) {
+            fillFields(editEvent);
+        }
         if (savedInstanceState != null) {
             String sUri = savedInstanceState.getString(KEY_URL);
             if (sUri != null) {
@@ -61,7 +80,8 @@ public class AddEventActivity extends AppCompatActivity implements ApiCallback, 
             activeSystemService.runPhotoPicker();
         });
         r.includeAddEvent.btnEventSave.setOnClickListener(v -> {
-            uploadImage();
+            geocoding();
+            setVisibleProgressBar(true);
         });
         r.includeAddEvent.tvEventKindSport.setOnClickListener(v -> {
             Intent intent = new Intent(AddEventActivity.this, SelectInterestsActivtiy.class);
@@ -81,7 +101,8 @@ public class AddEventActivity extends AppCompatActivity implements ApiCallback, 
     @Override
     public void setFirebaseLink(String firebaseLink) {
         this.photoUrlFirebase = firebaseLink;
-        uploadDataToServer();
+        if (editEvent == null) uploadDataToServer();
+        else updateEvent();
         setVisibleProgressBar(false);
     }
 
@@ -109,7 +130,20 @@ public class AddEventActivity extends AppCompatActivity implements ApiCallback, 
                     Integer.valueOf(r.includeAddEvent.etEventCountMembers.getText().toString()),
                     r.includeAddEvent.etEventPrice.getText().toString(), SharedPreferencesProvider.getInstance(this).getUserTokken(),
                     //Todo норм place и kindSport
-                    photoUrlFirebase, String.valueOf(kindSport.getId()), null, 12, 12, AddEventActivity.this);
+                    photoUrlFirebase, String.valueOf(kindSport.getId()), null, latitude, longitude, AddEventActivity.this);
+
+        }
+    }
+
+    private void updateEvent() {
+        if (checkCorrectData()) {
+            ApiService apiService = new ApiService(this);
+            //todo возвращать координаты
+            apiService.updateEvent(editEvent.getId(), r.includeAddEvent.etEventName.getText().toString(), r.includeAddEvent.etEventDescription.getText().toString(),
+                    Integer.valueOf(r.includeAddEvent.etEventCountMembers.getText().toString()),
+                    r.includeAddEvent.etEventPrice.getText().toString(), SharedPreferencesProvider.getInstance(this).getUserTokken(),
+                    //Todo норм place и kindSport
+                    photoUrlFirebase, String.valueOf(kindSport.getId()), null, latitude, longitude, AddEventActivity.this);
 
         }
     }
@@ -160,10 +194,22 @@ public class AddEventActivity extends AppCompatActivity implements ApiCallback, 
 
     @Override
     public void callback(Object object) {
-        if ((Boolean) object) {
-            Toast.makeText(this, "Добавление успешно выполнено!", Toast.LENGTH_SHORT).show();
-            finish();
-        } else Toast.makeText(this, "Не удалось добавить объект", Toast.LENGTH_SHORT).show();
+        if (object instanceof Boolean) {
+            if ((Boolean) object) {
+                setResult(RESULT_OK);
+                Toast.makeText(this, "Добавление успешно выполнено!", Toast.LENGTH_SHORT).show();
+                finish();
+            } else Toast.makeText(this, "Не удалось добавить объект", Toast.LENGTH_SHORT).show();
+        } else if (object instanceof Map) {
+            latitude = ((Map) object).getX();
+            longitude = ((Map) object).getY();
+        } else if (object instanceof String) {
+            if (object.equals("MAP_NON")) {
+                Log.e("MAP", "Не удалось загрузить координаты");
+                Toast.makeText(this, "Не удалось подгрузить данные с сервера", LENGTH_SHORT).show();
+                setVisibleProgressBar(false);
+            }
+        }
     }
 
     private void uploadImage() {
@@ -191,6 +237,29 @@ public class AddEventActivity extends AppCompatActivity implements ApiCallback, 
         }
     }
 
+    private void fillFields(Event event) {
+        r.includeAddEvent.etEventName.setText(event.getName());
+        r.includeAddEvent.etEventDescription.setText(event.getDescription());
+        r.includeAddEvent.etEventCountMembers.setText(String.valueOf(event.getMembers().size()));
+        r.includeAddEvent.etEventAddress.setText(event.getAddress());
+        r.includeAddEvent.etEventPrice.setText(event.getPrice());
+        photoUrlFirebase = event.getPhoto();
+        fillImage(Uri.parse(event.getPhoto()));
+
+        setVisibleProgressBar(true);
+        ApiService apiService = new ApiService(this);
+        apiService.getMap(event.getMap(), this);
+        //TODO getMap обрабатывать лучше
+
+        for (KindSport kindSportLocal : SharedPreferencesProvider.getInstance(AddEventActivity.this).getKindsSports()) {
+            if (kindSportLocal.getId() == event.getSport()) {
+                kindSport = kindSportLocal;
+                r.includeAddEvent.tvEventKindSport.setText(kindSport.getName());
+                break;
+            }
+        }
+    }
+
 
     private void setVisibleProgressBar(boolean bool) {
         if (bool) {
@@ -203,5 +272,49 @@ public class AddEventActivity extends AppCompatActivity implements ApiCallback, 
         }
     }
 
+    private void geocoding() {
+        Intent intent = new Intent(this, GeocodeAddressIntentService.class);
+        intent.putExtra(ServiceConstants.RECEIVER, mResultReceiver);
+        intent.putExtra(ServiceConstants.FETCH_TYPE_EXTRA, ServiceConstants.USE_ADDRESS_NAME);
+        if (r.includeAddEvent.etEventAddress.getText().length() == 0) {
+            Toast.makeText(AddEventActivity.this, "Введите Адрес", LENGTH_SHORT).show();
+            setVisibleProgressBar(false);
+            return;
+        }
+        intent.putExtra(ServiceConstants.LOCATION_NAME_DATA_EXTRA, r.includeAddEvent.etEventAddress.getText().toString());
+        Log.e("ADDEVENTACTIVITY", "Starting Service");
+        startService(intent);
+    }
 
+    class AddressResultReceiver extends ResultReceiver {
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, final Bundle resultData) {
+            if (resultCode == ServiceConstants.SUCCESS_RESULT) {
+                final Address address = resultData.getParcelable(ServiceConstants.RESULT_ADDRESS);
+                runOnUiThread(() -> {
+                    System.out.println("Latitude: " + address.getLatitude() + "\n" +
+                            "Longitude: " + address.getLongitude() + "\n" +
+                            "Address: " + resultData.getString(ServiceConstants.RESULT_DATA_KEY));
+                    longitude = address.getLongitude();
+                    latitude = address.getLatitude();
+                    if (photoUrlFirebase == null && selectedImage == null) {
+                        Toast.makeText(AddEventActivity.this, "Выберите фото", Toast.LENGTH_SHORT).show();
+                    } else if (editEvent != null && editEvent.getPhoto().equals(photoUrlFirebase))
+                        setFirebaseLink(photoUrlFirebase);
+                    else uploadImage();
+
+                });
+            } else {
+                runOnUiThread(() -> {
+                    System.out.println("receiveERROR " + resultData.getString(ServiceConstants.RESULT_DATA_KEY));
+                    Toast.makeText(AddEventActivity.this, "Адрес не существует", LENGTH_SHORT).show();
+                });
+
+            }
+        }
+    }
 }

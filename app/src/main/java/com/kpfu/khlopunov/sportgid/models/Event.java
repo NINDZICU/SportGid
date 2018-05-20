@@ -40,13 +40,16 @@ public class Event implements Serializable {
     @SerializedName("price")
     @Expose
     private String price;
-    @SerializedName("maxOfMembers")
+    @SerializedName("max_of_members")
     @Expose
     private int maxOfMembers;
 
     @SerializedName("avtor")
     @Expose
     private User author;
+    @SerializedName("sport")
+    @Expose
+    private int sport;
     @SerializedName("description")
     @Expose
     private String description;
@@ -59,27 +62,31 @@ public class Event implements Serializable {
     @SerializedName("members")
     @Expose
     private List<User> members;
-    private KindSport kindSport;
+    @SerializedName("reviews")
+    @Expose
+    private List<Review> reviews;
+//    private KindSport kindSport;
 
 
-    public Event(int id, String photo, String name, String rating, int place, int x, int y, String price, int maxOfMembers,
-                 User author, String description, String address, boolean is_subscribed, int map, List<User> members, KindSport kindSport) {
+    public Event(int id, String photo, String name, String rating, int place, String address, int x, int y, String price, int maxOfMembers,
+                 User author, int sport, String description, boolean is_subscribed, int map, List<User> members, List<Review> reviews) {
         this.id = id;
         this.photo = photo;
         this.name = name;
         this.rating = rating;
         this.place = place;
+        this.address = address;
         this.x = x;
         this.y = y;
         this.price = price;
         this.maxOfMembers = maxOfMembers;
         this.author = author;
+        this.sport = sport;
         this.description = description;
         this.is_subscribed = is_subscribed;
         this.map = map;
         this.members = members;
-        this.kindSport = kindSport;
-        this.address = address;
+        this.reviews = reviews;
     }
 
     public int getPlace() {
@@ -155,14 +162,6 @@ public class Event implements Serializable {
         this.members = members;
     }
 
-    public KindSport getKindSport() {
-        return kindSport;
-    }
-
-    public void setKindSport(KindSport kindSport) {
-        this.kindSport = kindSport;
-    }
-
     public String getRating() {
         return rating;
     }
@@ -218,6 +217,22 @@ public class Event implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public int getSport() {
+        return sport;
+    }
+
+    public void setSport(int sport) {
+        this.sport = sport;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 }
 

@@ -24,6 +24,8 @@ import android.widget.Toast;
 
 
 import com.kpfu.khlopunov.sportgid.R;
+import com.kpfu.khlopunov.sportgid.activities.AddEventActivity;
+import com.kpfu.khlopunov.sportgid.activities.AddPlaceActivity;
 import com.kpfu.khlopunov.sportgid.activities.AuthentificationActivity;
 import com.kpfu.khlopunov.sportgid.adapters.InteresAdapter;
 import com.kpfu.khlopunov.sportgid.adapters.MyEventsAdapter;
@@ -43,9 +45,12 @@ import static android.app.Activity.RESULT_OK;
  * Created by hlopu on 24.10.2017.
  */
 
-public class ProfileFragment extends Fragment implements ApiCallback, OnBackPressedListener {
+public class ProfileFragment extends Fragment implements ApiCallback, OnBackPressedListener, UpdateCallback {
 
     public final static int REQUEST_CODE_SIGN_IN = 110;
+    public final static int REQUEST_CODE_UPDATE_EVENTS = 105;
+    public final static int REQUEST_CODE_UPDATE_PLACES = 106;
+
     private Context context;
     private TextView toolbarTitle;
     private ImageButton btnAddEvent;
@@ -102,6 +107,14 @@ public class ProfileFragment extends Fragment implements ApiCallback, OnBackPres
         if (SharedPreferencesProvider.getInstance(context).getUserTokken() != null) {
             btnAddEvent.setOnClickListener(v -> {
                 AddEventDialogFragment dialogFragment = new AddEventDialogFragment();
+                dialogFragment.setStartEventActivity(() -> {
+                    Intent intent = new Intent(getActivity(), AddEventActivity.class);
+                    startActivityForResult(intent, REQUEST_CODE_UPDATE_EVENTS);
+                });
+                dialogFragment.setStartPlaceActivity(() -> {
+                    Intent intent = new Intent(getActivity(), AddPlaceActivity.class);
+                    startActivityForResult(intent, REQUEST_CODE_UPDATE_PLACES);
+                });
                 dialogFragment.show(getFragmentManager(), AddEventDialogFragment.class.getName());
                 //TODO нужен колбэк после добавления обновлять списки моих мероприятий
             });
@@ -110,7 +123,7 @@ public class ProfileFragment extends Fragment implements ApiCallback, OnBackPres
             System.out.println("FROM SHARED PREFERENCES " + user);
             ApiService apiService = new ApiService(context);
             if (user == null) {
-                System.out.println("NURIK PIDR " + SharedPreferencesProvider.getInstance(context).getUserTokken());
+                System.out.println("USER TOKEN FROM SHAR PREF " + SharedPreferencesProvider.getInstance(context).getUserTokken());
                 apiService.getUser(SharedPreferencesProvider.getInstance(context).getUserTokken(), ProfileFragment.this);
             } else {
                 tvName.setText((user.getName() + " " + user.getSurname()));
@@ -128,6 +141,16 @@ public class ProfileFragment extends Fragment implements ApiCallback, OnBackPres
             rvMyPlaces.setLayoutManager(new LinearLayoutManager(context));
             eventsAdapter = new MyEventsAdapter(context);
             placesAdapter = new MyEventsAdapter(context);
+            eventsAdapter.setStartEventActivity(event -> {
+                Intent intent = new Intent(context, AddEventActivity.class);
+                intent.putExtra("EDIT_EVENT", event);
+                startActivityForResult(intent, REQUEST_CODE_UPDATE_EVENTS);
+            });
+            placesAdapter.setStartPlaceActivity(place -> {
+                Intent intent = new Intent(context, AddPlaceActivity.class);
+                intent.putExtra("EDIT_PLACE", place);
+                startActivityForResult(intent, REQUEST_CODE_UPDATE_PLACES);
+            });
             rvMyEvents.setAdapter(eventsAdapter);
             rvMyPlaces.setAdapter(placesAdapter);
 
@@ -164,13 +187,13 @@ public class ProfileFragment extends Fragment implements ApiCallback, OnBackPres
     @Override
     public void callback(Object object) {
         try {
-            if (((List) object).size()!=0 && ((List) object) instanceof Event) {
+            if (((List) object).size() != 0 && ((List) object).get(0) instanceof Event) {
                 eventsAdapter.setEvents((List) object);
                 eventsAdapter.notifyDataSetChanged();
                 tvMyEvent.setVisibility(View.VISIBLE);
 
             }
-            if (((List) object).size()!=0 &&((List) object).get(0) instanceof Place) {
+            if (((List) object).size() != 0 && ((List) object).get(0) instanceof Place) {
                 System.out.println("MY PLACE SUCCESSFULL");
                 placesAdapter.setPlaces((List) object);
                 placesAdapter.notifyDataSetChanged();
@@ -178,6 +201,8 @@ public class ProfileFragment extends Fragment implements ApiCallback, OnBackPres
             }
         } catch (IndexOutOfBoundsException e) {
             Log.e("NULL MY EVENT OR PLACE", "IndexOutOfBoundsException");
+        } catch (NullPointerException e1) {
+            Log.e("NULL MY EVENT OR PLACE", "NullPointerException");
         }
 
 
@@ -199,7 +224,13 @@ public class ProfileFragment extends Fragment implements ApiCallback, OnBackPres
             switch (requestCode) {
                 case REQUEST_CODE_SIGN_IN:
                     notifyFragment.notifyData();
-
+                    break;
+                case REQUEST_CODE_UPDATE_EVENTS:
+                    updateData("EVENT");
+                    break;
+                case REQUEST_CODE_UPDATE_PLACES:
+                    updateData("PLACE");
+                    break;
             }
         }
     }
@@ -212,6 +243,21 @@ public class ProfileFragment extends Fragment implements ApiCallback, OnBackPres
     public void onBackPressed() {
         Log.d("BACK PRESSED", "PROFILE");
         getChildFragmentManager().popBackStack();
+    }
+
+
+    @Override
+    public void updateData(String TAG) {
+        ApiService apiService = new ApiService(context);
+        //TODO не каждый раз подгрузку с сервера при обновлении
+        switch (TAG) {
+            case "EVENT":
+                apiService.getMyEvents(SharedPreferencesProvider.getInstance(context).getUserTokken(), ProfileFragment.this);
+                break;
+            case "PLACE":
+                apiService.getMyPlaces(SharedPreferencesProvider.getInstance(context).getUserTokken(), ProfileFragment.this);
+                break;
+        }
     }
 }
 

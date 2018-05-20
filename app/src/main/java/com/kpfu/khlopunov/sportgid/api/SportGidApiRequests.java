@@ -5,6 +5,7 @@ import com.kpfu.khlopunov.sportgid.models.BodyMyEvent;
 import com.kpfu.khlopunov.sportgid.models.BodyMyPlace;
 import com.kpfu.khlopunov.sportgid.models.Event;
 import com.kpfu.khlopunov.sportgid.models.KindSport;
+import com.kpfu.khlopunov.sportgid.models.Map;
 import com.kpfu.khlopunov.sportgid.models.Place;
 import com.kpfu.khlopunov.sportgid.models.User;
 import com.kpfu.khlopunov.sportgid.models.UserToken;
@@ -56,13 +57,25 @@ public interface SportGidApiRequests {
     @POST("api/v1/place/add")
     Observable<ApiResult> addPlace(@Query("address") String address, @Query("contact") String contact, @Query("title") String title,
                                    @Query("description") String description, @Query("city") String city, @Query("photo") String photo,
-                                   @Query("sport") List<Integer> kindOfSport, @Query("token") String token);
+                                   @Query("sport") List<Integer> kindOfSport, @Query("token") String token,
+                                   @Query("x") double x, @Query("y") double y);
 
     @POST("api/v1/event/add")
     Observable<ApiResult> addEvent(@Query("title") String title, @Query("description") String description,
                                    @Query("maxOfMembers") int maxOfMembers, @Query("price") String price, @Query("token") String token,
                                    @Query("photo") String photo, @Query("sport") String sport, @Query("place") Place place,
                                    @Query("x") double x, @Query("y") double y);
+
+    @POST("api/v1/place/{id}/edit")
+    Observable<ApiResult> updatePlace(@Path("id") int id, @Query("address") String address, @Query("contact") String contact, @Query("title") String title,
+                                      @Query("description") String description, @Query("city") String city, @Query("photo") String photo,
+                                      @Query("sport") List<Integer> kindOfSport, @Query("token") String token);
+
+    @POST("api/v1/event/{id}/edit")
+    Observable<ApiResult> updateEvent(@Path("id") int id, @Query("title") String title, @Query("description") String description,
+                                      @Query("maxOfMembers") int maxOfMembers, @Query("price") String price, @Query("token") String token,
+                                      @Query("photo") String photo, @Query("sport") String sport, @Query("place") Place place,
+                                      @Query("x") double x, @Query("y") double y);
 
     @POST("api/v1/place/{id}/delete")
     Observable<ApiResult> deletePlace(@Path("id") int idPlace, @Query("token") String token);
@@ -98,5 +111,7 @@ public interface SportGidApiRequests {
     @POST("api/v1/place/{id}/complaint")
     Observable<ApiResult> sendComplaint(@Path("id") int id, @Query("token") String token,
                                         @Query("title") String title, @Query("body") String body);
+    @GET("api/v1//{id}")
+    Observable<ApiResult<Map>> getMap(@Path("id") int id);
 
 }

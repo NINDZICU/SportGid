@@ -1,8 +1,10 @@
 package com.kpfu.khlopunov.sportgid.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.kpfu.khlopunov.sportgid.R;
+import com.kpfu.khlopunov.sportgid.activities.MapsActivity;
 import com.kpfu.khlopunov.sportgid.adapters.MemberListAdapter;
 import com.kpfu.khlopunov.sportgid.models.Event;
 import com.kpfu.khlopunov.sportgid.models.User;
@@ -49,6 +52,7 @@ public class DetailEventFragment extends Fragment implements ApiCallback {
     private RecyclerView rvMembers;
     private MemberListAdapter memberListAdapter;
     private EventsListener eventsListener;
+    private FloatingActionButton floatingMap;
 
     public static DetailEventFragment newInstance(Event event, Context context) {
         Bundle bundle = new Bundle();
@@ -99,6 +103,7 @@ public class DetailEventFragment extends Fragment implements ApiCallback {
 
 
         btnJoin.setOnClickListener(v -> {
+            Log.d("IS SUBSCRIBE", String.valueOf(event.isIs_subscribed()));
             if(event.isIs_subscribed()){
                 btnJoin.setText("Не пойду");
                 apiService.unsubscribeEvent(event.getId(), SharedPreferencesProvider.getInstance(context).getUserTokken(),
@@ -114,6 +119,10 @@ public class DetailEventFragment extends Fragment implements ApiCallback {
                     //TODO открыть окно авторизации
                 }
             }
+        });
+        floatingMap.setOnClickListener(v->{
+            Intent intent = new Intent(getActivity(), MapsActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -131,6 +140,7 @@ public class DetailEventFragment extends Fragment implements ApiCallback {
         tvKindSport = view.findViewById(R.id.tv_detail_kind_sport);
         rvMembers = view.findViewById(R.id.rv_event_list_member);
         pbJoin = view.findViewById(R.id.pb_join);
+        floatingMap = view.findViewById(R.id.fab_map_event);
     }
 
     public void setEventsListener(EventsListener eventsListener) {
