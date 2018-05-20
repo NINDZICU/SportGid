@@ -104,7 +104,7 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
 
         });
 
-        tvContacts.setOnClickListener(v->{
+        tvContacts.setOnClickListener(v -> {
             activeSystemService.makeCall(tvContacts.getText().toString());
         });
 
@@ -112,7 +112,8 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
         tvSendReview.setOnClickListener(v -> {
             if (etReview.length() == 0)
                 Toast.makeText(getActivity(), "Заполните поле", Toast.LENGTH_SHORT).show();
-            else if(ratingBar.getRating()==0) Toast.makeText(getActivity(), "Поставьте оценку", Toast.LENGTH_SHORT).show();
+            else if (ratingBar.getRating() == 0)
+                Toast.makeText(getActivity(), "Поставьте оценку", Toast.LENGTH_SHORT).show();
             else {
                 ApiService service = new ApiService(getActivity());
                 service.addReview(place.getId(), SharedPreferencesProvider.getInstance(getActivity()).getUserTokken(),
@@ -121,12 +122,13 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
         });
 
         tvComplain.setOnClickListener(v -> {
-        ComplaintFragment fragment = ComplaintFragment.newInstance(getActivity(), place.getId(),
-                ComplaintFragment.COMPLAINT_FOR_PLACE);
-        fragment.show(getFragmentManager(), "COMPLAINT_FRAGMENT");
+            ComplaintFragment fragment = ComplaintFragment.newInstance(getActivity(), place.getId(),
+                    ComplaintFragment.COMPLAINT_FOR_PLACE);
+            fragment.show(getFragmentManager(), "COMPLAINT_FRAGMENT");
         });
-        floatingMap.setOnClickListener(v->{
+        floatingMap.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), MapsActivity.class);
+            intent.putExtra("MAP_ID", place.getMap());
             startActivity(intent);
         });
     }
@@ -154,10 +156,10 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
         if ((Boolean) object == Boolean.TRUE) {
             Toast.makeText(getActivity(), "Отзыв успешно добавлен!!", Toast.LENGTH_SHORT).show();
 
-            List<Review> reviewList =adapter.getReviewList();       //TODO сделать подгрузку с сервера после добавления или что-то другое
+            List<Review> reviewList = adapter.getReviewList();       //TODO сделать подгрузку с сервера после добавления или что-то другое
             //Todo date
-            reviewList.add(new Review(0, 0l, etReview.getText().toString(),4,       //хардкод поменять
-                    SharedPreferencesProvider.getInstance(getActivity()).getUser(),null,null  ));
+            reviewList.add(new Review(0, 0l, etReview.getText().toString(), 4,       //хардкод поменять
+                    SharedPreferencesProvider.getInstance(getActivity()).getUser(), null, null));
             adapter.setReviewList(reviewList);
 
             etReview.setText("");
@@ -168,8 +170,8 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
             Toast.makeText(getActivity(), "Не удалось добавить отзыв", Toast.LENGTH_SHORT).show();
     }
 
-    public void checkAuthorisation(){
-        if (SharedPreferencesProvider.getInstance(getActivity()).getUserTokken()==null){
+    public void checkAuthorisation() {
+        if (SharedPreferencesProvider.getInstance(getActivity()).getUserTokken() == null) {
             etReview.setVisibility(View.GONE);
             tvSendReview.setVisibility(View.GONE);
             tvReviews.setVisibility(View.GONE);

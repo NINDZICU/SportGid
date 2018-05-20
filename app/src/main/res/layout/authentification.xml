@@ -4,11 +4,11 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical">
+
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -77,7 +77,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/btn_aut"
@@ -91,27 +91,34 @@
             android:paddingRight="60dp"
             android:text="Войти"
             android:textColor="@color/text_color" />
+        <ProgressBar
+            android:id="@+id/pb_auth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_gravity="center"/>
 
         <!--<com.google.android.gms.common.SignInButton-->
-            <!--android:id="@+id/aut_google"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center"-->
-            <!--/>-->
+        <!--android:id="@+id/aut_google"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--/>-->
 
         <Button
-        android:id="@+id/btn_aut_google"
-        style="@style/AppTheme.ButtonWhite"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="7dp"
-        android:layout_marginTop="5dp"
-        android:drawableLeft="@drawable/icon_google"
-        android:paddingLeft="60dp"
-        android:paddingRight="60dp"
-        android:text="  Войти через аккаунт Google"
-        android:textColor="@color/black" />
+            android:id="@+id/btn_aut_google"
+            style="@style/AppTheme.ButtonWhite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="7dp"
+            android:layout_marginTop="5dp"
+            android:drawableLeft="@drawable/icon_google"
+            android:paddingLeft="60dp"
+            android:paddingRight="60dp"
+            android:text="  Войти через аккаунт Google"
+            android:textColor="@color/black" />
+
         <Button
             android:id="@+id/btn_aut_vk"
             style="@style/AppTheme.ButtonBlue"
@@ -126,7 +133,16 @@
             android:text="Войти c помощью Вконтакте"
             android:textColor="@color/text_color" />
 
+        <TextView
+            android:id="@+id/tv_policy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/button_vk"
+            android:text="Политика Конфиденциальности"
+            android:gravity="center"
+            />
         <RelativeLayout
+            android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">

@@ -131,7 +131,7 @@ public class ListEventsFragment extends Fragment implements NotifyFragment, Navi
 */
         btnObjects.setOnClickListener(v -> {
             if (eventsListener != null) {
-                ListObjectsFragment fragment = ListObjectsFragment.newInstance(getArguments().getInt("idKind"));
+                ListObjectsFragment fragment = ListObjectsFragment.newInstance(getArguments().getInt("idKind"), context);
                 fragment.setEventsListener(eventsListener);
                 eventsListener.onButtonClicked(fragment);
             }

@@ -150,12 +150,6 @@
             android:text="Зарегистрироваться"
             android:textColor="@color/text_color" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text="Зарегистрированы? Войти"
-            android:textColor="@color/reg_gray" />
     </LinearLayout>
 
 

@@ -444,6 +444,7 @@ public class ApiService {
         requests.getMap(id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(apiResult -> {
+                    Log.d("BODY MAP", String.valueOf(apiResult.getCode()));
                     if (apiResult.getCode() == 0) {
                         callback.callback(apiResult.getBody());
                     }

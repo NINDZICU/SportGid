@@ -1,5 +1,6 @@
 package com.kpfu.khlopunov.sportgid.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -45,6 +46,7 @@ import io.apptik.widget.MultiSlider;
 public class ListObjectsFragment extends Fragment implements ApiCallback,
         OnBackPressedListener, NavigationView.OnNavigationItemSelectedListener {
     private static final int PRICEMAX = 1000;
+    private Context context;
     private Button btnObjects;
     private Button btnEvents;
     private NoDefaultSpinner spinnerSort;
@@ -60,11 +62,12 @@ public class ListObjectsFragment extends Fragment implements ApiCallback,
 //    private TextView tvMaxPrice;
 //    private Button btnFilterSearch;
 
-    public static ListObjectsFragment newInstance(int idKind) {
+    public static ListObjectsFragment newInstance(int idKind, Context context) {
         Bundle bundle = new Bundle();
         bundle.putInt("idKind", idKind);
         ListObjectsFragment fragment = new ListObjectsFragment();
         fragment.setArguments(bundle);
+        fragment.setContext(context);
         return fragment;
     }
 
@@ -130,7 +133,7 @@ public class ListObjectsFragment extends Fragment implements ApiCallback,
         btnEvents.setOnClickListener(v -> {
             if (eventsListener != null) {
                 System.out.println("NURIKU IDKIND " + getArguments().getInt("idKind"));
-                ListEventsFragment fragment = ListEventsFragment.newInstance(getArguments().getInt("idKind"), getActivity());
+                ListEventsFragment fragment = ListEventsFragment.newInstance(getArguments().getInt("idKind"), context);
                 fragment.setEventsListener(eventsListener);
                 eventsListener.onButtonClicked(fragment);
             }
@@ -215,6 +218,10 @@ public class ListObjectsFragment extends Fragment implements ApiCallback,
 //        getChildFragmentManager().popBackStack(R.id.frame_home_fragment, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 //        getChildFragmentManager().popBackStackImmediate();
 //        getFragmentManager().popBackStackImmediate();
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 
     @Override

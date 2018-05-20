@@ -158,7 +158,7 @@ public class ProfileFragment extends Fragment implements ApiCallback, OnBackPres
                 DetailEventFragment fragment = DetailEventFragment.newInstance(event, context);
                 getChildFragmentManager().beginTransaction()
                         .add(R.id.frame_profile_fragment, fragment, DetailEventFragment.class.getName())
-                        .addToBackStack(ProfileFragment.class.getName())
+                            .addToBackStack(ProfileFragment.class.getName())
                         .commit();
             });
             placesAdapter.setPlaceListener(place -> {
@@ -171,7 +171,6 @@ public class ProfileFragment extends Fragment implements ApiCallback, OnBackPres
             //TODO как нибудь потом одним запросом сделать
             apiService.getMyEvents(SharedPreferencesProvider.getInstance(context).getUserTokken(), ProfileFragment.this);
             apiService.getMyPlaces(SharedPreferencesProvider.getInstance(context).getUserTokken(), ProfileFragment.this);
-
 
         } else {
             btnSignIn.setVisibility(View.VISIBLE);

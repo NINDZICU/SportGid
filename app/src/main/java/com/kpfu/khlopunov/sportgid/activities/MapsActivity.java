@@ -6,16 +6,10 @@ import android.graphics.Color;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.LocationServices;
@@ -24,17 +18,16 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.kpfu.khlopunov.sportgid.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.kpfu.khlopunov.sportgid.adapters.mapsAdapters.CustomInfoWindowAdapter;
+import com.kpfu.khlopunov.sportgid.fragments.ApiCallback;
+import com.kpfu.khlopunov.sportgid.models.Map;
+import com.kpfu.khlopunov.sportgid.service.ApiService;
 
 
 public class MapsActivity extends AppCompatActivity
@@ -42,7 +35,7 @@ public class MapsActivity extends AppCompatActivity
         GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener,
         OnMapReadyCallback,
-        ActivityCompat.OnRequestPermissionsResultCallback {
+        ActivityCompat.OnRequestPermissionsResultCallback, ApiCallback {
 
     /**
      * Request code for location permission request.
@@ -54,6 +47,7 @@ public class MapsActivity extends AppCompatActivity
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Location mLastKnownLocation;
     private final LatLng mDefaultLocation = new LatLng(-33.8523341, 151.2106085);
+    private ApiService apiService;
 
     /**
      * Flag indicating whether a requested permission has been denied after returning in
@@ -72,6 +66,10 @@ public class MapsActivity extends AppCompatActivity
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+
+        apiService = new ApiService(this);
+        apiService.getMap(getIntent().getIntExtra("MAP_ID", 0), this);
     }
 
     @Override
@@ -83,10 +81,10 @@ public class MapsActivity extends AppCompatActivity
 //        CameraPosition ADELAIDE_CAMERA = new CameraPosition.Builder()
 //                .target(new LatLng(-34.92873, 138.59995)).zoom(20.0f).bearing(0).tilt(0).build();
 //        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(ADELAIDE_CAMERA));
-        map.addMarker(new MarkerOptions()
-                .position(new LatLng(55.7431582, 49.1818399))
-                .title("Marker")
-                .snippet("asdasd"));
+//        map.addMarker(new MarkerOptions()
+//                .position(new LatLng(55.7431582, 49.1818399))
+//                .title("Marker")
+//                .snippet("asdasd"));
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationClickListener(this);
         enableMyLocation();
@@ -195,4 +193,21 @@ public class MapsActivity extends AppCompatActivity
     }
 
 
+    @Override
+    public void callback(Object object) {
+        Log.d("CALLBACK", "CALLBACK Maps Activity");
+        if(object instanceof Map){
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(((Map) object).getX(), ((Map) object).getY()))
+                    .title("Marker")
+                    .snippet("asdasd"));
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(55.7431582, 49.1818399))
+                    .title("Marker")
+                    .snippet("asdasd"));
+            Log.d("MARKER", "Marker Add");
+            mMap.notify();
+
+        }
+    }
 }

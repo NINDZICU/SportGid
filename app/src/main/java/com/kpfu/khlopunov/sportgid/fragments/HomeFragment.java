@@ -1,5 +1,6 @@
 package com.kpfu.khlopunov.sportgid.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -37,13 +38,16 @@ import io.reactivex.schedulers.Schedulers;
 public class HomeFragment extends Fragment implements NotifyFragment, OnBackPressedListener, ApiCallback {
     private VKAccessToken access_token;
 
+    private Context context;
     private RecyclerView rvKinds;
     private SearchView searchView;
     private KindSportsAdapter adapter;
     private ProgressBar progressBar;
 
-    public static HomeFragment newInstance() {
-        return new HomeFragment();
+    public static HomeFragment newInstance(Context context) {
+        HomeFragment homeFragment = new HomeFragment();
+        homeFragment.setContext(context);
+        return homeFragment;
     }
 
     @Nullable
@@ -69,7 +73,7 @@ public class HomeFragment extends Fragment implements NotifyFragment, OnBackPres
         setVisible();
         adapter = new KindSportsAdapter(getActivity(), HomeFragment.this);
         adapter.setmKindSportListener(kindSport -> {
-            ListObjectsFragment fragment = ListObjectsFragment.newInstance(kindSport.getId());
+            ListObjectsFragment fragment = ListObjectsFragment.newInstance(kindSport.getId(), context);
             fragment.setEventsListener(nextFragment -> getChildFragmentManager().beginTransaction()
                     .replace(R.id.frame_home_fragment, nextFragment, ListObjectsFragment.class.getName())
                     .addToBackStack(HomeFragment.class.getName())
@@ -131,6 +135,10 @@ public class HomeFragment extends Fragment implements NotifyFragment, OnBackPres
         rvKinds.setVisibility(View.GONE);
     }
 
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
     @Override
     public void callback(Object object) {
         if (object instanceof String) {
@@ -149,7 +157,6 @@ public class HomeFragment extends Fragment implements NotifyFragment, OnBackPres
         System.out.println("IM PRESSED");
 //        getChildFragmentManager().popBackStack(R.id.frame_home_fragment, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         getChildFragmentManager().popBackStack();
-
 
     }
 }

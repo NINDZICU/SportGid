@@ -1,6 +1,8 @@
 package com.kpfu.khlopunov.sportgid.activities;
 
 import android.content.Intent;
+import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,11 +58,13 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
     private Button googleSignInButton;
     //    private SignInButton googleSignInButton;
     private EditText etPassword;
+    private TextView tvPolicy;
     private EditText etLogin;
     private TextView tvForgetPassword;
     private TextView tvRegistration;
     private TextView tvErrorPassword;
     private TextView tvErrorEmail;
+    private ProgressBar progressBar;
 
 
     @Override
@@ -74,26 +79,35 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
 //        googleSignInButton.setSize(SignInButton.SIZE_WIDE);
         etPassword = findViewById(R.id.et_aut_password);
         etLogin = findViewById(R.id.et_aut_email);
+        tvPolicy = findViewById(R.id.tv_policy);
         tvForgetPassword = findViewById(R.id.tv_forget_password);
         tvRegistration = findViewById(R.id.tv_registration);
         tvErrorEmail = findViewById(R.id.tv_error_aut_email);
         tvErrorPassword = findViewById(R.id.tv_error_aut_password);
+        progressBar = findViewById(R.id.pb_auth);
 
         tvRegistration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RegistrationFragment regFragment = new RegistrationFragment();
-                getFragmentManager().beginTransaction().replace(R.id.fragment_container, regFragment, FRAGMENT_TAG).commit();
+                Intent intent = new Intent(AuthentificationActivity.this, RegistrationActivity.class);
+                startActivity(intent);
+//                RegistrationFragment regFragment = new RegistrationFragment();
+//                getFragmentManager().beginTransaction().replace(R.id.fragment_container, regFragment, FRAGMENT_TAG).commit();
 
             }
+        });
+        tvPolicy.setPaintFlags(tvPolicy.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvPolicy.setOnClickListener(v -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sportgid.herokuapp.com/api/v1/start"));
+            startActivity(browserIntent);
         });
 
         btnEnter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setVisibilityPB(View.VISIBLE);
                 ApiService apiService = new ApiService(AuthentificationActivity.this);
                 apiService.authentification(etLogin.getText().toString(), etPassword.getText().toString(), AuthentificationActivity.this);
-                //TODO запрос на сервер
             }
         });
 
@@ -213,6 +227,7 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
 
     @Override
     public void callback(Object object) {
+        setVisibilityPB(View.GONE);
         System.out.println("TOKKKKEKEN OT NURIKA " + (String) object);
         if (((String) object).equals("ERROR")) Toast.makeText(AuthentificationActivity.this,
                 "Не удалось авторизоваться", Toast.LENGTH_SHORT).show();
@@ -229,5 +244,18 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
         Intent intent = new Intent(AuthentificationActivity.this, MainActivity.class);
         setResult(RESULT_OK, intent);
         finish();
+    }
+
+    public void setVisibilityPB(int visibility) {
+        switch (visibility) {
+            case View.VISIBLE:
+                progressBar.setVisibility(View.VISIBLE);
+                btnEnter.setVisibility(View.GONE);
+                break;
+            case View.GONE:
+                progressBar.setVisibility(View.GONE);
+                btnEnter.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 }

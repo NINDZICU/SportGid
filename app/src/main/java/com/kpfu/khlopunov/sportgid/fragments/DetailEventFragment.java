@@ -122,6 +122,7 @@ public class DetailEventFragment extends Fragment implements ApiCallback {
         });
         floatingMap.setOnClickListener(v->{
             Intent intent = new Intent(getActivity(), MapsActivity.class);
+            intent.putExtra("MAP_ID", event.getMap());
             startActivity(intent);
         });
     }

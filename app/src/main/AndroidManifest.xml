@@ -54,6 +54,9 @@
             android:name=".activities.SelectInterestsActivtiy"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activities.RegistrationActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".activities.AddEventActivity"
             android:label="@string/title_activity_add_event"
             android:screenOrientation="portrait"
@@ -72,7 +75,7 @@
 
         <activity
             android:name=".activities.MapsActivity"
-            android:label="@string/title_activity_maps"/>
+            android:label="@string/title_activity_maps" />
     </application>
 
 </manifest>

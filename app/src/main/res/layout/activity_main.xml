@@ -9,47 +9,21 @@
 
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/tab_pager"
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        tools:layout_editor_absoluteY="8dp"
-        tools:layout_editor_absoluteX="8dp">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/sliding_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:tabMode="fixed"
+            app:tabBackground="@color/colorPrimaryDark"
+            app:tabIndicatorColor="@color/white"
+            app:tabTextColor="@color/white"/>
     </android.support.v4.view.ViewPager>
-
-    <LinearLayout
-        android:id="@+id/tabs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:background="@color/tab_background"
-        android:orientation="horizontal"
-        tools:layout_editor_absoluteY="0dp"
-        tools:layout_editor_absoluteX="8dp">
-
-        <ImageButton
-            android:id="@+id/home"
-            style="@style/BottomTab"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/icon_home"/>
-
-        <ImageButton
-            android:id="@+id/tab_2"
-            style="@style/BottomTab"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/icon_profile"/>
-
-        <ImageButton
-            android:id="@+id/tab_3"
-            style="@style/BottomTab"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/icon_settings"/>
-    </LinearLayout>
 
 </LinearLayout>
