@@ -62,6 +62,7 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
 
     private ActiveSystemServiceInt activeSystemService;
 
+
     public static DetailPlaceFragment newInstance(Place place) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("place", place);
@@ -158,7 +159,7 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
 
             List<Review> reviewList = adapter.getReviewList();       //TODO сделать подгрузку с сервера после добавления или что-то другое
             //Todo date
-            reviewList.add(new Review(0, 0l, etReview.getText().toString(), 4,       //хардкод поменять
+            reviewList.add(new Review(0, 0l, etReview.getText().toString(), (int) ratingBar.getRating(),       //хардкод поменять
                     SharedPreferencesProvider.getInstance(getActivity()).getUser(), null, null));
             adapter.setReviewList(reviewList);
 
@@ -175,6 +176,7 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
             etReview.setVisibility(View.GONE);
             tvSendReview.setVisibility(View.GONE);
             tvReviews.setVisibility(View.GONE);
+            ratingBar.setVisibility(View.GONE);
         }
     }
 

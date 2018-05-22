@@ -22,6 +22,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.kpfu.khlopunov.sportgid.R;
+import com.kpfu.khlopunov.sportgid.api.SportGidApi;
 import com.kpfu.khlopunov.sportgid.fragments.ApiCallback;
 import com.kpfu.khlopunov.sportgid.fragments.RegistrationFragment;
 import com.kpfu.khlopunov.sportgid.models.User;
@@ -40,6 +41,10 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKList;
 
 import org.json.JSONException;
+
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by hlopu on 30.10.2017.
@@ -98,16 +103,20 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
         });
         tvPolicy.setPaintFlags(tvPolicy.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         tvPolicy.setOnClickListener(v -> {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sportgid.herokuapp.com/api/v1/start"));
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sportgid.herokuapp.com/start"));
             startActivity(browserIntent);
         });
 
         btnEnter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setVisibilityPB(View.VISIBLE);
                 ApiService apiService = new ApiService(AuthentificationActivity.this);
-                apiService.authentification(etLogin.getText().toString(), etPassword.getText().toString(), AuthentificationActivity.this);
+                if (etLogin.getText().length() == 0 || etPassword.length() == 0) {
+                    Toast.makeText(AuthentificationActivity.this, "Заполните поля", Toast.LENGTH_SHORT).show();
+                } else{
+                    setVisibilityPB(View.VISIBLE);
+                    apiService.authentification(etLogin.getText().toString(), etPassword.getText().toString(), AuthentificationActivity.this);
+                }
             }
         });
 
@@ -228,14 +237,25 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
     @Override
     public void callback(Object object) {
         setVisibilityPB(View.GONE);
-        System.out.println("TOKKKKEKEN OT NURIKA " + (String) object);
+        System.out.println("TOKKKKEKEN OT NURIKA " + object);
         if (((String) object).equals("ERROR")) Toast.makeText(AuthentificationActivity.this,
                 "Не удалось авторизоваться", Toast.LENGTH_SHORT).show();
         else {
             SharedPreferencesProvider.getInstance(AuthentificationActivity.this).saveUserTokken((String) object);
-            successAuthorisation("Анатолий", "Хлопунов");
-            finish();
-        }
+            SportGidApi.getInstance().getmSportGidApiRequests().getUser((String) object)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(userApiResult -> {
+                        if(userApiResult.getCode() == 0){
+                            successAuthorisation(userApiResult.getBody().getName(), userApiResult.getBody().getSurname());
+                        }
+                        else {
+                            Toast.makeText(this, "Не удалось получить данные пользователя", Toast.LENGTH_SHORT).show();
+                            //TODO убрать
+                            successAuthorisation("Анатолий", "Хлопунов");
+                        }
+                    });
+            }
     }
 
     public void successAuthorisation(String name, String surname) {

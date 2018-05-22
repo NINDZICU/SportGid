@@ -29,7 +29,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NotifyFragment{
 
 //    @BindView(R.id.tab_pager)
 //    ViewPager mTabPager;
@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), this);
+        mSectionsPagerAdapter.setNotifyFragment(this);
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -124,6 +125,11 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void notifyData() {
+        mSectionsPagerAdapter.notifyDataSetChanged();
     }
 }
 

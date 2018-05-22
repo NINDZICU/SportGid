@@ -6,7 +6,7 @@
     <Button
         android:id="@+id/btn_kind_sport"
         style="@style/AppTheme.ButtonKindSport"
-        android:background="@color/white"
+        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="120dp"/>
 

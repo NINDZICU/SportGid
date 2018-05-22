@@ -31,7 +31,7 @@
     <string name="city">Город:</string>
     <string name="exit_from_accounts">Выйти из аккаунта</string>
     <string name="callback">Обратная связь</string>
-    <string name="sign_in">Войти</string>
+    <string name="sign_in">ВОЙТИ</string>
     <string name="count_members">Количество участников</string>
 
     <string-array name="event">

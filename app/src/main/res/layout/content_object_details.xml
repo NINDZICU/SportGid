@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/white"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="8dp"
@@ -45,15 +45,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="Рейтинг:  "
-                    android:textColor="@color/white" />
+                    android:text="Рейтинг:  " />
 
                 <TextView
                     android:id="@+id/tv_detail_raiting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
-                    android:textColor="@color/white"
                     android:textSize="20sp" />
 
             </LinearLayout>
@@ -63,7 +61,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textColor="@color/white"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -75,7 +72,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="asdasdasd"
-                android:textColor="@color/white"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -83,9 +79,10 @@
 
             <Button
                 android:id="@+id/btn_take_over"
+                android:visibility="gone"
                 style="@style/AppTheme.ButtonBiruza"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="43dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/take_over"
                 android:textColor="@color/white"
@@ -108,7 +105,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/price"
-                    android:textColor="@color/white"
                     android:textSize="17sp" />
 
                 <TextView
@@ -116,7 +112,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="asdasdfasdfs"
-                    android:textColor="@color/white"
+                    android:layout_marginLeft="8dp"
                     android:textSize="17sp" />
             </LinearLayout>
 
@@ -126,7 +122,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/description"
-                android:textColor="@color/white"
                 android:textSize="17sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -138,7 +133,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="asdasdfdgdf"
-                android:textColor="@color/white"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -150,7 +144,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/contacts"
-                android:textColor="@color/white"
                 android:textSize="17sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -170,7 +163,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="98213"
-                    android:textColor="@color/white"
                     android:textSize="17sp"
                     android:drawableRight="@drawable/call"
                     />
@@ -182,7 +174,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/reviews"
-                android:textColor="@color/white"
                 android:textSize="17sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -202,7 +193,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/add_review"
-                android:textColor="@color/white"
                 android:textSize="17sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -219,26 +209,25 @@
                 android:id="@+id/et_review"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:hint="Напишите свой отзыв!"
                 android:gravity="top|left"
                 android:overScrollMode="always"
                 android:scrollbarStyle="insideInset"
                 android:scrollbars="vertical"
-                android:lines="6"
+                android:lines="3"
                 android:inputType="textMultiLine"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ratingBar"/>
-            <TextView
+            <android.support.design.button.MaterialButton
                 android:id="@+id/tv_send_review"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:gravity="end"
                 android:layout_marginTop="8dp"
                 android:text="@string/send"
-                android:textColor="@color/white"
-                android:textSize="25sp"
+                android:textSize="22sp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
                 app:layout_constraintEnd_toEndOf="parent"

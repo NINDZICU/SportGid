@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
     android:orientation="vertical">
 
     <FrameLayout
@@ -23,7 +22,6 @@
             android:layout_marginBottom="15dp"
             android:paddingTop="30dp"
             android:text="Авторизация"
-            android:textColor="@color/text_color"
             android:textSize="35dp" />
 
 
@@ -36,7 +34,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Email"
-                android:textColor="@color/text_color"
                 android:textSize="16dp" />
 
             <TextView
@@ -50,8 +47,7 @@
             android:id="@+id/et_aut_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:textColor="@color/white" />
+            android:inputType="textEmailAddress" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -62,7 +58,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Пароль"
-                android:textColor="@color/text_color"
                 android:textSize="16dp" />
 
             <TextView
@@ -76,12 +71,11 @@
             android:id="@+id/et_aut_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:textColor="@color/white" />
+            android:inputType="textPassword" />
 
         <Button
             android:id="@+id/btn_aut"
-            style="@style/AppTheme.ButtonOrange"
+            style="@style/AppTheme.ButtonBiruza"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -90,6 +84,7 @@
             android:paddingLeft="60dp"
             android:paddingRight="60dp"
             android:text="Войти"
+            android:textSize="18sp"
             android:textColor="@color/text_color" />
         <ProgressBar
             android:id="@+id/pb_auth"
@@ -152,6 +147,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Забыли пароль?"
+                android:visibility="gone"
                 android:textColor="@color/reg_gray" />
 
             <TextView

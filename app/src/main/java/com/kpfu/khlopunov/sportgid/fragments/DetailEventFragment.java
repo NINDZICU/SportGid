@@ -24,6 +24,7 @@ import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.activities.MapsActivity;
 import com.kpfu.khlopunov.sportgid.adapters.MemberListAdapter;
 import com.kpfu.khlopunov.sportgid.models.Event;
+import com.kpfu.khlopunov.sportgid.models.KindSport;
 import com.kpfu.khlopunov.sportgid.models.User;
 import com.kpfu.khlopunov.sportgid.providers.SharedPreferencesProvider;
 import com.kpfu.khlopunov.sportgid.service.ApiService;
@@ -89,12 +90,13 @@ public class DetailEventFragment extends Fragment implements ApiCallback {
         tvAddressEvent.setText(event.getAddress()!=null? event.getAddress() : "");
         tvPrice.setText(event.getPrice());
         tvDescription.setText(event.getDescription());
-        //TODO У Нурика нет в бд
-//        tvOrganizer.setText(event.getAvtor().getName());
-        tvOrganizer.setText(" USER");
-        //TODO У Нурика нет
-//        tvKindSport.setText(event.getKindSport().getName());
-        tvKindSport.setText(" Test");
+        tvOrganizer.setText(event.getAvtor().getName()+" "+event.getAvtor().getSurname());
+        for (KindSport kindSportLocal : SharedPreferencesProvider.getInstance(context).getKindsSports()) {
+            if (kindSportLocal.getId() == event.getSport()) {
+                tvKindSport.setText(kindSportLocal.getName());
+                break;
+            }
+        }
         rvMembers.setLayoutManager(new LinearLayoutManager(getActivity()));
         users = new ArrayList<>();
         memberListAdapter = new MemberListAdapter(getActivity(), users);
@@ -116,6 +118,7 @@ public class DetailEventFragment extends Fragment implements ApiCallback {
                             DetailEventFragment.this);
                     setVisiblePB(View.VISIBLE);
                 } else {
+                    Toast.makeText(context, "Авторизуйтесь!", Toast.LENGTH_SHORT).show();
                     //TODO открыть окно авторизации
                 }
             }

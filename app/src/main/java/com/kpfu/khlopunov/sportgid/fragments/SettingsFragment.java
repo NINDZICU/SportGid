@@ -126,4 +126,5 @@ public class SettingsFragment extends Fragment implements ApiCallback {
         } else
             Toast.makeText(getActivity(), "Не удалось изменить город!", Toast.LENGTH_SHORT).show();
     }
+
 }

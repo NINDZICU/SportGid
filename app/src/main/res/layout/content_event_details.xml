@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
+    android:background="@color/white"
     android:paddingTop="8dp">
 
     <ScrollView
@@ -14,10 +12,14 @@
         android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
 
             <ImageView
                 android:id="@+id/iv_event_detail"
@@ -43,28 +45,24 @@
                     android:layout_height="match_parent"
                     android:drawableLeft="@drawable/members"
                     android:gravity="center_vertical"
-                    android:text="Участников "
-                    android:textColor="@color/white" />
+                    android:text="Участников " />
 
                 <TextView
                     android:id="@+id/tv_signed_up"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textColor="@color/white" />
+                    android:text="0" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="/"
-                    android:textColor="@color/white" />
+                    android:text="/" />
 
                 <TextView
                     android:id="@+id/tv_count_members"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textColor="@color/white" />
+                    android:text="0" />
             </LinearLayout>
 
             <TextView
@@ -72,7 +70,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textColor="@color/white"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -84,7 +81,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="asdasdasd"
-                android:textColor="@color/white"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -95,7 +91,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="asdasdasd"
-                android:textColor="@color/white"
                 android:textSize="17sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -107,10 +102,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_detailt_place"
-                android:visibility="gone"/>
+                app:layout_constraintTop_toBottomOf="@+id/tv_detailt_place" />
+
             <Button
                 android:id="@+id/btn_join"
                 style="@style/AppTheme.ButtonBiruza"
@@ -138,15 +134,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/price"
-                    android:textColor="@color/white"
                     android:textSize="17sp" />
 
                 <TextView
                     android:id="@+id/tv_detail_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
                     android:text="asdasdfasdfs"
-                    android:textColor="@color/white"
                     android:textSize="17sp" />
             </LinearLayout>
 
@@ -156,7 +151,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/description"
-                android:textColor="@color/white"
                 android:textSize="17sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -168,7 +162,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="asdasdfdgdf"
-                android:textColor="@color/white"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -187,18 +180,18 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text= "@string/organizer"
-                    android:textColor="@color/white"
+                    android:text="@string/organizer"
                     android:textSize="17sp" />
 
                 <TextView
                     android:id="@+id/tv_detail_organizer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
                     android:text="asdasdfasdfs"
-                    android:textColor="@color/white"
                     android:textSize="14sp" />
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/linearLayout5"
                 android:layout_width="match_parent"
@@ -213,15 +206,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/kind_sport"
-                    android:textColor="@color/white"
                     android:textSize="17sp" />
 
                 <TextView
                     android:id="@+id/tv_detail_kind_sport"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
                     android:text="asdasdfasdfs"
-                    android:textColor="@color/white"
                     android:textSize="14sp" />
             </LinearLayout>
 
@@ -231,7 +223,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/list_members"
-                android:textColor="@color/white"
                 android:textSize="17sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

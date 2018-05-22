@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
     android:orientation="vertical">
 
     <LinearLayout
@@ -137,7 +136,7 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword" />
 
-        <Button
+        <android.support.design.button.MaterialButton
             android:id="@+id/btn_reg"
             style="@style/AppTheme.ButtonOrange"
             android:layout_width="wrap_content"

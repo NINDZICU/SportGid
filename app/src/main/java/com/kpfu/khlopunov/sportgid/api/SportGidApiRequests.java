@@ -98,7 +98,7 @@ public interface SportGidApiRequests {
     Observable<ApiResult> updateCity(@Query("token") String token, @Query("city") String city);
 
 
-    @GET("api/v1/profile")
+    @POST("api/v1/profile")
     Observable<ApiResult<User>> getUser(@Query("token") String token);
 
     @POST("api/v1/event/{id}")
@@ -111,7 +111,11 @@ public interface SportGidApiRequests {
     @POST("api/v1/place/{id}/complaint")
     Observable<ApiResult> sendComplaint(@Path("id") int id, @Query("token") String token,
                                         @Query("title") String title, @Query("body") String body);
-    @GET("api/v1//{id}")
-    Observable<ApiResult<Map>> getMap(@Path("id") int id);
+
+    @GET("api/v1/map")
+    Observable<ApiResult<Map>> getMap(@Query("id") int id);
+
+    @GET("api/v1/list")
+    Observable<ApiResult<List<Map>>> getMaps(@Query("maps") List<Integer> mapsId);
 
 }

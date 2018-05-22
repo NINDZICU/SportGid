@@ -26,7 +26,9 @@ import com.kpfu.khlopunov.sportgid.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.kpfu.khlopunov.sportgid.adapters.mapsAdapters.CustomInfoWindowAdapter;
 import com.kpfu.khlopunov.sportgid.fragments.ApiCallback;
+import com.kpfu.khlopunov.sportgid.models.Event;
 import com.kpfu.khlopunov.sportgid.models.Map;
+import com.kpfu.khlopunov.sportgid.models.Place;
 import com.kpfu.khlopunov.sportgid.service.ApiService;
 
 
@@ -56,6 +58,9 @@ public class MapsActivity extends AppCompatActivity
     private boolean mPermissionDenied = false;
 
     private GoogleMap mMap;
+    private Event event;
+    private Place place;
+    private String nameForMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +75,10 @@ public class MapsActivity extends AppCompatActivity
 
         apiService = new ApiService(this);
         apiService.getMap(getIntent().getIntExtra("MAP_ID", 0), this);
+        place = (Place) getIntent().getSerializableExtra("EVENT");
+        event = (Event) getIntent().getSerializableExtra("PLACE");
+        if (place != null) nameForMarker = place.getTitle();
+        else if (event != null) nameForMarker = event.getName();
     }
 
     @Override
@@ -196,17 +205,12 @@ public class MapsActivity extends AppCompatActivity
     @Override
     public void callback(Object object) {
         Log.d("CALLBACK", "CALLBACK Maps Activity");
-        if(object instanceof Map){
+        if (object instanceof Map) {
+            Log.d("Coordinates", ((Map) object).getX() + " " + ((Map) object).getY());
             mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(((Map) object).getX(), ((Map) object).getY()))
-                    .title("Marker")
+                    .title(nameForMarker)
                     .snippet("asdasd"));
-            mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(55.7431582, 49.1818399))
-                    .title("Marker")
-                    .snippet("asdasd"));
-            Log.d("MARKER", "Marker Add");
-            mMap.notify();
 
         }
     }

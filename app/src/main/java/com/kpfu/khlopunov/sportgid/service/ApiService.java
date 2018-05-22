@@ -340,6 +340,7 @@ public class ApiService {
                         UserToken tokken1 = apiResult.getBody();
                         callback.callback(tokken1.getAccessToken());
                     }
+                    else callback.callback(apiResult.getCode());
                 }, throwable -> {
                     callback.callback("ERROR");
                     Toast.makeText(context, "Throw " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
@@ -451,7 +452,7 @@ public class ApiService {
                 }, throwable -> {
                     callback.callback("MAP_NON");
                     Toast.makeText(context, "Throw " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                    System.out.println("THROW OT NURIKA getMap" + throwable.getMessage());
+                    Log.d("GetMapThrow", throwable.getMessage());
                 });
     }
 }

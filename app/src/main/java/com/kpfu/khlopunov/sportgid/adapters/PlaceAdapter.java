@@ -56,8 +56,8 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceViewHol
                 .load(place.getPhoto())
                 .apply(RequestOptions.centerCropTransform())
                 .into(holder.placeImage);
-        holder.placePrice.setText("р.");        //TODO Сказать Нурику
-
+//        holder.placePrice.setText("р.");        //TODO Сказать Нурику
+        holder.placePrice.setVisibility(View.GONE);
         holder.itemView.setOnClickListener(v->{
             if(mPlaceListener!=null){
                 mPlaceListener.onAlarmClick(place);
