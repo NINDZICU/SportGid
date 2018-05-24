@@ -28,9 +28,13 @@ import com.kpfu.khlopunov.sportgid.Constants;
 import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.adapters.EventAdapter;
 import com.kpfu.khlopunov.sportgid.custom.NoDefaultSpinner;
+import com.kpfu.khlopunov.sportgid.models.Event;
 import com.kpfu.khlopunov.sportgid.providers.SharedPreferencesProvider;
 import com.kpfu.khlopunov.sportgid.service.ApiService;
 import com.kpfu.khlopunov.sportgid.service.SortService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.apptik.widget.MultiSlider;
 
@@ -147,7 +151,8 @@ public class ListEventsFragment extends Fragment implements NotifyFragment, Navi
         });
 
         apiService.getEvents(getArguments().getInt("idKind"),
-                SharedPreferencesProvider.getInstance(context).getCity(), eventAdapter);
+                SharedPreferencesProvider.getInstance(context).getCity(),
+                SharedPreferencesProvider.getInstance(context).getUserTokken(), eventAdapter);
         rvEvents.setAdapter(eventAdapter);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, Constants.DATA);
@@ -157,8 +162,22 @@ public class ListEventsFragment extends Fragment implements NotifyFragment, Navi
         spinnerSort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                SortService service = new SortService();
-//                service.sortEvents();
+                System.out.println("POSITION " + position);
+                SortService sort = new SortService();
+                List<Event> sortPlace = new ArrayList<>();
+                switch (position) {
+                    case 0:
+                        sortPlace = sort.sortEvents(eventAdapter.getmEventList(), "name", SortService.ASC);
+                        break;
+                    case 1:
+                        sortPlace = sort.sortEvents(eventAdapter.getmEventList(), "price", SortService.ASC);
+                        break;
+                    case 2:
+                        sortPlace = sort.sortEvents(eventAdapter.getmEventList(), "rating", SortService.DESC);
+                        break;
+                }
+                eventAdapter.setmEventList(sortPlace);
+//                placeAdapter.notifyDataSetChanged();
             }
 
             @Override

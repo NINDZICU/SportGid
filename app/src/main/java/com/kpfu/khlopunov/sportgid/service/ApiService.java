@@ -102,9 +102,9 @@ public class ApiService {
                 });
     }
 
-    public List<Event> getEvents(int id, String city, EventAdapter adapter) {
+    public List<Event> getEvents(int id, String city, String token, EventAdapter adapter) {
         List<Event> events = new ArrayList<>();
-        requests.getEvents(id, city).subscribeOn(Schedulers.io())
+        requests.getEvents(id, city, token).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(apiResult -> {
                     if (apiResult.getCode() == 0) {
@@ -170,7 +170,7 @@ public class ApiService {
                     }
                 }, throwable -> {
                     apiCallback.callback(null);
-                    Log.d("THROW OT NUR getPlaces", throwable.getMessage());
+                    Log.d("THROW subscribeEvent", throwable.getMessage());
                     Toast.makeText(context, "Throw subscribeEvent " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
@@ -187,7 +187,7 @@ public class ApiService {
                     }
                 }, throwable -> {
                     apiCallback.callback(null);
-                    Log.d("THROW OT NUR getPlaces", throwable.getMessage());
+                    Log.d("THROW unsubscribeEvent", throwable.getMessage());
                     Toast.makeText(context, "Throw unsubscribeEvent " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
@@ -222,7 +222,8 @@ public class ApiService {
                     System.out.println("CODE add Place " + apiResult.getCode());
                     if (apiResult.getCode() == 0) {
                         callback.callback(true);
-                    }
+                    } else callback.callback(false);
+
                 }, throwable -> {
                     callback.callback(false);
                     Toast.makeText(context, "Throw " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
@@ -238,7 +239,7 @@ public class ApiService {
                 .subscribe(apiResult -> {
                     if (apiResult.getCode() == 0) {
                         apiCallback.callback(true);
-                    }
+                    } else apiCallback.callback(false);
                 }, throwable -> {
                     apiCallback.callback(false);
                     Toast.makeText(context, "Throw " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
@@ -255,7 +256,8 @@ public class ApiService {
                     System.out.println("CODE add Place " + apiResult.getCode());
                     if (apiResult.getCode() == 0) {
                         callback.callback(true);
-                    }
+                    } else callback.callback(false);
+
                 }, throwable -> {
                     callback.callback(false);
                     Toast.makeText(context, "Throw " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
@@ -271,7 +273,8 @@ public class ApiService {
                 .subscribe(apiResult -> {
                     if (apiResult.getCode() == 0) {
                         apiCallback.callback(true);
-                    }
+                    } else apiCallback.callback(false);
+
                 }, throwable -> {
                     apiCallback.callback(false);
                     Toast.makeText(context, "Throw " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
@@ -329,6 +332,23 @@ public class ApiService {
                     System.out.println("THROW OT NURIKA registration " + throwable.getMessage());
                 });
     }
+    public void authentificationSocial(String name, String surname, String token, String city, ApiCallback callback) {
+        requests.authentificationSocial(name, surname, token, city).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(apiResult -> {
+                    if (apiResult.getCode() == 0) {
+
+                        UserToken tokken1 = apiResult.getBody();
+                        callback.callback(tokken1.getAccessToken());
+                    } else if (apiResult.getCode() == 14) {
+                        callback.callback("SAME_LOGIN");
+                    }
+                }, throwable -> {
+                    callback.callback("ERROR");
+                    Toast.makeText(context, "Throw " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    System.out.println("THROW OT NURIKA registration " + throwable.getMessage());
+                });
+    }
 
     public void authentification(String email, String password, ApiCallback callback) {
         requests.authentification(email, password).subscribeOn(Schedulers.io())
@@ -339,8 +359,7 @@ public class ApiService {
 //                        }.getType();
                         UserToken tokken1 = apiResult.getBody();
                         callback.callback(tokken1.getAccessToken());
-                    }
-                    else callback.callback(apiResult.getCode());
+                    } else callback.callback(apiResult.getCode());
                 }, throwable -> {
                     callback.callback("ERROR");
                     Toast.makeText(context, "Throw " + throwable.getMessage(), Toast.LENGTH_SHORT).show();

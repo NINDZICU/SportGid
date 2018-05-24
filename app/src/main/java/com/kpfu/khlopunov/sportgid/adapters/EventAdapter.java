@@ -37,6 +37,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         this.mEventList = mEventList;
     }
 
+    public List<Event> getmEventList() {
+        return mEventList;
+    }
+
     @Override
     public EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.event_item, parent, false);
@@ -56,10 +60,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 //        holder.eventAddress.setText(event.getPlace().getAddress());
         holder.eventAddress.setText("");
         holder.eventRaiting.setText(String.valueOf(event.getRating()));
-        holder.eventPrice.setText(event.getPrice()+"р.");
+        holder.eventPrice.setText(event.getPrice() + "р.");
 
-        holder.itemView.setOnClickListener(v->{
-            if(mEventListener!=null){
+        holder.itemView.setOnClickListener(v -> {
+            if (mEventListener != null) {
                 mEventListener.onAlarmClick(event);
             }
         });
@@ -99,8 +103,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         this.mEventListener = mEventListener;
     }
 
-    public void notifyData(){
+    public void notifyData() {
         notifyDataSetChanged();
         notifyFragment.notifyData();
     }
+
 }

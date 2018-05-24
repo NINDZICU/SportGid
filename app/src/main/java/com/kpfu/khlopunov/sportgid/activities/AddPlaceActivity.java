@@ -86,6 +86,7 @@ public class AddPlaceActivity extends AppCompatActivity implements ApiCallback, 
         if (editPlace != null) {
             fillFields(editPlace);
         }
+        setVisibleProgressBar(false);
 
         if (savedInstanceState != null) {
             String sUri = savedInstanceState.getString(KEY_URL);
@@ -384,6 +385,7 @@ public class AddPlaceActivity extends AppCompatActivity implements ApiCallback, 
                 runOnUiThread(() -> {
                     System.out.println("receiveERROR " + resultData.getString(ServiceConstants.RESULT_DATA_KEY));
                     Toast.makeText(AddPlaceActivity.this, "Адрес не существует", LENGTH_SHORT).show();
+                    setVisibleProgressBar(false);
                 });
 
             }

@@ -75,8 +75,8 @@ public class MapsActivity extends AppCompatActivity
 
         apiService = new ApiService(this);
         apiService.getMap(getIntent().getIntExtra("MAP_ID", 0), this);
-        place = (Place) getIntent().getSerializableExtra("EVENT");
-        event = (Event) getIntent().getSerializableExtra("PLACE");
+        place = (Place) getIntent().getSerializableExtra("PLACE");
+        event = (Event) getIntent().getSerializableExtra("EVENT");
         if (place != null) nameForMarker = place.getTitle();
         else if (event != null) nameForMarker = event.getName();
     }
@@ -189,8 +189,7 @@ public class MapsActivity extends AppCompatActivity
                         } else {
                             Log.d("LOCATION", "Current location is null. Using defaults.");
                             Log.e("LOCATION", "Exception: %s", task.getException());
-                            mMap.moveCamera(CameraUpdateFactory
-                                    .newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
                             mMap.getUiSettings().setMyLocationButtonEnabled(false);
                         }
                     }
@@ -206,7 +205,11 @@ public class MapsActivity extends AppCompatActivity
     public void callback(Object object) {
         Log.d("CALLBACK", "CALLBACK Maps Activity");
         if (object instanceof Map) {
+
             Log.d("Coordinates", ((Map) object).getX() + " " + ((Map) object).getY());
+            mMap.clear();
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(((Map) object).getX(), ((Map) object).getY()),
+                    DEFAULT_ZOOM));
             mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(((Map) object).getX(), ((Map) object).getY()))
                     .title(nameForMarker)

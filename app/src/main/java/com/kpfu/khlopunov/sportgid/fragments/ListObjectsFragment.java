@@ -171,7 +171,7 @@ public class ListObjectsFragment extends Fragment implements ApiCallback,
                         sortPlace = sort.sortPlaces(placeAdapter.getmPlaceList(), "price", SortService.ASC);
                         break;
                     case 2:
-                        sortPlace = sort.sortPlaces(placeAdapter.getmPlaceList(), "rating", SortService.ASC);
+                        sortPlace = sort.sortPlaces(placeAdapter.getmPlaceList(), "rating", SortService.DESC);
                         break;
                 }
                 placeAdapter.setmPlaceList(sortPlace);

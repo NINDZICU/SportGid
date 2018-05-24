@@ -36,7 +36,8 @@ public interface SportGidApiRequests {
                                                              @Query("price1") String price1, @Query("price2") String price2);
 
     @GET("api/v1/sport/{id}/events")
-    Observable<ApiResult<List<Event>>> getEvents(@Path("id") int kindSportId, @Query("city") String city);
+    Observable<ApiResult<List<Event>>> getEvents(@Path("id") int kindSportId, @Query("city") String city,
+                                                 @Query("token")String token);
 
     @POST("api/v1/my_events")
     Observable<ApiResult<BodyMyEvent>> getMyEvents(@Query("token") String token);
@@ -85,6 +86,10 @@ public interface SportGidApiRequests {
 
     @POST("api/v1/sign_up")
     Observable<ApiResult<UserToken>> registration(@Query("name") String name, @Query("surname") String surname, @Query("email") String email, @Query("password") String password,
+                                                  @Query("city") String city);
+
+    @POST("api/v1/sign_up")
+    Observable<ApiResult<UserToken>> authentificationSocial(@Query("name") String name, @Query("surname") String surname, @Query("token") String socialToken,
                                                   @Query("city") String city);
 
     @POST("api/v1/sign_in")

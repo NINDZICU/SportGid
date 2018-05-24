@@ -1,9 +1,13 @@
 package com.kpfu.khlopunov.sportgid.activities;
 
+import android.content.Intent;
+import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +37,8 @@ public class RegistrationActivity extends AppCompatActivity implements ApiCallba
     private TextView tvErrEmail;
     private TextView tvErrPassword;
     private TextView tvErrRepassword;
+    private CheckBox cbPolicy;
+    private TextView tvPolicy;
     private static final String EMAIL_PATTERN = "^[a-zA-Z0-9#_~!$&'()*+,;=:.\"(),:;<>@\\[\\]\\\\]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*$";
 
     private Pattern pattern = Pattern.compile(EMAIL_PATTERN);
@@ -49,6 +55,8 @@ public class RegistrationActivity extends AppCompatActivity implements ApiCallba
         btnRegistration = findViewById(R.id.btn_reg);
         tvErrPassword = findViewById(R.id.tv_error_reg_password);
         tvErrRepassword = findViewById(R.id.tv_error_reg_repassword);
+        cbPolicy = findViewById(R.id.cb_policy);
+        tvPolicy = findViewById(R.id.tv_policy);
 
         btnRegistration.setOnClickListener(v -> {
             if (checkCorrectData()) {
@@ -58,6 +66,11 @@ public class RegistrationActivity extends AppCompatActivity implements ApiCallba
                         etEmail.getText().toString(), etPassword.getText().toString(),
                         SharedPreferencesProvider.getInstance(this).getCity(), RegistrationActivity.this);
             }
+        });
+        tvPolicy.setPaintFlags(tvPolicy.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvPolicy.setOnClickListener(v -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sportgid.herokuapp.com/start"));
+            startActivity(browserIntent);
         });
     }
 
@@ -76,6 +89,9 @@ public class RegistrationActivity extends AppCompatActivity implements ApiCallba
             etPassword.setText("");
             etRepassword.setText("");
             tvErrRepassword.setText("Неверный пароль");
+            return false;
+        } else if(!cbPolicy.isChecked()){
+            Toast.makeText(this, "Согласитесь с политикой конфиденциальности", Toast.LENGTH_SHORT).show();
             return false;
         } else return true;
     }

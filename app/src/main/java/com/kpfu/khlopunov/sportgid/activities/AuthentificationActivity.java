@@ -160,8 +160,12 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
                 System.out.println("SUCUCUCEESSSSSSSSSSSSSSSSSSSS");
                 access_token = res;
 
-                access_token.saveTokenToSharedPreferences(getApplicationContext(), VKAccessToken.ACCESS_TOKEN);
-                SharedPreferencesProvider.getInstance(AuthentificationActivity.this).saveUserTokken(access_token.toString()); //TODO Переделать на запрос к серверу
+                ApiService apiService = new ApiService(AuthentificationActivity.this);
+//                access_token.saveTokenToSharedPreferences(getApplicationContext(), VKAccessToken.ACCESS_TOKEN);
+                //TODO отправление id соц сетей на сервер и получение токена от сервера
+                SharedPreferencesProvider.getInstance(AuthentificationActivity.this).saveUserTokken("97d2df1c7d0e9906a7ba74ba6ccb9ace");
+
+//                SharedPreferencesProvider.getInstance(AuthentificationActivity.this).saveUserTokken(access_token.toString()); //TODO Переделать на запрос к серверу
 
                 final VKRequest request = VKApi.users().get(VKParameters.from(VKApiConst.ACCESS_TOKEN, access_token.accessToken));
                 request.executeWithListener(new VKRequest.VKRequestListener() {
@@ -177,7 +181,14 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
                         for (int i = 0; i < list.size(); i++) {
                             try {
                                 System.out.println("ID " + list.get(i).fields.get("id"));
+//                                ApiService apiService = new ApiService(AuthentificationActivity.this);
                                 String vkID = list.get(i).fields.get("id").toString();
+//                                apiService.authentificationSocial(list.get(i).fields.get("first_name").toString(),
+//                                        list.get(i).fields.get("last_name").toString(),  vkID,
+//                                        SharedPreferencesProvider.getInstance(AuthentificationActivity.this).getCity(),
+//                                        AuthentificationActivity.this);
+
+                                Log.d("VKID", vkID);
                                 SharedPreferencesProvider.getInstance(AuthentificationActivity.this).saveVkId(vkID);
                                 SharedPreferencesProvider.getInstance(AuthentificationActivity.this)
                                         .saveVkName(list.get(i).fields.get("first_name").toString() + " " + list.get(i).fields.get("last_name"));
@@ -221,7 +232,9 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
             GoogleSignInAccount acct = result.getSignInAccount();
 
             System.out.println("DISPLAY NAME    " + acct.getDisplayName());
-            SharedPreferencesProvider.getInstance(AuthentificationActivity.this).saveUserTokken(acct.getId());//Todo через сервер
+            SharedPreferencesProvider.getInstance(AuthentificationActivity.this).saveUserTokken("97d2df1c7d0e9906a7ba74ba6ccb9ace");
+            Log.d("GOOGLEID",             acct.getId());
+//            SharedPreferencesProvider.getInstance(AuthentificationActivity.this).saveUserTokken(acct.getId());//Todo через сервер
             SharedPreferencesProvider.getInstance(AuthentificationActivity.this)
                     .saveUser(new User(acct.getDisplayName(), ""));
             successAuthorisation(acct.getDisplayName(), "");
@@ -252,7 +265,7 @@ public class AuthentificationActivity extends AppCompatActivity implements Googl
                         else {
                             Toast.makeText(this, "Не удалось получить данные пользователя", Toast.LENGTH_SHORT).show();
                             //TODO убрать
-                            successAuthorisation("Анатолий", "Хлопунов");
+//                            successAuthorisation("Анатолий", "Хлопунов");
                         }
                     });
             }

@@ -111,15 +111,24 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
 
         ratingBar.setStepSize(1);
         tvSendReview.setOnClickListener(v -> {
+            boolean flag = true;
             if (etReview.length() == 0)
                 Toast.makeText(getActivity(), "Заполните поле", Toast.LENGTH_SHORT).show();
             else if (ratingBar.getRating() == 0)
                 Toast.makeText(getActivity(), "Поставьте оценку", Toast.LENGTH_SHORT).show();
-            else {
+            else for(Review review: adapter.getReviewList()){
+                //TODO на проверку комментариев сделать нормальную проверку
+                    if(review.getUser().getName().equals(SharedPreferencesProvider.getInstance(getActivity()).getUser().getName())){
+                        Toast.makeText(getActivity(), "Вы уже добавляли комментарий", Toast.LENGTH_SHORT).show();
+                        flag = false;
+                    }
+                }
+                if(flag){
                 ApiService service = new ApiService(getActivity());
                 service.addReview(place.getId(), SharedPreferencesProvider.getInstance(getActivity()).getUserTokken(),
                         etReview.getText().toString(), (int) ratingBar.getRating(), DetailPlaceFragment.this);
             }
+
         });
 
         tvComplain.setOnClickListener(v -> {
@@ -129,6 +138,7 @@ public class DetailPlaceFragment extends Fragment implements ApiCallback {
         });
         floatingMap.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), MapsActivity.class);
+            intent.putExtra("PLACE", place);
             intent.putExtra("MAP_ID", place.getMap());
             startActivity(intent);
         });

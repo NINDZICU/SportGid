@@ -55,6 +55,8 @@ public class DetailEventFragment extends Fragment implements ApiCallback {
     private EventsListener eventsListener;
     private FloatingActionButton floatingMap;
 
+    private Event event;
+
     public static DetailEventFragment newInstance(Event event, Context context) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("event", event);
@@ -75,7 +77,7 @@ public class DetailEventFragment extends Fragment implements ApiCallback {
         super.onViewCreated(view, savedInstanceState);
         bind(view);
 
-        Event event = (Event) getArguments().getSerializable("event");
+        event = (Event) getArguments().getSerializable("event");
         int id = getArguments().getInt("id");
         Glide
                 .with(getContext())
@@ -100,12 +102,16 @@ public class DetailEventFragment extends Fragment implements ApiCallback {
         rvMembers.setLayoutManager(new LinearLayoutManager(getActivity()));
         users = new ArrayList<>();
         memberListAdapter = new MemberListAdapter(getActivity(), users);
+        users = event.getMembers();
         memberListAdapter.setmUsers(event.getMembers());
         rvMembers.setAdapter(memberListAdapter);
 
+        Log.d("IS SUBSCRIBE", String.valueOf(event.isIs_subscribed()));
+        if(event.isIs_subscribed()) {
+            btnJoin.setText("Не пойду");
+        }
 
         btnJoin.setOnClickListener(v -> {
-            Log.d("IS SUBSCRIBE", String.valueOf(event.isIs_subscribed()));
             if(event.isIs_subscribed()){
                 btnJoin.setText("Не пойду");
                 apiService.unsubscribeEvent(event.getId(), SharedPreferencesProvider.getInstance(context).getUserTokken(),
@@ -125,6 +131,7 @@ public class DetailEventFragment extends Fragment implements ApiCallback {
         });
         floatingMap.setOnClickListener(v->{
             Intent intent = new Intent(getActivity(), MapsActivity.class);
+            intent.putExtra("EVENT", event);
             intent.putExtra("MAP_ID", event.getMap());
             startActivity(intent);
         });
@@ -156,16 +163,30 @@ public class DetailEventFragment extends Fragment implements ApiCallback {
         if (object instanceof Boolean) {
             if((Boolean) object) {
                 users.add(SharedPreferencesProvider.getInstance(context).getUser());
+                memberListAdapter.setmUsers(users);
                 memberListAdapter.notifyDataSetChanged();
                 btnJoin.setText("Не пойду");
-                tvCountJoin.setText(Integer.valueOf(tvCountJoin.getText().toString())+1);
+                event.setIs_subscribed(true);
+                int countMembers = Integer.valueOf(tvCountJoin.getText().toString())+1;
+                tvCountJoin.setText(String.valueOf(countMembers));
                 setVisiblePB(View.GONE);
             }
             else {
-                users.remove(SharedPreferencesProvider.getInstance(context).getUser());
+                for(User user : users){
+                    Log.d("ID", String.valueOf(SharedPreferencesProvider.getInstance(context).getUser().getId()));
+                    Log.d("IDUser", String.valueOf(user.getId()));
+                    //TODO сделать удаление по id иначе может удалить с тем же именем и фамилией
+                    if(user.getName().equals( SharedPreferencesProvider.getInstance(context).getUser().getName())&&
+                            user.getSurname().equals( SharedPreferencesProvider.getInstance(context).getUser().getSurname())){
+                        users.remove(user);
+                        break;
+                    }
+                }
+                memberListAdapter.setmUsers(users);
                 memberListAdapter.notifyDataSetChanged();
                 btnJoin.setText("Присоединиться");
-                tvCountJoin.setText(Integer.valueOf(tvCountJoin.getText().toString())-1);
+                event.setIs_subscribed(false);
+                tvCountJoin.setText(String.valueOf(Integer.valueOf(tvCountJoin.getText().toString())-1));
                 setVisiblePB(View.GONE);
             }
         }

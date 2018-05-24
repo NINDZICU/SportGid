@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SportGid</string>
+    <string name="app_name">SportGuide</string>
     <integer name="com_vk_sdk_AppId">6240516</integer>
 
     <string name="find">Найти:</string>

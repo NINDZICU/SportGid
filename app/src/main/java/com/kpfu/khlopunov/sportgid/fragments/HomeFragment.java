@@ -97,12 +97,12 @@ public class HomeFragment extends Fragment implements NotifyFragment, OnBackPres
         SportGidApiRequests requests = SportGidApi.getInstance().getmSportGidApiRequests();
         SearchService.fromView(searchView)
                 .debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                .filter(new Predicate<String>() {
-                    @Override
-                    public boolean test(String text) throws Exception {
-                        return !text.isEmpty();
-                    }
-                })
+//                .filter(new Predicate<String>() {
+//                    @Override
+//                    public boolean test(String text) {
+//                        return !text.isEmpty();
+//                    }
+//                })
                 .distinctUntilChanged()
                 .switchMap(query -> {
                     setVisible();

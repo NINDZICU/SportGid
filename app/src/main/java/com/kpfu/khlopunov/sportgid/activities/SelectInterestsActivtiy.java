@@ -19,6 +19,7 @@ import com.kpfu.khlopunov.sportgid.adapters.InterestSelect.InteresSelectAdapter;
 import com.kpfu.khlopunov.sportgid.adapters.InterestSelect.InteresSelectAdapterRadio;
 import com.kpfu.khlopunov.sportgid.fragments.ApiCallback;
 import com.kpfu.khlopunov.sportgid.models.KindSport;
+import com.kpfu.khlopunov.sportgid.providers.SharedPreferencesProvider;
 import com.kpfu.khlopunov.sportgid.service.ApiService;
 
 import java.io.Serializable;
@@ -45,7 +46,6 @@ public class SelectInterestsActivtiy extends AppCompatActivity implements ApiCal
         toolbarTitle = findViewById(R.id.toolbar_title_set);
         progressBar = findViewById(R.id.pb_select_interests);
 
-        onVisibleProgBar();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -55,13 +55,19 @@ public class SelectInterestsActivtiy extends AppCompatActivity implements ApiCal
         rvInterests.setLayoutManager(new LinearLayoutManager(this));
         if (getIntent().getStringExtra(TYPE_CHECK_BUTTON).equals(CHECKBOX)) {
             adapter = new InteresSelectAdapter(SelectInterestsActivtiy.this);
+            adapter.setKindSports(SharedPreferencesProvider.getInstance(this).getKindsSports());
             rvInterests.setAdapter(adapter);
         } else if (getIntent().getStringExtra(TYPE_CHECK_BUTTON).equals(RADIO)) {
             adapter = new InteresSelectAdapterRadio(SelectInterestsActivtiy.this);
+            adapter.setKindSports(SharedPreferencesProvider.getInstance(this).getKindsSports());
             rvInterests.setAdapter(adapter);
         }
-        ApiService apiService = new ApiService(SelectInterestsActivtiy.this);
-        apiService.getKindSports(SelectInterestsActivtiy.this);
+        /**
+         * Подгрузка видов спорта с сервера, вернуть если нужно
+         */
+//        onVisibleProgBar();
+//        ApiService apiService = new ApiService(SelectInterestsActivtiy.this);
+//        apiService.getKindSports(SelectInterestsActivtiy.this);
 
         btnSave.setOnClickListener(v -> {
             List<KindSport> selected = adapter.getSelected();

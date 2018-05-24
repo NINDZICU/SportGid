@@ -68,6 +68,7 @@ public class AddEventActivity extends AppCompatActivity implements ApiCallback, 
         if (editEvent != null) {
             fillFields(editEvent);
         }
+        setVisibleProgressBar(false);
         if (savedInstanceState != null) {
             String sUri = savedInstanceState.getString(KEY_URL);
             if (sUri != null) {
@@ -240,7 +241,7 @@ public class AddEventActivity extends AppCompatActivity implements ApiCallback, 
     private void fillFields(Event event) {
         r.includeAddEvent.etEventName.setText(event.getName());
         r.includeAddEvent.etEventDescription.setText(event.getDescription());
-        r.includeAddEvent.etEventCountMembers.setText(String.valueOf(event.getMembers().size()));
+        r.includeAddEvent.etEventCountMembers.setText(String.valueOf(event.getMaxOfMembers()));
         r.includeAddEvent.etEventAddress.setText(event.getAddress());
         r.includeAddEvent.etEventPrice.setText(event.getPrice());
         photoUrlFirebase = event.getPhoto();
@@ -312,6 +313,7 @@ public class AddEventActivity extends AppCompatActivity implements ApiCallback, 
                 runOnUiThread(() -> {
                     System.out.println("receiveERROR " + resultData.getString(ServiceConstants.RESULT_DATA_KEY));
                     Toast.makeText(AddEventActivity.this, "Адрес не существует", LENGTH_SHORT).show();
+                    setVisibleProgressBar(false);
                 });
 
             }

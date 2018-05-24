@@ -44,8 +44,7 @@
         <EditText
             android:id="@+id/et_reg_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white" />
+            android:layout_height="wrap_content" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -57,8 +56,7 @@
         <EditText
             android:id="@+id/et_reg_surname"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white" />
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -82,8 +80,7 @@
         <EditText
             android:id="@+id/et_reg_email"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white" />
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -108,8 +105,7 @@
             android:id="@+id/et_reg_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:textColor="@color/white" />
+            android:inputType="textPassword" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -136,9 +132,29 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword" />
 
-        <android.support.design.button.MaterialButton
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/cb_policy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_policy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:text="Я согласен с политикой конфиденциальности"
+                android:textColor="@color/button_vk" />
+        </LinearLayout>
+
+
+        <Button
             android:id="@+id/btn_reg"
-            style="@style/AppTheme.ButtonOrange"
+            style="@style/AppTheme.ButtonBiruza"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

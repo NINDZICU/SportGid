@@ -7,7 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.kpfu.khlopunov.sportgid.R;
 import com.kpfu.khlopunov.sportgid.fragments.NotifyFragment;
 import com.kpfu.khlopunov.sportgid.models.KindSport;
@@ -48,12 +52,16 @@ public class KindSportsAdapter extends RecyclerView.Adapter<KindSportsAdapter.Ki
     public void onBindViewHolder(KindSportViewHolder holder, int position) {
         final KindSport kindSport = mKindSports.get(position);
         holder.tvKindSport.setText(kindSport.getName());
-        holder.tvKindSport.setOnClickListener(v -> {
+        Glide
+                .with(context)
+                .load(kindSport.getPhoto())
+                .apply(RequestOptions.centerCropTransform())
+                .into(holder.btnKindSport);
+        holder.btnKindSport.setOnClickListener(v -> {
             if (mKindSportListener != null) {
                 mKindSportListener.onAlarmClick(kindSport);
             }
         });
-
     }
 
     @Override
@@ -62,11 +70,13 @@ public class KindSportsAdapter extends RecyclerView.Adapter<KindSportsAdapter.Ki
     }
 
     public class KindSportViewHolder extends RecyclerView.ViewHolder {
-        Button tvKindSport;
+        ImageButton btnKindSport;
+        TextView tvKindSport;
 
         public KindSportViewHolder(View itemView) {
             super(itemView);
-            tvKindSport = itemView.findViewById(R.id.btn_kind_sport);
+            btnKindSport = itemView.findViewById(R.id.btn_kind_sport);
+            tvKindSport = itemView.findViewById(R.id.tv_kind_sport);
         }
     }
 
